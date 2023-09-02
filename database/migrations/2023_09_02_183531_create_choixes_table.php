@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Choix;
+use App\Models\Question;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,8 +13,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('choixes', function (Blueprint $table) {
+        Schema::create('choix', function (Blueprint $table) {
             $table->id();
+            $table->string('libelle');
+            $table->string('type');
+            $table->foreignIdFor(Question::class)->constrained();
+            $table->unsignedInteger('choix_id')->nullable();
             $table->timestamps();
         });
     }
@@ -22,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('choixes');
+        Schema::dropIfExists('choix');
     }
 };

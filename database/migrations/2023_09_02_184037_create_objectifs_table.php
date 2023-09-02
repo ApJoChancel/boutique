@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('objectifs', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('montant');
+            $table->unsignedTinyInteger('mois');
+            $table->unsignedSmallInteger('annee');
             $table->timestamps();
         });
     }
