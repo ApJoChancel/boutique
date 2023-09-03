@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Article;
 use App\Livewire\Boutique;
 use App\Livewire\Caracteristique;
 use App\Livewire\Categorie;
@@ -27,3 +28,4 @@ Route::get('role', Role::class);
 Route::get('boutique', Boutique::class);
 Route::get('categorie', Categorie::class);
 Route::get('carac', Caracteristique::class);
+Route::get('article', Article::class);
