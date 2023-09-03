@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Caracteristique extends Model
 {
     use HasFactory;
+
+    public function options()
+    {
+        return $this->belongsToMany(Option::class, 'carac_opt');
+    }
 }

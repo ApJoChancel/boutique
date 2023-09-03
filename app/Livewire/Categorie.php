@@ -44,7 +44,6 @@ class Categorie extends AppComponent
     {
         parent::resetValues();
         $this->libelle = null;
-        $this->dispatch('close-modal'); 
     }
 
     #[Layout('livewire.layouts.base')]
