@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Boutique extends Model
 {
     use HasFactory;
+
+    public function manager()
+    {
+        return $this->hasOne(User::class);
+    }
 }

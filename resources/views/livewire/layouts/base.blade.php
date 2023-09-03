@@ -15,10 +15,14 @@
     <script>
         window.addEventListener('close-modal', event => {
             $('#confirmModal').modal('hide');
+            $('#changeModal').modal('hide');
         });
 
         window.addEventListener('show-confirm', event => {
             $('#confirmModal').modal('show')
+        });
+        window.addEventListener('show-change', event => {
+            $('#changeModal').modal('show')
         });
     </script>
     

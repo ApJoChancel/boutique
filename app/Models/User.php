@@ -13,4 +13,9 @@ class User extends Model
     {
         return $this->belongsTo(Role::class);
     }
+
+    public function boutique()
+    {
+        return $this->belongsTo(Boutique::class);
+    }
 }
