@@ -53,7 +53,7 @@ class Caracteristique extends AppComponent
         parent::resetValues();
         $this->libelle =
             $this->options = null;
-        $this->dispatch('close-modal'); 
+        $this->dispatch('close-modal');
     }
 
     public function changeOptions(ModelsCaracteristique $item)
