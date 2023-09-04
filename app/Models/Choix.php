@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Choix extends Model
 {
     use HasFactory;
+
+    protected $table = 'choix';
+
+    public function question()
+    {
+       return $this->belongsTo(Question::class);
+    }
 }

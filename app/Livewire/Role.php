@@ -12,7 +12,7 @@ class Role extends AppComponent
     #[Rule('required|unique:roles')]
     public $libelle = null;
 
-    public function addRole()
+    public function save()
     {
         $this->validate();
         $item = (!$this->edit_id) ? new ModelsRole() : ModelsRole::findOrFail($this->edit_id);

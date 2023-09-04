@@ -16,8 +16,6 @@ class Boutique extends AppComponent
     #[Rule('sometimes')]
     public $user_id = null;
 
-    public $isChangeManager = false;
-
     public function save()
     {
         $this->validate();
@@ -64,7 +62,6 @@ class Boutique extends AppComponent
 
     public function changeManager(ModelsBoutique $item)
     {
-        $this->isChangeManager = true;
         $this->edit_id = $item->id;
         $this->designation = $item->manager->login ?? 'Aucun';
         $this->user_id = $item->manager?->id;
@@ -83,7 +80,6 @@ class Boutique extends AppComponent
         $this->dispatch('close-modal'); 
         $this->resetValues();
         session()->flash('status', 'Changed successfully');
-        $this->isChangeManager = false;
     }
 
     #[Layout('livewire.layouts.base')]

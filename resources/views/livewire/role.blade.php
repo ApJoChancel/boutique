@@ -1,6 +1,6 @@
 <div>
     <div>
-        <form wire:submit="addRole">
+        <form wire:submit="save">
             <div>
                 <label for="libelle">Libellé</label>
                 <input wire:model.live="libelle" id="libelle" type="text">
