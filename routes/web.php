@@ -7,6 +7,7 @@ use App\Livewire\Categorie;
 use App\Livewire\Role;
 use App\Livewire\Sondage;
 use App\Livewire\User;
+use App\Livewire\Vente;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,3 +32,4 @@ Route::get('categorie', Categorie::class);
 Route::get('carac', Caracteristique::class);
 Route::get('article', Article::class);
 Route::get('sondage', Sondage::class);
+Route::get('vente', Vente::class);

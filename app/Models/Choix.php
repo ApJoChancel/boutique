@@ -15,4 +15,9 @@ class Choix extends Model
     {
        return $this->belongsTo(Question::class);
     }
+
+    public function sousChoix()
+    {
+        return $this->hasMany(Choix::class);
+    }
 }

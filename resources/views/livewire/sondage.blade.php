@@ -19,7 +19,7 @@
                                     <option value="text">Text</option>
                                     <option value="unique">Unique</option>
                                     <option value="multiple">Multiple</option>
-                                </select>
+                                </select> 
                             </div>
                             <div class="complement-container" style="display: none">
                                 <label for="complement-{{ $index }}">Options</label>

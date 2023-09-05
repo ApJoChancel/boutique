@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use App\Models\Choix;
 use App\Models\Question;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Attributes\Layout;
@@ -28,7 +27,7 @@ class Sondage extends AppComponent
             'type' => 'text',
             'complement' => '',
         ];
-    }
+    } 
 
     public function updated()
     {
