@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Choix;
+use App\Models\Question;
 use App\Models\Vente;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -12,12 +14,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('paiements', function (Blueprint $table) {
+        Schema::create('reponses', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('montant');
-            $table->unsignedInteger('reduction')->default(0);
-            $table->date('date');
             $table->foreignIdFor(Vente::class)->constrained();
+            $table->foreignIdFor(Question::class)->constrained();
+            $table->foreignIdFor(Choix::class)->constrained();
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('paiements');
+        Schema::dropIfExists('reponses');
     }
 };

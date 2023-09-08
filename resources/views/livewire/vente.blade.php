@@ -30,31 +30,57 @@
             </form>
         </div>
     @else
-        <div>
-            <p>Les articles achetés</p>
+        @if (!$answered)
             <div>
-                <label for="article">Article</label>
-                <select wire:change.lazy='hasCarac' wire:model="selectedItem" id="article">
-                    @foreach ($articles as $item)
-                        <option value="{{ $item->id }}">{{ $item->libelle }}</option>
-                    @endforeach
-                </select>
-                @if ($this->article?->categorie->caracteristiques())
-                    <div>
-                        @foreach ($this->article->categorie->caracteristiques as $index => $item)
-                            <div>
-                                <label for="">{{ $item['libelle'] }}</label>
-                                <select wire:model="opts.{{ $index }}.libelle">
-                                    @foreach ($item->options as $opt)
-                                        <option value="{{ $opt->libelle }}">{{ $opt->libelle }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                <p>Les articles achetés</p>
+                <div>
+                    <label for="article">Article</label>
+                    <select wire:change.lazy='hasCarac' wire:model="selectedArticle" id="article">
+                        @foreach ($this->articles as $item)
+                            <option value="{{ $item->id }}">{{ $item->libelle }}</option>
                         @endforeach
-                    </div>
-                @endif
-                <button wire:click='addItem' type="button">Ajouter l'article</button>
+                    </select>
+                    @if ($this->article?->categorie->caracteristiques())
+                        <div>
+                            @foreach ($this->article->categorie->caracteristiques as $item)
+                                <div>
+                                    <label for="">{{ $item['libelle'] }}</label>
+                                    <select wire:model="opts.{{ $item->id }}.option">
+                                        @foreach ($item->options as $opt)
+                                            <option value="{{ $opt->libelle }}">{{ $opt->libelle }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+                    <button wire:click='addItem' type="button">Ajouter l'article</button>
+                    <button wire:click='validVente' type="button">Valider</button>
+                </div>
             </div>
-        </div>
+        @else
+            <form wire:submit.prevent='submitPaiement'>
+                <div>
+                    <label for="client">Client</label>
+                    <input wire:model='client' type="text" id="client">
+                </div>
+                <div>
+                    <label for="mtt_achat">Montant des achats</label>
+                    <input wire:model='mtt_achat' type="text" id="mtt_achat">
+                </div>
+                <div>
+                    <label for="mtt_paye">Montant payé</label>
+                    <input wire:model='mtt_paye' type="text" id="mtt_paye">
+                </div>
+                <div>
+                    <label for="mtt_reduction">Réduction accordée</label>
+                    <input wire:model='mtt_reduction' type="text" id="mtt_reduction">
+                </div>
+                <button>Valider la vente</button>
+            </form>        
+        @endif
+    @endif
+    @if (session()->has('status'))
+        <div class="alert alert-success text-center">{{ session('status') }}</div>
     @endif
 </div>

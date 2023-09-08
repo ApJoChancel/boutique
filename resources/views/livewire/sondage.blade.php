@@ -37,7 +37,7 @@
     </form>
     @if (session()->has('status'))
         <div class="alert alert-success text-center">{{ session('status') }}</div>
-    @endif    
+    @endif
 </div>
 
 

@@ -87,7 +87,7 @@ class Boutique extends AppComponent
     public function render()
     {
         return view('livewire.boutique', [
-            'users' => User::where('role_id', 2)->get(),
+            'users' => User::where('role_id', 1)->get(),
             'boutiques' => ModelsBoutique::all(),
         ]);
     }
