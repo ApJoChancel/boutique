@@ -16,10 +16,18 @@
         window.addEventListener('close-modal', event => {
             $('#confirmModal').modal('hide');
             $('#changeModal').modal('hide');
+            $('#infoModal').modal('hide');
+            $('#paieModal').modal('hide');
         });
 
         window.addEventListener('show-confirm', event => {
             $('#confirmModal').modal('show')
+        });
+        window.addEventListener('show-info', event => {
+            $('#infoModal').modal('show')
+        });
+        window.addEventListener('show-paie', event => {
+            $('#paieModal').modal('show')
         });
         window.addEventListener('show-change', event => {
             $('#changeModal').modal('show')

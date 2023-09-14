@@ -128,11 +128,11 @@ class Vente extends AppComponent
 
             $paie = new Paiement();
             $paie->montant = $this->mtt_paye;
-            $paie->reduction = $this->mtt_reduction;
+            $paie->reduction = $this->mtt_reduction ?? 0;
             $paie->vente_id = $vente->id;
             $paie->date = $vente->date;
             $paie->save();
-        DB::rollBack();
+        DB::commit();
         $this->resetValues();
         session()->flash('status', 'Vente successfully');
     }
