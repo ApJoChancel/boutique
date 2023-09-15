@@ -14,15 +14,18 @@ class User extends AppComponent
     const DEFAULT_PASSWORD = 'password';
 
     #[Rule('required|min:5|unique:users')]
-    public $login = null;
+    public $email = null;
     #[Rule('required')]
     public $role_id = null;
+    #[Rule('required')]
+    public $noms = null;
 
     public function register()
     {
         $this->validate();
         $item = (!$this->edit_id) ? new ModelsUser() : ModelsUser::findOrFail($this->edit_id);
-        $item->login = $this->login;
+        $item->email = $this->email;
+        $item->noms = $this->noms;
         $item->role_id = $this->role_id;
         $item->password = Hash::make(self::DEFAULT_PASSWORD);
         $item->save();
@@ -33,7 +36,8 @@ class User extends AppComponent
     public function editItem(ModelsUser $user)
     {
         $this->edit_id = $user->id;
-        $this->login = $user->login;
+        $this->email = $user->email;
+        $this->noms = $user->noms;
         $this->role_id = $user->role_id;
         $this->textSubmit = 'Modifier';
     }
@@ -52,7 +56,8 @@ class User extends AppComponent
     public function resetValues()
     {
         parent::resetValues();
-        $this->login =
+        $this->email =
+            $this->noms =
             $this->role_id = null;
     }
 

@@ -2,9 +2,14 @@
     <div>
         <form wire:submit="register">
             <div>
-                <label for="login">Login</label>
-                <input wire:model.live="login" id="login" type="text">
-                @error('login') <span>{{ $message }}</span> @enderror
+                <label for="email">Email</label>
+                <input wire:model.live="email" id="email" type="email">
+                @error('email') <span>{{ $message }}</span> @enderror
+            </div>
+            <div>
+                <label for="noms">Noms et prénoms</label>
+                <input wire:model.live="noms" id="noms" type="noms">
+                @error('noms') <span>{{ $message }}</span> @enderror
             </div>
             @empty($this->edit_id)
                 <div>
@@ -32,7 +37,8 @@
     <table>
         <thead>
             <tr>
-                <th>Login</th>
+                <th>Email</th>
+                <th>Noms et prénoms</th>
                 <th>Role</th>
             </tr>
         </thead>
@@ -42,7 +48,8 @@
                     wire:click='editItem({{ $item->id }})'
                     wire:dblclick='deleteItem({{ $item->id }})'
                 >
-                    <td>{{ $item->login }}</td>
+                    <td>{{ $item->email }}</td>
+                    <td>{{ $item->noms }}</td>
                     <td>{{ $item->role->libelle }}</td>
                 </tr>
             @endforeach
@@ -58,7 +65,7 @@
                     <button class="btn-close" wire:click="deleteCancelled()" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Suppression de &lt; {{ $this->login }} &gt;</p>
+                    <p>Suppression de &lt; {{ $this->noms }} &gt;</p>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary btn-sm" wire:click="deleteConfirmed({{ $this->delete_id }})">

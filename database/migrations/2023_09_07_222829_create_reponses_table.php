@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Vente::class)->constrained();
             $table->foreignIdFor(Question::class)->constrained();
-            $table->foreignIdFor(Choix::class)->constrained();
+            $table->foreignIdFor(Choix::class)->constrained(table: 'choix');
             $table->timestamps();
         });
     }

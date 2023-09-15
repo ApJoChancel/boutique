@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('libelle');
             $table->date('date');
             $table->foreignIdFor(User::class)->constrained();
-            $table->foreignIdFor(Boutique::class)->constrained();
+            $table->foreignIdFor(Boutique::class)->nullable()->constrained();
             $table->timestamps();
         });
     }
