@@ -35,7 +35,7 @@ class Compte extends AppComponent
         }
         else{
             Auth::user()->password = Hash::make($this->nouveau);
-            Auth::user()->save();
+            // Auth::user()->save();
             session()->flash('status', 'Added successfully');
         }
     }

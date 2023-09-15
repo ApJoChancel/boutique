@@ -42,12 +42,6 @@ class Auth extends AppComponent
         $this->addError('email', 'Informations incorrectes');
     }
 
-    public function logout()
-    {
-        Auth::logout();
-        return to_route('login');
-    }
-
     public function resetValues()
     {
         parent::resetValues();

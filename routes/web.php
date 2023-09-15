@@ -6,6 +6,7 @@ use App\Livewire\Boutique;
 use App\Livewire\Caracteristique;
 use App\Livewire\Categorie;
 use App\Livewire\Compte;
+use App\Livewire\Logout;
 use App\Livewire\Recouvrement;
 use App\Livewire\Role;
 use App\Livewire\Sondage;
@@ -31,7 +32,7 @@ Route::get('/', function () {
 Route::get('auth', Auth::class)->middleware('guest')->name('login');
 
 Route::middleware('auth')->group(function() {
-    Route::get('logout', [Auth::class, 'logout'])->name('logout');
+    Route::get('logout', Logout::class)->name('logout');
     Route::get('user', User::class)->name('user');
     Route::get('role', Role::class)->name('role');
     Route::get('boutique', Boutique::class)->name('boutique');
