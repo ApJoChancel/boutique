@@ -64,8 +64,8 @@
                         </a>
 
                         <div id="groupArticleContent" class="absolute left-14 top-0 hidden mt-2 space-y-2 bg-white border border-gray-200 w-40">
-                            <a href="{{ route('categorie') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Catégories</a>
                             <a href="{{ route('carac') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Caractéristiques</a>
+                            <a href="{{ route('categorie') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Catégories</a>
                             <a href="{{ route('article') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Articles</a>
                         </div>
                     </div>
