@@ -69,6 +69,11 @@ class User extends AppComponent
         session()->flash('status', 'Changed successfully');
     }
 
+    public function mount()
+    {
+        $this->role_id = 2;
+    }
+
     #[Layout('livewire.layouts.base')]
     #[Title('Boutique | User')]
     public function render()
