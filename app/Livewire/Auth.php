@@ -49,7 +49,7 @@ class Auth extends AppComponent
         $this->password = null;
     }
 
-    #[Layout('livewire.layouts.base')]
+    #[Layout('livewire.layouts.login')]
     #[Title('Boutique | Auth')]
     public function render()
     {

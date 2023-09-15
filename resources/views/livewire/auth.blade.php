@@ -1,18 +1,17 @@
 <div>
-    <form wire:submit="save">
-        <div>
-            <label for="email">email</label>
-            <input wire:model.live="email" id="email" type="text">
+    <form wire:submit="save" class="form-horizontal w-3/4 mx-auto">
+        <div class="flex flex-col mt-4">
+            <input wire:model.live="email" type="text" placeholder="Email" class="flex-grow h-8 px-2 border rounded border-grey-400">
             @error('email') <span>{{ $message }}</span> @enderror
         </div>
-        <div>
-            <label for="password">Mot de passe</label>
-            <input wire:model.live="password" id="password" type="password">
+        <div class="flex flex-col mt-4">
+            <input wire:model="password" type="password" placeholder="Password" class="flex-grow h-8 px-2 rounded border border-grey-400">
             @error('password') <span>{{ $message }}</span> @enderror
         </div>
-
-        <div>
-            <input type="submit" value="{{ $this->textSubmit }}">
+        <div class="flex flex-col mt-8">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded">
+                {{ $this->textSubmit }}
+            </button>
         </div>
     </form>
 </div>
