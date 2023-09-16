@@ -1,29 +1,59 @@
 <div>
-    <table>
-        <thead>
-            <tr>
-                <th>Date de vente</th>
-                <th>Client</th>
-                <th>Montant vente</th>
-                <th>Montant reçu</th>
-                <th>Reste à percevoir</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($ventes as $item)
-                <tr
-                    wire:click='infoItem({{ $item->vente_id }})'
-                    wire:dblclick='paiementItem({{ $item->vente_id }})'
-                >
-                    <td>{{ $item->date_vente }}</td>
-                    <td>{{ $item->client }}</td>
-                    <td>{{ $item->montant_vente }}</td>
-                    <td>{{ $item->montant_recu }}</td>
-                    <td>{{ $item->reste }}</td>
+    <div class="mt-8 bg-white p-4 shadow rounded-lg">
+        <h2 class="text-gray-500 text-lg font-semibold pb-4">Les ventes en cours</h2>
+        <div class="my-1"></div> <!-- Espacio de separación -->
+        <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div> <!-- Línea con gradiente -->
+        <table class="w-full table-auto text-sm">
+            <thead>
+                <tr class="text-sm leading-normal">
+                    <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
+                        Date de vente
+                    </th>
+                    <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
+                        Client
+                    </th>
+                    <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
+                        Montant vente
+                    </th>
+                    <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
+                        Montant reçu
+                    </th>
+                    <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
+                        Réduction accordée
+                    </th>
+                    <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
+                        Reste à percevoir
+                    </th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach ($ventes as $item)
+                    <tr class="hover:bg-grey-lighter"
+                        wire:click='infoItem({{ $item->vente_id }})'
+                    >
+                        <td class="py-2 px-4 border-b border-grey-light">
+                            {{ $item->date_vente }}
+                        </td>
+                        <td class="py-2 px-4 border-b border-grey-light">
+                            {{ $item->client }}
+                        </td>
+                        <td class="py-2 px-4 border-b border-grey-light">
+                            {{ $item->montant_vente }}
+                        </td>
+                        <td class="py-2 px-4 border-b border-grey-light">
+                            {{ $item->montant_recu }}
+                        </td>
+                        <td class="py-2 px-4 border-b border-grey-light">
+                            {{ $item->reduction ?? 0 }}
+                        </td>
+                        <td class="py-2 px-4 border-b border-grey-light">
+                            {{ $item->reste }}
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
     <!-- infoModal -->
     <div wire:ignore.self class="modal fade" id="infoModal">
         <div class="modal-dialog">
@@ -65,6 +95,9 @@
                     </div>
                 @endif
                 <div class="modal-footer">
+                    <button class="btn btn-primary btn-sm" wire:click="paiementItem({{ $vente?->id }})" data-bs-dismiss="modal">
+                        Nouveau paiement
+                    </button>
                     <button class="btn btn-primary btn-sm" wire:click="deleteCancelled" data-bs-dismiss="modal">
                         Fermer
                     </button>

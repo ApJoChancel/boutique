@@ -74,7 +74,8 @@ class Recouvrement extends AppComponent
             'clients.noms AS client',
             'ventes.date AS date_vente',
             'ventes.montant AS montant_vente',
-            DB::raw('SUM(paiements.montant + COALESCE(paiements.reduction, 0)) AS montant_recu'),
+            DB::raw('SUM(paiements.montant) AS montant_recu'),
+            DB::raw('SUM(paiements.reduction) AS reduction'),
             DB::raw('(ventes.montant - SUM(paiements.montant + COALESCE(paiements.reduction, 0))) AS reste')
         )
         ->leftJoin('paiements', 'ventes.id', 'paiements.vente_id')
