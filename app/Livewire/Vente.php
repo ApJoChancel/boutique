@@ -106,7 +106,7 @@ class Vente extends AppComponent
             $vente->montant = $this->mtt_achat;
             $vente->client_id = $cli->id;
             $vente->user_id = $user->id;
-            $vente->boutique_id = $user->boutique->id;
+            $vente->boutique_id = $user->boutique->id ?? 6;
             $vente->date = now();
             $vente->save();
 
@@ -139,7 +139,25 @@ class Vente extends AppComponent
 
     public function resetValues()
     {
-        
+        parent::resetValues();
+        $libelle = null;
+        $questions = null;
+        $question = null;
+        $currentQuestion = null;
+        $reponses = [];
+        $reponse = null;
+        $allResponsesAnswered = false;
+        $answered = false;
+        $selectedArticle = null;
+        $articles = null;
+        $article = null;
+        $opts = [];
+        $artcilesAdded = null;
+
+        $client = null;
+        $mtt_achat = null;
+        $mtt_paye = null;
+        $mtt_reduction = null;
     }
 
     #[Layout('livewire.layouts.base')]

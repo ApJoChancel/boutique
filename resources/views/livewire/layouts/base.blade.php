@@ -17,8 +17,8 @@
         <div class="bg-white text-white shadow w-full p-2 flex items-center justify-between">
             <div class="flex items-center">
                 <div class="flex items-center"> <!-- Mostrado en todos los dispositivos -->
-                    <img src="https://www.emprenderconactitud.com/img/POC%20WCS%20(1).png" alt="Logo" class="w-28 h-18 mr-2">
-                    <h2 class="font-bold text-xl">Nombre de la Aplicación</h2>
+                    <img src="/nuptial.jpg" alt="Logo" style="width: 150px">
+                    <h2 class="font-bold text-xl">CORNALD Nuptial</h2>
                 </div>
                 <div class="md:hidden flex items-center"> <!-- Se muestra solo en dispositivos pequeños -->
                     <button id="menuBtn">
@@ -69,6 +69,16 @@
                             <a href="{{ route('article') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Articles</a>
                         </div>
                     </div>
+                    <div class="relative">
+                        <a href="#" id="groupVente" class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white">
+                            <i class="fas fa-file-alt mr-2"></i>Ventes
+                        </a>
+
+                        <div id="groupVenteContent" class="absolute left-14 top-0 hidden mt-2 space-y-2 bg-white border border-gray-200 w-40">
+                            <a href="{{ route('vente') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Ventes</a>
+                            <a href="{{ route('rec') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Recouvrements</a>
+                        </div>
+                    </div>
                 </nav>
 
                 <!-- Ítem de Cerrar Sesión -->
@@ -90,7 +100,7 @@
                     <div class="absolute top-1 left-2 inline-flex items-center p-2">
                         <i class="fas fa-search text-gray-400"></i>
                     </div>
-                    <input class="w-full h-10 pl-10 pr-4 py-1 text-base placeholder-gray-500 border rounded-full focus:shadow-outline" type="search" placeholder="Buscar...">
+                    <input placeholder="Rechercher..." class="w-full h-10 pl-10 pr-4 py-1 text-base placeholder-gray-500 border rounded-full focus:shadow-outline" type="search">
                 </div>
                 {{ $slot }}
             </div>
@@ -124,6 +134,8 @@
         });
         document.getElementById('groupArticle').addEventListener('click', function() {
             document.getElementById('groupArticleContent').classList.toggle('hidden');
+        });document.getElementById('groupVente').addEventListener('click', function() {
+            document.getElementById('groupVenteContent').classList.toggle('hidden');
         });
     </script>
     

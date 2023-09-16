@@ -1,6 +1,6 @@
 <div>
     <!-- deleteModal -->
-    <div wire:ignore.self class="modal fade" id="confirmModal">
+    {{-- <div wire:ignore.self class="modal fade" id="confirmModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     
     @if (session()->has('status'))
         <div class="alert alert-success text-center">{{ session('status') }}</div>
