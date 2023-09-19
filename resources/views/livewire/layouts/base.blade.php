@@ -54,6 +54,7 @@
                         </a>
 
                         <div id="groupBoutiqueContent" class="absolute left-14 top-0 hidden mt-2 space-y-2 bg-white border border-gray-200 w-40">
+                            <a href="{{ route('zone') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Zones</a>
                             <a href="{{ route('user') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Utilisateurs</a>
                             <a href="{{ route('boutique') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Boutiques</a>
                         </div>

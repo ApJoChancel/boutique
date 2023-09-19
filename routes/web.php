@@ -12,6 +12,7 @@ use App\Livewire\Role;
 use App\Livewire\Sondage;
 use App\Livewire\User;
 use App\Livewire\Vente;
+use App\Livewire\Zone;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,4 +44,5 @@ Route::middleware('auth')->group(function() {
     Route::get('vente', Vente::class)->name('vente');
     Route::get('rec', Recouvrement::class)->name('rec');
     Route::get('compte', Compte::class)->name('compte');
+    Route::get('zone', Zone::class)->name('zone');
 });
