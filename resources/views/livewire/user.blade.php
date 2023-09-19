@@ -29,11 +29,11 @@
         <div class="mt-8 bg-white p-4 shadow rounded-lg">
             <div class="-mx-3 md:flex mb-2">
                 <div class="md:w-1/2 px-3 mb-6 md:mb-0">
-                    <label for="email" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
-                        Email
+                    <label for="login" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
+                        login
                     </label>
-                    <input wire:model.live="email" id="email" type="email" placeholder="chancel@domain.net" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
-                    @error('email') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                    <input wire:model.live="login" id="login" type="text" placeholder="Ex : COM0102" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                    @error('login') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                 </div>
                 <div class="md:w-1/2 px-3 mb-6 md:mb-0">
                     <label for="noms" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">

@@ -16,18 +16,18 @@ class Auth extends AppComponent
 {
     
     #[Rule('required')]
-    public $email = null;
+    public $login = null;
     #[Rule('required')]
     public $password = null;
 
     public function save(Request $request)
     {
         $this->validate();
-        $item = User::where('email', $this->email)->first();
+        $item = User::where('login', $this->login)->first();
         if(password_verify($this->password, $item?->password)){
             $request->session()->regenerate();
             DB::beginTransaction();
-                FacadesAuth::attempt($this->validate());
+                FacadesAuth::login($item);
                 $log = new Log();
                 $log->libelle = 'connexion';
                 $log->date = now();
@@ -39,13 +39,13 @@ class Auth extends AppComponent
             return redirect()->intended(route('compte'));
         }
 
-        $this->addError('email', 'Informations incorrectes');
+        $this->addError('login', 'Informations incorrectes');
     }
 
     public function resetValues()
     {
         parent::resetValues();
-        $this->email =
+        $this->login =
         $this->password = null;
     }
 
