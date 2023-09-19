@@ -15,10 +15,11 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->unique();
-            $table->string('noms');
+            $table->string('login')->unique();
+            $table->string('nom');
+            $table->string('prenom');
             $table->string('password');
-            $table->foreignIdFor(Role::class)->constrained();
+            $table->foreignIdFor(Role::class)->nullable()->constrained();
             $table->foreignIdFor(Boutique::class)->nullable()->constrained();
             $table->timestamps();
         });

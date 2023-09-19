@@ -14,28 +14,44 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
         DB::table('roles')->insert([
             [
-                'libelle' => 'Propriétaire'
+                'id' => 1,
+                'libelle' => 'Manager'
             ],
             [
-                'libelle' => 'Manager'
+                'id' => 2,
+                'libelle' => 'Commercial'
+            ],
+        ]);
+
+        DB::table('types')->insert([
+            [
+                'id' => 1,
+                'libelle' => 'Admin'
+            ],
+            [
+                'id' => 2,
+                'libelle' => 'Suppléant'
+
+            ],
+            [
+                'id' => 3,
+                'libelle' => 'Superviseur'
+            ],
+            [
+                'id' => 4,
+                'libelle' => 'Commercial'
             ],
         ]);
 
         DB::table('users')->insert([
             [
-                'email' => 'johndoe@gmail.com',
-                'noms' => 'John',
+                'login' => 'ADM0001',
+                'nom' => 'DOE',
+                'prenom' => 'John',
                 'password' => Hash::make('password'),
-                'role_id' => 1,
-                // 'boutique_id' => 1,
+                'type_id' => 1,
             ],
         ]);
     }
