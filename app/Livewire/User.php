@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Role;
+use App\Models\Type;
 use App\Models\User as ModelsUser;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
@@ -14,19 +15,25 @@ class User extends AppComponent
     const DEFAULT_PASSWORD = 'password';
 
     #[Rule('required|min:5|unique:users')]
-    public $email = null;
+    public $login = null;
+    #[Rule('required')]
+    public $nom = null;
+    #[Rule('required')]
+    public $prenom = null;
     #[Rule('required')]
     public $role_id = null;
     #[Rule('required')]
-    public $noms = null;
+    public $type_id = null;
 
-    public function register()
+    public function save()
     {
         $this->validate();
         $item = (!$this->edit_id) ? new ModelsUser() : ModelsUser::findOrFail($this->edit_id);
-        $item->email = $this->email;
-        $item->noms = $this->noms;
+        $item->login = $this->login;
+        $item->nom = $this->nom;
+        $item->prenom = $this->prenom;
         $item->role_id = $this->role_id;
+        $item->type_id = $this->type_id;
         $item->password = Hash::make(self::DEFAULT_PASSWORD);
         $item->save();
         $this->resetValues();
@@ -36,9 +43,11 @@ class User extends AppComponent
     public function editItem(ModelsUser $user)
     {
         $this->edit_id = $user->id;
-        $this->email = $user->email;
-        $this->noms = $user->noms;
+        $this->login = $user->login;
+        $this->nom = $user->nom;
+        $this->prenom = $user->prenom;
         $this->role_id = $user->role_id;
+        $this->type_id = $user->type_id;
         $this->textSubmit = 'Modifier';
     }
 
@@ -56,8 +65,10 @@ class User extends AppComponent
     public function resetValues()
     {
         parent::resetValues();
-        $this->email =
-            $this->noms =
+        $this->login =
+            $this->nom =
+            $this->prenom =
+            $this->type_id =
             $this->role_id = null;
     }
 
@@ -71,7 +82,8 @@ class User extends AppComponent
 
     public function mount()
     {
-        $this->role_id = 2;
+        $this->type_id = 4; //Commercial
+        $this->role_id = 2; //Commercial
     }
 
     #[Layout('livewire.layouts.base')]
@@ -80,6 +92,7 @@ class User extends AppComponent
     {
         return view('livewire.user', [
             'roles' => Role::all(),
+            'types' => Type::all(),
             'users' => ModelsUser::all(),
         ]);
     }

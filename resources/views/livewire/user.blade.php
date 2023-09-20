@@ -25,7 +25,7 @@
     @if (session()->has('status'))
         <div class="alert alert-success text-center">{{ session('status') }}</div>
     @endif
-    <form wire:submit="register">
+    <form wire:submit="save">
         <div class="mt-8 bg-white p-4 shadow rounded-lg">
             <div class="-mx-3 md:flex mb-2">
                 <div class="md:w-1/2 px-3 mb-6 md:mb-0">
@@ -36,13 +36,38 @@
                     @error('login') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                 </div>
                 <div class="md:w-1/2 px-3 mb-6 md:mb-0">
-                    <label for="noms" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
-                        Noms et prénoms
+                    <label for="nom" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
+                        Nom
                     </label>
-                    <input wire:model.live="noms" id="noms" type="text" placeholder="chancel" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
-                    @error('noms') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                    <input wire:model.live="nom" id="nom" type="text" placeholder="Ex : DOE" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                    @error('nom') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                 </div>
+                <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+                    <label for="prenom" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
+                        prenom
+                    </label>
+                    <input wire:model.live="prenom" id="prenom" type="text" placeholder="Ex : John" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                    @error('prenom') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                </div>
+            </div>
+            <div class="-mx-3 md:flex mb-2">
                 @empty($this->edit_id)
+                    <div class="md:w-1/2 px-3">
+                        <label for="type" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
+                            type
+                        </label>
+                        <div class="relative">
+                            <select wire:model="type_id" name="type_id" id="type" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded">
+                                <option disabled>Choisir un type...</option>
+                                @foreach ($types as $item)
+                                    <option wire:key="{{ $item->id }}" value="{{ $item->id }}">{{ $item->libelle }}</option>
+                                @endforeach
+                            </select>
+                            <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                            </div>
+                        </div>
+                    </div>
                     <div class="md:w-1/2 px-3">
                         <label for="role" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
                             Role
@@ -88,10 +113,13 @@
             <thead>
                 <tr class="text-sm leading-normal">
                     <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
-                        Email
+                        Login
                     </th>
                     <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
                         Noms et prénoms
+                    </th>
+                    <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
+                        Type
                     </th>
                     <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
                         Role
@@ -104,13 +132,16 @@
                         wire:click='editItem({{ $item->id }})'
                     >
                         <td class="py-2 px-4 border-b border-grey-light">
-                            {{ $item->email }}
+                            {{ $item->login }}
                         </td>
                         <td class="py-2 px-4 border-b border-grey-light">
-                            {{ $item->noms }}
+                            {{ "{$item->nom} {$item->prenom}" }}
                         </td>
                         <td class="py-2 px-4 border-b border-grey-light">
-                            {{ $item->role->libelle }}
+                            {{ $item->type->libelle }}
+                        </td>
+                        <td class="py-2 px-4 border-b border-grey-light">
+                            {{ $item->role?->libelle }}
                         </td>
                     </tr>
                 @endforeach

@@ -14,6 +14,11 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function type()
+    {
+        return $this->belongsTo(Type::class);
+    }
+
     public function boutique()
     {
         return $this->belongsTo(Boutique::class);
