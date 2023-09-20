@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Boutique as ModelsBoutique;
 use App\Models\User;
+use App\Models\Zone;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
@@ -14,13 +15,18 @@ class Boutique extends AppComponent
     #[Rule('required|min:5|unique:boutiques')]
     public $designation = null;
     #[Rule('sometimes')]
+    public $zone_id = null;
+    #[Rule('sometimes')]
     public $user_id = null;
+
+    public $change_zone = false;
 
     public function save()
     {
         $this->validate();
         $item = (!$this->edit_id) ? new ModelsBoutique() : ModelsBoutique::findOrFail($this->edit_id);
         $item->designation = $this->designation;
+        $item->zone_id = $this->zone_id;
         $user = User::find($this->user_id);
         DB::beginTransaction();
             $item->save();
@@ -38,6 +44,7 @@ class Boutique extends AppComponent
         $this->edit_id = $item->id;
         $this->designation = $item->designation;
         $this->user_id = null;
+        $this->zone_id = $item->zone->id;
         $this->textSubmit = 'Modifier';
     }
 
@@ -56,7 +63,9 @@ class Boutique extends AppComponent
     {
         parent::resetValues();
         $this->designation =
+            $this->zone_id =
             $this->user_id = null;
+            $this->change_zone = false;
         $this->dispatch('close-modal'); 
     }
 
@@ -82,12 +91,36 @@ class Boutique extends AppComponent
         session()->flash('status', 'Changed successfully');
     }
 
+    public function changeZone(ModelsBoutique $item)
+    {
+        $this->edit_id = $item->id;
+        $this->change_zone = true;
+        $this->designation = $item->zone->libelle;
+        $this->zone_id = $item->zone->id;
+        $this->dispatch('show-change');
+    }
+
+    public function changeZoneData()
+    {
+        $this->validate();
+        $item = ModelsBoutique::findOrFail($this->edit_id);
+        $zone = Zone::find($this->zone_id);
+        DB::beginTransaction();
+            $item->zone()->associate($zone);
+            $item->save();
+        DB::commit();
+        $this->dispatch('close-modal'); 
+        $this->resetValues();
+        session()->flash('status', 'Changed successfully');
+    }
+
     #[Layout('livewire.layouts.base')]
     #[Title('Boutique | Boutique')]
     public function render()
     {
         return view('livewire.boutique', [
-            'users' => User::where('role_id', 2)->get(),
+            'users' => User::where('role_id', 1)->get(), //Manager
+            'zones' => Zone::all(),
             'boutiques' => ModelsBoutique::all(),
         ]);
     }

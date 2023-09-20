@@ -13,4 +13,9 @@ class Boutique extends Model
     {
         return $this->hasOne(User::class);
     }
+
+    public function zone()
+    {
+        return $this->belongsTo(Zone::class);
+    }
 }
