@@ -72,7 +72,7 @@ class Boutique extends AppComponent
     public function changeManager(ModelsBoutique $item)
     {
         $this->edit_id = $item->id;
-        $this->designation = $item->manager->login ?? 'Aucun';
+        $this->designation = "{$item->manager->nom} {$item->manager->prenom}";
         $this->user_id = $item->manager?->id;
         $this->dispatch('show-change');
     }

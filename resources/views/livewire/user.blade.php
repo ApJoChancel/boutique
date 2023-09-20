@@ -66,6 +66,7 @@
                             <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
                                 <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                             </div>
+                            @error('type_id') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                         </div>
                     </div>
                     <div class="md:w-1/2 px-3">
@@ -82,6 +83,41 @@
                             <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
                                 <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                             </div>
+                            @error('role_id') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 px-3">
+                        <label for="zone" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
+                            Zone
+                        </label>
+                        <div class="relative">
+                            <select wire:model="zone_id" name="zone_id" id="zone" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded">
+                                <option disabled>Choisir une zone...</option>
+                                @foreach ($zones as $item)
+                                    <option wire:key="{{ $item->id }}" value="{{ $item->id }}">{{ $item->libelle }}</option>
+                                @endforeach
+                            </select>
+                            <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                            </div>
+                            @error('zone_id') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 px-3">
+                        <label for="boutique" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
+                            Boutique
+                        </label>
+                        <div class="relative">
+                            <select wire:model="boutique_id" name="boutique_id" id="boutique" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded">
+                                <option disabled>Choisir une boutique...</option>
+                                @foreach ($boutiques as $item)
+                                    <option wire:key="{{ $item->id }}" value="{{ $item->id }}">{{ $item->designation }}</option>
+                                @endforeach
+                            </select>
+                            <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                            </div>
+                            @error('boutique_id') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                         </div>
                     </div>
                 @endempty
@@ -124,6 +160,12 @@
                     <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
                         Role
                     </th>
+                    <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
+                        Zone
+                    </th>
+                    <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
+                        Boutique
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -142,6 +184,12 @@
                         </td>
                         <td class="py-2 px-4 border-b border-grey-light">
                             {{ $item->role?->libelle }}
+                        </td>
+                        <td class="py-2 px-4 border-b border-grey-light">
+                            {{ $item->zone?->libelle }}
+                        </td>
+                        <td class="py-2 px-4 border-b border-grey-light">
+                            {{ $item->boutique?->designation }}
                         </td>
                     </tr>
                 @endforeach

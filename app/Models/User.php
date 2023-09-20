@@ -23,4 +23,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Boutique::class);
     }
+
+    public function zone()
+    {
+        return $this->belongsTo(Zone::class);
+    }
 }

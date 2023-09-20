@@ -2,9 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Models\Boutique;
 use App\Models\Role;
 use App\Models\Type;
 use App\Models\User as ModelsUser;
+use App\Models\Zone;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
@@ -20,10 +22,10 @@ class User extends AppComponent
     public $nom = null;
     #[Rule('required')]
     public $prenom = null;
-    #[Rule('required')]
     public $role_id = null;
-    #[Rule('required')]
     public $type_id = null;
+    public $zone_id = null;
+    public $boutique_id = null;
 
     public function save()
     {
@@ -32,9 +34,47 @@ class User extends AppComponent
         $item->login = $this->login;
         $item->nom = $this->nom;
         $item->prenom = $this->prenom;
-        $item->role_id = $this->role_id;
-        $item->type_id = $this->type_id;
         $item->password = Hash::make(self::DEFAULT_PASSWORD);
+        switch ($this->type_id) {
+            case 1 : //Admin
+            case 2 : //Suppléant
+                //On s'assure qu'il n'y a qu'un suppléant
+                if($this->type_id == 2){ //Suppléant
+                    $exist = ModelsUser::where('type_id', $this->type_id)->first();
+                    if($exist){
+                        $this->addError('type_id', 'Un suppléant existe déjà');
+                        return;
+                    }
+                }
+                $item->type_id = $this->type_id;
+                break;
+
+            case 3 : //Superviseur
+                //On s'assure qu'il n'y a aucun superviseur dans cette zone
+                $exist = ModelsUser::where('zone_id', $this->zone_id)->first();
+                if($exist){
+                    $this->addError('zone_id', 'Cette zone a déjà un superviseur');
+                    return;
+                }
+                $item->type_id = $this->type_id;
+                $item->zone_id = $this->zone_id;
+                break;
+            
+            case 4 : //Commercial
+                if($this->role_id == 1){ //Manager
+                    //On s'assure qu'il n'y a pas déjà un manager dans la boutique
+                    $exist = ModelsUser::where('boutique_id', $this->boutique_id)
+                        ->where('role_id', $this->role_id)->first();
+                    if($exist){
+                        $this->addError('boutique_id', 'Cette boutique a déjà un manager');
+                        return;
+                    }
+                }
+                $item->type_id = $this->type_id;
+                $item->role_id = $this->role_id;
+                $item->boutique_id = $this->boutique_id;
+                break;
+        }
         $item->save();
         $this->resetValues();
         session()->flash('status', 'Added successfully');
@@ -93,6 +133,8 @@ class User extends AppComponent
         return view('livewire.user', [
             'roles' => Role::all(),
             'types' => Type::all(),
+            'zones' => Zone::all(),
+            'boutiques' => Boutique::all(),
             'users' => ModelsUser::all(),
         ]);
     }

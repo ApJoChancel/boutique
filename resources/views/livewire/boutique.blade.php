@@ -96,7 +96,7 @@
                             {{ $item->zone->libelle }}
                         </td>
                         <td class="py-2 px-4 border-b border-grey-light">
-                            {{ $item->manager?->noms }}
+                            {{ "{$item->manager?->nom} {$item->manager?->prenom}" }}
                         </td>
                     </tr>
                 @endforeach
@@ -132,7 +132,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="viewModalLabel">Changer le manager</h5>
+                    <h5 class="modal-title" id="viewModalLabel">Changer</h5>
                     <button class="btn-close" wire:click="deleteCancelled()" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -166,7 +166,7 @@
                             <select wire:model="user_id" name="user_id" id="user">
                                 <option>Choisir un manager</option>
                                 @foreach ($users as $item)
-                                    <option wire:key="{{ $item->id }}" value="{{ $item->id }}">{{ $item->noms }}</option>
+                                    <option wire:key="{{ $item->id }}" value="{{ $item->id }}">{{ "{$item->nom} {$item->prenom}" }}</option>
                                 @endforeach
                             </select>
                         </div>
