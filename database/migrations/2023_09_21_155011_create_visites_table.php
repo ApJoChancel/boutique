@@ -14,13 +14,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ventes', function (Blueprint $table) {
+        Schema::create('visites', function (Blueprint $table) {
             $table->id();
-            $table->string('montant')->default(0);
-            $table->date('date');
-            $table->string('type')->nullable(); //Vente | Location
-            $table->string('motif')->nullable();
-            $table->string('comment')->nullable();
+            $table->dateTime('date');
             $table->foreignIdFor(Client::class)->constrained();
             $table->foreignIdFor(User::class)->constrained();
             $table->foreignIdFor(Boutique::class)->constrained();
@@ -33,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ventes');
+        Schema::dropIfExists('visites');
     }
 };

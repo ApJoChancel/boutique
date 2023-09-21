@@ -189,7 +189,7 @@
                             </label>
                             <div class="relative">
                                 <select wire:model="client_id" name="client_id" id="client" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded">
-                                    <option disabled>Choisir un client...</option>
+                                    <option>Choisir un client...</option>
                                     @foreach ($clients as $item)
                                         <option wire:key="{{ $item->id }}" value="{{ $item->id }}">{{ "{$item->nom} {$item->prenom}" }}</option>
                                     @endforeach
@@ -262,67 +262,67 @@
             </button>
         @else
             @if ($etape3)
-                @if (!$visite_conclue)
+                @if (!$nature_operation)
                     <div>
-                        <p>Visite concluante ?</p>
+                        <p>Vente ou location ?</p>
                         <div>
-                            <button wire:click='estConcluante(true)' type="button" class="py-2 px-4 bg-transparent text-purple-600 font-semibold border border-purple-600 rounded hover:bg-purple-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                                Oui
+                            <button wire:click='estVente(true)' type="button" class="py-2 px-4 bg-transparent text-purple-600 font-semibold border border-purple-600 rounded hover:bg-purple-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                Vente
                             </button>
-                            <button wire:click='estConcluante(false)' type="button" class="py-2 px-4 bg-transparent text-blue-600 font-semibold border border-blue-600 rounded hover:bg-blue-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                                Non
+                            <button wire:click='estVente(false)' type="button" class="py-2 px-4 bg-transparent text-blue-600 font-semibold border border-blue-600 rounded hover:bg-blue-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                Location
                             </button>
                         </div>
                     </div>
                 @else
-                    @if (!$est_concluante)
+                    @if (!$visite_conclue) {{--  --}}
                         <div>
-                            <h1>Motif</h1>
-                            <div class="mt-8 bg-white p-4 shadow rounded-lg">
-                                <div class="-mx-3 md:flex mb-2">
-                                    <div class="md:w-1/2 px-3 mb-6 md:mb-0">
-                                        <label for="motif" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
-                                            Elément défaillant
-                                        </label>
-                                        <div class="relative">
-                                            <select wire:model="motif" id="motif" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded">
-                                                <option>Choisir un motif...</option>
-                                                <option value="article">Article</option>
-                                                <option value="modele">Modèle</option>
-                                                <option value="taille">Taille</option>
-                                                <option value="couleur">Couleur</option>
-                                                <option value="prix">Prix</option>
-                                            </select>
-                                            <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
-                                                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="md:w-1/2 px-3 mb-6 md:mb-0">
-                                        <label for="comment" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
-                                            Commentaire
-                                        </label>
-                                        <textarea wire:model="comment" id="comment" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded"></textarea>
-                                    </div>
-                                </div>
-                                <div>
-                                    <button wire:click='venteTerminee' type="button" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                                        Terminer
-                                    </button>
-                                </div>
+                            <p>Visite concluante ?</p>
+                            <div>
+                                <button wire:click='estConcluante(true)' type="button" class="py-2 px-4 bg-transparent text-purple-600 font-semibold border border-purple-600 rounded hover:bg-purple-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                    Oui
+                                </button>
+                                <button wire:click='estConcluante(false)' type="button" class="py-2 px-4 bg-transparent text-blue-600 font-semibold border border-blue-600 rounded hover:bg-blue-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                    Non
+                                </button>
                             </div>
                         </div>
                     @else
-                        @if (!$nature_operation)
+                        @if (!$est_concluante) {{--  --}}
                             <div>
-                                <p>Vente ou location ?</p>
-                                <div>
-                                    <button wire:click='estVente(true)' type="button" class="py-2 px-4 bg-transparent text-purple-600 font-semibold border border-purple-600 rounded hover:bg-purple-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                                        Vente
-                                    </button>
-                                    <button wire:click='estVente(false)' type="button" class="py-2 px-4 bg-transparent text-blue-600 font-semibold border border-blue-600 rounded hover:bg-blue-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                                        Location
-                                    </button>
+                                <h1>Motif</h1>
+                                <div class="mt-8 bg-white p-4 shadow rounded-lg">
+                                    <div class="-mx-3 md:flex mb-2">
+                                        <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+                                            <label for="motif" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
+                                                Elément défaillant
+                                            </label>
+                                            <div class="relative">
+                                                <select wire:model="motif" id="motif" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded">
+                                                    <option>Choisir un motif...</option>
+                                                    <option value="article">Article</option>
+                                                    <option value="modele">Modèle</option>
+                                                    <option value="taille">Taille</option>
+                                                    <option value="couleur">Couleur</option>
+                                                    <option value="prix">Prix</option>
+                                                </select>
+                                                <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                                                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+                                            <label for="comment" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
+                                                Commentaire
+                                            </label>
+                                            <textarea wire:model="comment" id="comment" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded"></textarea>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button wire:click='venteTerminee' type="button" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                            Terminer
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         @else
@@ -336,6 +336,7 @@
                                         </label>
                                         <div class="relative">
                                             <select wire:change.lazy='hasCarac' wire:model="selected_article_id" id="article" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded">
+                                                <option>Choisir un article...</option>
                                                 @foreach ($articles as $item)
                                                     <option wire:key="{{ $item->id }}" value="{{ $item->id }}">{{ $item->libelle }}</option>
                                                 @endforeach
@@ -388,7 +389,7 @@
                                 <label for="mtt_achat" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
                                     Montant des achats
                                 </label>
-                                <input wire:model.live="mtt_achat" id="mtt_achat" type="text" placeholder="Catégorie" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                <input wire:model.live="mtt_achat" id="mtt_achat" type="text" placeholder="Ex : 500000" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
                                 @error('mtt_achat') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                             </div>
                         </div>
@@ -397,7 +398,7 @@
                                 <label for="mtt_paye" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
                                     Montant payé
                                 </label>
-                                <input wire:model.live="mtt_paye" id="mtt_paye" type="text" placeholder="Catégorie" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                <input wire:model.live="mtt_paye" id="mtt_paye" type="text" placeholder="Ex: 500000" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
                                 @error('mtt_paye') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                             </div>
                         </div>
@@ -406,7 +407,7 @@
                                 <label for="mtt_reduction" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
                                     Réduction accordée
                                 </label>
-                                <input wire:model.live="mtt_reduction" id="mtt_reduction" type="text" placeholder="Catégorie" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                <input wire:model.live="mtt_reduction" id="mtt_reduction" type="text" placeholder="Ex : 10000" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
                                 @error('mtt_reduction') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                             </div>
                         </div>
