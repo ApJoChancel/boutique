@@ -29,10 +29,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::get('auth', Auth::class)->middleware('guest')->name('login');
 
 Route::middleware('auth')->group(function() {
@@ -50,5 +46,5 @@ Route::middleware('auth')->group(function() {
     Route::get('zone', Zone::class)->name('zone');
     Route::get('log', Log::class)->name('log');
     Route::get('obj', Objectif::class)->name('objectif');
-    Route::get('statistiques/objectif', StatObjectif::class)->name('stat_objectif');
+    Route::get('/', StatObjectif::class)->name('stat_objectif');
 });

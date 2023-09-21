@@ -35,7 +35,7 @@ class Auth extends AppComponent
                     $log->boutique()->associate($item->boutique->id);
                 $log->save();
             DB::commit();
-            return redirect()->intended(route('compte'));
+            return redirect()->intended(route('stat_objectif'));
         }
 
         $this->addError('login', 'Informations incorrectes');

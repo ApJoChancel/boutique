@@ -12,15 +12,22 @@
     @livewireStyles
     <script>
         function graphique(idcanvas, labels, datas){
-            const barCanvas = document.getElementById(idcanvas);
-            const barChart = new Chart(barCanvas, {
-                type: "bar",
+            const pieCanvas = document.getElementById(idcanvas);
+            const pieChart = new Chart(pieCanvas, {
+                type: "pie",
                 data: {
                     labels: labels,
                     datasets: [{
+                        labels: labels,
                         data: datas,
-                        backgroundColor: ['blue', 'red', 'yellow']
-                    }]
+                        backgroundColor: [
+                            'rgb(255, 99, 132)', 
+                            'rgb(54, 162, 235)', 
+                            'rgb(255, 205, 86)'
+                        ],
+                        hoverOffset: 40,
+                        borderWidth: 1
+                    }],
                 },
             });
         }
@@ -60,7 +67,7 @@
             <!-- Barra lateral de navegación (oculta en dispositivos pequeños) -->
             <div class="p-2 bg-white w-full md:w-60 flex flex-col md:flex hidden" id="sideNav">
                 <nav>
-                    <a href="#" class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white">
+                    <a href="{{ route('stat_objectif') }}" class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white">
                         <i class="fas fa-home mr-2"></i>Tableau de bord
                     </a>
 

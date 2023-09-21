@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Boutique;
 use App\Models\Objectif;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,7 @@ class StatObjectif extends Component
         //Semaine
         $debutSemaine = Carbon::now()->startOfWeek();
         $finSemaine = Carbon::now()->endOfWeek();
-        $semaine = DB::table('ventes')
+        $semaine_global = DB::table('ventes')
             ->select(
                 DB::raw('SUM(ventes.montant) AS montant'),
             )
@@ -29,7 +30,7 @@ class StatObjectif extends Component
         ;
         //Mois
         $moisEnCours = Carbon::now()->startOfMonth();
-        $mois = DB::table('ventes')
+        $mois_global = DB::table('ventes')
             ->select(
                 DB::raw('SUM(ventes.montant) AS montant'),
             )
@@ -39,9 +40,38 @@ class StatObjectif extends Component
             ->first()
         ;
 
+        $items = null;
+        $boutiques = null;
+        foreach (Boutique::all() as $bout) {
+            $semaine = DB::table('ventes')
+                ->select(
+                    DB::raw('SUM(ventes.montant) AS montant'),
+                )
+                ->leftJoin('paiements', 'ventes.id', 'paiements.vente_id')
+                ->whereBetween('ventes.date', [$debutSemaine, $finSemaine])
+                ->where('ventes.boutique_id', $bout->id)
+                ->first()
+            ;
+
+            $mois = DB::table('ventes')
+                ->select(
+                    DB::raw('SUM(ventes.montant) AS montant'),
+                )
+                ->leftJoin('paiements', 'ventes.id', 'paiements.vente_id')
+                ->whereYear('ventes.date', $moisEnCours->year)
+                ->whereMonth('ventes.date', $moisEnCours->month)
+                ->where('ventes.boutique_id', $bout->id)
+                ->first()
+            ;
+            $items[] = [$semaine->montant, $mois->montant, $objectif];
+            $boutiques[] = $bout->designation;
+        }
+
         return view('livewire.stat-objectif', [
             'labels' => ['Semaine', 'Mois', 'Objectif'],
-            'datas' => [$semaine->montant, $mois->montant, $objectif],
+            'global' => [$semaine_global->montant, $mois_global->montant, $objectif],
+            'items' => $items,
+            'boutiques' => $boutiques,
         ]);
     }
 }
