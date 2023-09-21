@@ -13,56 +13,172 @@ use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\DB;
 use App\Models\Vente as ModelsVente;
+use Livewire\Attributes\Rule;
 
 class Vente extends AppComponent
 {
-    public $libelle = null;
-    private $questions = null;
-    private $question = null;
+    // public $libelle = null;
+    // private $questions = null;
+    // private $question = null;
+    // public $currentQuestion = null;
+    // public $reponses = [];
+    // public $reponse = null;
+    // public $allResponsesAnswered = false;
+    // public $answered = false;
+    // public $selectedArticle = null;
+    // public $articles = null;
+    // public $article = null;
+    // public $opts = [];
+    // public $artcilesAdded;
+
+    // public $client = null;
+    // public $mtt_achat = null;
+    // public $mtt_paye = null;
+    // public $mtt_reduction = null;
+
+    public $etape1 = false; //Identification
+    public $est_nouveau = false;
+    public $est_identifie = false;
+    public $nom = null;
+    public $prenom = null;
+    public $telephone = null;
+    public $client_id = null;
+    public $clients = null;
+
+    public $etape2 = false; //Sondage
+    public $questions = null;
+    public $question = null;
     public $currentQuestion = null;
     public $reponses = [];
-    public $reponse = null;
-    public $allResponsesAnswered = false;
-    public $answered = false;
-    public $selectedArticle = null;
-    public $articles = null;
-    public $article = null;
-    public $opts = [];
-    public $artcilesAdded;
 
-    public $client = null;
+    public $etape3 = false; //Articles
+    public $est_concluante = false;
+    public $visite_conclue = false;
+    public $motif = null;
+    public $comment = null;
+    public $nature_operation = false;
+    public $est_vente = false;
+    public $articles = null;
+    public $selected_article_id = null;
+    public $selected_article = null;
+    public $opts = null;
+    public $artciles_added;
+
+    public $etape4 = false; //Facture
     public $mtt_achat = null;
     public $mtt_paye = null;
     public $mtt_reduction = null;
 
+
     public function mount()
     {
-        $this->currentQuestion = 0;
-        $this->questions = Question::all();
-        $this->question = $this->questions[$this->currentQuestion];
+        $this->initEtape1();
+        // $this->currentQuestion = 0;
+        // $this->questions = Question::all();
+        // $this->question = $this->questions[$this->currentQuestion];
 
-        $this->articles = Article::all();
+        // $this->articles = Article::all();
     }
 
-    public function submitResponse()
+    public function initEtape1()
     {
+        $this->etape1 = true;
+        $this->etape2 = false;
+
+        $this->est_identifie = false;
+        $this->clients = Client::all();
+        $this->client_id = $this->clients[0]->id;
+    }
+
+    public function estNouveau(bool $value)
+    {
+        $this->est_identifie = true;;
+        $this->est_nouveau = $value;
+    }
+
+    public function estIdentifie(bool $value)
+    {
+        $this->est_identifie = $value;
+    }
+
+    public function finEtape1()
+    {
+        if($this->client_id){
+            $client = User::findOrFail($this->client_id);
+            $this->nom = $client->nom;
+            $this->prenom = $client->prenom;
+            $this->telephone = $client->telephone;
+        }
+        $this->initEtape2();
+    }
+
+    public function initEtape2()
+    {
+        $this->etape2 = true;
+        $this->etape1 = false;
+
+        $this->currentQuestion = 4;
         $this->questions = Question::all();
         $this->question = $this->questions[$this->currentQuestion];
-        $this->reponses[$this->question->id] = $this->reponse;
-        $this->reponse = null;
+        $this->reponses[$this->currentQuestion] = ['val' => $this->reponses[$this->currentQuestion]['val'] ?? 0];
+    }
+
+    public function questionPrecedente()
+    {
+        if(array_key_exists($this->currentQuestion-1, $this->questions->toArray())){
+            $this->currentQuestion--;
+        }
+        $this->question = $this->questions[$this->currentQuestion];
+        $this->reponses[$this->currentQuestion] = ['val' => $this->reponses[$this->currentQuestion]['val'] ?? 0];
+    }
+
+    public function questionSuivante()
+    {
         $this->currentQuestion++;
         if(array_key_exists($this->currentQuestion, $this->questions->toArray())){
-            $this->questions = Question::all();
             $this->question = $this->questions[$this->currentQuestion];
+            $this->reponses[$this->currentQuestion] = ['val' => $this->reponses[$this->currentQuestion]['val'] ?? 0];
         } else{
-            $this->allResponsesAnswered = true;
+            $this->initEtape3();
         }
+    }
+
+    public function initEtape3()
+    {
+        $this->etape3 = true;
+        $this->etape1 = false;
+        $this->etape2 = false;
+
+        $this->est_concluante = false;
+        $this->visite_conclue = false;
+        $this->motif = 'article';
+        $this->comment = null;
+        $this->nature_operation = false;
+        $this->est_vente = false;
+        $this->articles = null;
+        $this->selected_article_id = null;
+        $this->selected_article = null;
+        $this->opts = [];
+        $this->artciles_added = [];
+    }
+
+    public function estConcluante(bool $value)
+    {
+        $this->visite_conclue = true;;
+        $this->est_concluante = $value;
+    }
+
+    public function estVente(bool $value)
+    {
+        $this->nature_operation = true;;
+        $this->est_vente = $value;
+        $this->articles = ($this->est_vente) ? Article::all() : Article::all();
     }
 
     public function hasCarac()
     {
-        $this->article = Article::findOrFail($this->selectedArticle);
-        foreach($this->article->categorie->caracteristiques as $carac){
+        $this->selected_article = Article::findOrFail($this->selected_article_id);
+        foreach($this->selected_article->categorie->caracteristiques as $carac){
             foreach($carac->options as $opt){
                 $this->opts[$carac->id] = [
                     'carac' => $carac->libelle,
@@ -75,18 +191,30 @@ class Vente extends AppComponent
     public function addItem()
     {
         $car = '';
-        foreach($this->article->categorie->caracteristiques as $carac){
+        foreach($this->selected_article->categorie->caracteristiques as $carac){
             $car .= "{$this->opts[$carac->id]['carac']} : {$this->opts[$carac->id]['option']} |";
         }
-        $this->artcilesAdded[$this->article->id] = $car;
-        $this->articles = $this->articles->filter(function ($item) {
-            return $item->id !== $this->article->id;
-        });
+        $this->artciles_added[$this->selected_article->id][] = $car;
+        session()->flash('status', 'Added successfully');
     }
 
-    public function validVente()
+    public function initEtape4()
     {
-        $this->answered = true;
+        $this->etape4 = true;
+        $this->etape1 = false;
+        $this->etape2 = false;
+        $this->etape3 = false;
+
+        $this->mtt_achat = null;
+        $this->mtt_paye = null;
+        $this->mtt_reduction = null;
+    }
+
+    public function venteTerminee()
+    {
+        //
+        $this->resetValues();
+        $this->initEtape1();
     }
 
     public function submitPaiement()
@@ -140,34 +268,34 @@ class Vente extends AppComponent
     public function resetValues()
     {
         parent::resetValues();
-        $libelle = null;
-        $questions = null;
-        $question = null;
-        $currentQuestion = null;
-        $reponses = [];
-        $reponse = null;
-        $allResponsesAnswered = false;
-        $answered = false;
-        $selectedArticle = null;
-        $articles = null;
-        $article = null;
-        $opts = [];
-        $artcilesAdded = null;
+        // $libelle = null;
+        // $questions = null;
+        // $question = null;
+        // $currentQuestion = null;
+        // $reponses = [];
+        // $reponse = null;
+        // $allResponsesAnswered = false;
+        // $answered = false;
+        // $selectedArticle = null;
+        // $articles = null;
+        // $article = null;
+        // $opts = [];
+        // $artcilesAdded = null;
 
-        $client = null;
-        $mtt_achat = null;
-        $mtt_paye = null;
-        $mtt_reduction = null;
+        // $client = null;
+        // $mtt_achat = null;
+        // $mtt_paye = null;
+        // $mtt_reduction = null;
     }
 
     #[Layout('livewire.layouts.base')]
     #[Title('Boutique | Vente')]
     public function render()
     {
-        
-        return view('livewire.vente', [
-            'question' => $this->question,
-            'articles' => $this->articles,
-        ]);
+        return view('livewire.vente');
+        // return view('livewire.vente', [
+        //     'question' => $this->question,
+        //     'articles' => $this->articles,
+        // ]);
     }
 }

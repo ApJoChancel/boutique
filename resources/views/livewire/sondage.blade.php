@@ -7,6 +7,7 @@
             <div>
                 <label>Les choix</label>
                 @foreach($choix as $index => $choixItem)
+                <div class="choix-container">
                     <div class="choix">
                         <div class="unchoix">
                             <div>
@@ -21,13 +22,14 @@
                                     <option value="multiple">Multiple</option>
                                 </select> 
                             </div>
-                            <div class="complement-container" style="display: none">
+                            <div class="complement-container">
                                 <label for="complement-{{ $index }}">Options</label>
                                 <textarea wire:model="choix.{{ $index }}.complement" id="complement-{{ $index }}"></textarea>
                             </div>
                             <button type="button" wire:click="removeChoix({{ $index }})">Supprimer</button>
                         </div>
                     </div>
+                </div>
                 @endforeach
                 <button type="button"y wire:click="addChoix">Ajouter un choix</button>
             </div>
@@ -41,29 +43,32 @@
 </div>
 
 
-@push('scripts')
+{{-- @push('scripts')
     <script>
-        document.addEventListener('livewire:load', function () {
-            $(document).on('change', '.type', function () {
-                const complementContainer = $(this).closest('.unchoix').find('.complement-container');
-                if ($(this).val() !== 'text') {
-                    complementContainer.show();
-                } else {
-                    complementContainer.hide();
-                }
-            });
+        document.addEventListener('DOMContentLoaded', function () {
+            // Fonction pour ajouter les gestionnaires d'événements
+            function addEventListenersToUnchoix() {
+                const typeSelects = document.querySelectorAll('.unchoix .type');
 
-            Livewire.on('update-script', function () {
-                // Réexécutez votre script JavaScript ici
-                $(document).on('change', '.type', function () {
-                    const complementContainer = $(this).closest('.unchoix').find('.complement-container');
-                    if ($(this).val() !== 'text') {
-                        complementContainer.show();
-                    } else {
-                        complementContainer.hide();
-                    }
+                typeSelects.forEach(function (typeSelect) {
+                    typeSelect.addEventListener('change', function () {
+                        const complementContainer = this.closest('.unchoix').querySelector('.complement-container');
+                        if (this.value !== 'text') {
+                            complementContainer.style.display = 'block';
+                        } else {
+                            complementContainer.style.display = 'none';
+                        }
+                    });
                 });
+            }
+
+            // Ajoutez les gestionnaires d'événements aux blocs "unchoix" existants
+            addEventListenersToUnchoix();
+
+            // Écoutez un événement Livewire personnalisé pour ajouter les gestionnaires d'événements aux nouveaux éléments
+            Livewire.on('unchoixAdded', function () {
+                addEventListenersToUnchoix();
             });
         });
     </script>
-@endpush
+@endpush --}}

@@ -31,7 +31,7 @@ class Sondage extends AppComponent
 
     public function updated()
     {
-        $this->dispatch('update-script');
+        $this->dispatch('unchoixAdded');
     }
 
 
