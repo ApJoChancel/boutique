@@ -6,6 +6,7 @@ use App\Livewire\Boutique;
 use App\Livewire\Caracteristique;
 use App\Livewire\Categorie;
 use App\Livewire\Compte;
+use App\Livewire\Log;
 use App\Livewire\Logout;
 use App\Livewire\Recouvrement;
 use App\Livewire\Role;
@@ -45,4 +46,5 @@ Route::middleware('auth')->group(function() {
     Route::get('rec', Recouvrement::class)->name('rec');
     Route::get('compte', Compte::class)->name('compte');
     Route::get('zone', Zone::class)->name('zone');
+    Route::get('log', Log::class)->name('log');
 });

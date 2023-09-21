@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
             $table->string('libelle');
-            $table->date('date');
+            $table->dateTime('date');
             $table->foreignIdFor(User::class)->constrained();
             $table->foreignIdFor(Boutique::class)->nullable()->constrained();
             $table->timestamps();

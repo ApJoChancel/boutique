@@ -80,6 +80,15 @@
                             <a href="{{ route('rec') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Recouvrements</a>
                         </div>
                     </div>
+                    <div class="relative">
+                        <a href="#" id="groupStat" class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white">
+                            <i class="fas fa-file-alt mr-2"></i>Statistiques
+                        </a>
+
+                        <div id="groupStatContent" class="absolute left-14 top-0 hidden mt-2 space-y-2 bg-white border border-gray-200 w-40">
+                            <a href="{{ route('log') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pointeuse</a>
+                        </div>
+                    </div>
                 </nav>
 
                 <!-- Ítem de Cerrar Sesión -->
@@ -135,8 +144,12 @@
         });
         document.getElementById('groupArticle').addEventListener('click', function() {
             document.getElementById('groupArticleContent').classList.toggle('hidden');
-        });document.getElementById('groupVente').addEventListener('click', function() {
+        });
+        document.getElementById('groupVente').addEventListener('click', function() {
             document.getElementById('groupVenteContent').classList.toggle('hidden');
+        });
+        document.getElementById('groupStat').addEventListener('click', function() {
+            document.getElementById('groupStatContent').classList.toggle('hidden');
         });
     </script>
     
