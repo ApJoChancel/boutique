@@ -12,6 +12,7 @@ use App\Livewire\Objectif;
 use App\Livewire\Recouvrement;
 use App\Livewire\Role;
 use App\Livewire\Sondage;
+use App\Livewire\StatObjectif;
 use App\Livewire\User;
 use App\Livewire\Vente;
 use App\Livewire\Zone;
@@ -49,4 +50,5 @@ Route::middleware('auth')->group(function() {
     Route::get('zone', Zone::class)->name('zone');
     Route::get('log', Log::class)->name('log');
     Route::get('obj', Objectif::class)->name('objectif');
+    Route::get('statistiques/objectif', StatObjectif::class)->name('stat_objectif');
 });
