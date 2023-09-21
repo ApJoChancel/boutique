@@ -6,20 +6,18 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 
 class Log extends Component
 {
+    #[Url]
     public $date_search = null;
 
     public function mount()
     {
         $this->date_search = now()->format('Y-m-d');
     }
-
-    protected $queryString = [
-        'date_search' => ['except' => '']
-    ];
 
     #[Layout('livewire.layouts.base')]
     #[Title('Boutique | Log')]

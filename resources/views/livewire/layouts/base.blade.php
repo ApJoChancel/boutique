@@ -80,6 +80,9 @@
                             <a href="{{ route('rec') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Recouvrements</a>
                         </div>
                     </div>
+                    <a href="{{ route('objectif') }}" class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white">
+                        <i class="fas fa-home mr-2"></i>Objectif mensuel
+                    </a>
                     <div class="relative">
                         <a href="#" id="groupStat" class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white">
                             <i class="fas fa-file-alt mr-2"></i>Statistiques

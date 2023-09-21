@@ -54,5 +54,11 @@ class DatabaseSeeder extends Seeder
                 'type_id' => 1,
             ],
         ]);
+
+        DB::table('objectifs')->insert([
+            [
+                'montant' => '2000000'
+            ],
+        ]);
     }
 }
