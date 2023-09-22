@@ -77,7 +77,7 @@ class User extends AppComponent
         }
         $item->save();
         $this->resetValues();
-        session()->flash('status', 'Added successfully');
+        $this->notificationToast('Added successfully');
     }
 
     public function editItem(ModelsUser $user)
@@ -99,7 +99,7 @@ class User extends AppComponent
     public function deleteConfirmed(mixed $id)
     {
         parent::deleteConfirmed(ModelsUser::findOrFail($id));
-        session()->flash('status', 'Deleted successfully');
+        $this->notificationToast('Deleted successfully');
     }
 
     public function resetValues()
@@ -117,7 +117,7 @@ class User extends AppComponent
         $item->password = Hash::make(self::DEFAULT_PASSWORD);
         $item->save();
         $this->resetValues();
-        session()->flash('status', 'Changed successfully');
+        $this->notificationToast('Changed successfully');
     }
 
     public function mount()

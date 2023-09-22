@@ -36,7 +36,7 @@ class Boutique extends AppComponent
             }
         DB::commit();
         $this->resetValues();
-        session()->flash('status', 'Saved successfully');
+        $this->notificationToast('Saved successfully');
     }
 
     public function editItem(ModelsBoutique $item)
@@ -56,7 +56,7 @@ class Boutique extends AppComponent
     public function deleteConfirmed(mixed $id)
     {
         parent::deleteConfirmed(ModelsBoutique::findOrFail($id));
-        session()->flash('status', 'Deleted successfully');
+        $this->notificationToast('Deleted successfully');
     }
 
     public function resetValues()
@@ -72,9 +72,9 @@ class Boutique extends AppComponent
     public function changeManager(ModelsBoutique $item)
     {
         $this->edit_id = $item->id;
-        $this->designation = "{$item->manager->nom} {$item->manager->prenom}";
+        $this->designation = $item->manager ? "{$item->manager->nom} {$item->manager->prenom}" : 'Aucun';
         $this->user_id = $item->manager?->id;
-        $this->dispatch('show-change');
+        $this->change_modal = true;
     }
 
     public function changeManagerData()
@@ -86,9 +86,9 @@ class Boutique extends AppComponent
             $item->manager()->save($user);
             $item->save();
         DB::commit();
-        $this->dispatch('close-modal'); 
+        $this->change_modal = false;
         $this->resetValues();
-        session()->flash('status', 'Changed successfully');
+        $this->notificationToast('Changed successfully');
     }
 
     public function changeZone(ModelsBoutique $item)
@@ -97,7 +97,7 @@ class Boutique extends AppComponent
         $this->change_zone = true;
         $this->designation = $item->zone->libelle;
         $this->zone_id = $item->zone->id;
-        $this->dispatch('show-change');
+        $this->change_modal = true;
     }
 
     public function changeZoneData()
@@ -109,9 +109,9 @@ class Boutique extends AppComponent
             $item->zone()->associate($zone);
             $item->save();
         DB::commit();
-        $this->dispatch('close-modal'); 
+        $this->change_modal = false;
         $this->resetValues();
-        session()->flash('status', 'Changed successfully');
+        $this->notificationToast('Changed successfully');
     }
 
     #[Layout('livewire.layouts.base')]

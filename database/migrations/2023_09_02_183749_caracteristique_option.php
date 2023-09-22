@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('carac_opt', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Caracteristique::class)->constrained();
-            $table->foreignIdFor(Option::class)->constrained();
+            $table->foreignIdFor(Caracteristique::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Option::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

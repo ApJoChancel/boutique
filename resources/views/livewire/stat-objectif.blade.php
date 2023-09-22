@@ -7,17 +7,19 @@
             <div>
                 <canvas id="{{ $id }}"></canvas>
                 <script>
-                    graphique('<?= $id ?>', <?= json_encode($labels) ?>, <?= json_encode($items[$i]) ?>);
+                    barGraphique('<?= $id ?>', <?= json_encode($labels) ?>, <?= json_encode($items[$i]) ?>);
                 </script>
             </div>
         </div>
         @endfor
-        <h2>Toutes les boutiques</h2>
-        <div>
-            <canvas id="global"></canvas>
-            <script>
-                graphique('global', <?= json_encode($labels) ?>, <?= json_encode($global) ?>);
-            </script>
+        <div style="width: 50%;margin: 20px">
+            <h2>Toutes les boutiques</h2>
+            <div>
+                <canvas id="global"></canvas>
+                <script>
+                    barGraphique('global', <?= json_encode($labels) ?>, <?= json_encode($global) ?>);
+                </script>
+            </div>
         </div>
 
     </div>

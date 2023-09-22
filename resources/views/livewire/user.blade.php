@@ -1,30 +1,4 @@
 <div>
-    <!-- deleteModal -->
-    {{-- <div wire:ignore.self class="modal fade" id="confirmModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="viewModalLabel">Confirmer la suppression</h5>
-                    <button class="btn-close" wire:click="deleteCancelled()" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Suppression de &lt; {{ $this->noms }} &gt;</p>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary btn-sm" wire:click="deleteConfirmed({{ $this->delete_id }})">
-                        Valider
-                    </button>
-                    <button class="btn btn-primary btn-sm" wire:click="deleteCancelled" data-bs-dismiss="modal">
-                        Annuler
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    
-    @if (session()->has('status'))
-        <div class="alert alert-success text-center">{{ session('status') }}</div>
-    @endif
     <form wire:submit="save">
         <div class="mt-8 bg-white p-4 shadow rounded-lg">
             <div class="-mx-3 md:flex mb-2">
@@ -58,7 +32,7 @@
                         </label>
                         <div class="relative">
                             <select wire:model="type_id" name="type_id" id="type" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded">
-                                <option disabled>Choisir un type...</option>
+                                <option>Choisir un type...</option>
                                 @foreach ($types as $item)
                                     <option wire:key="{{ $item->id }}" value="{{ $item->id }}">{{ $item->libelle }}</option>
                                 @endforeach
@@ -75,7 +49,7 @@
                         </label>
                         <div class="relative">
                             <select wire:model="role_id" name="role_id" id="role" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded">
-                                <option disabled>Choisir un rôle...</option>
+                                <option>Choisir un rôle...</option>
                                 @foreach ($roles as $item)
                                     <option wire:key="{{ $item->id }}" value="{{ $item->id }}">{{ $item->libelle }}</option>
                                 @endforeach
@@ -92,7 +66,7 @@
                         </label>
                         <div class="relative">
                             <select wire:model="zone_id" name="zone_id" id="zone" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded">
-                                <option disabled>Choisir une zone...</option>
+                                <option>Choisir une zone...</option>
                                 @foreach ($zones as $item)
                                     <option wire:key="{{ $item->id }}" value="{{ $item->id }}">{{ $item->libelle }}</option>
                                 @endforeach
@@ -109,7 +83,7 @@
                         </label>
                         <div class="relative">
                             <select wire:model="boutique_id" name="boutique_id" id="boutique" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded">
-                                <option disabled>Choisir une boutique...</option>
+                                <option>Choisir une boutique...</option>
                                 @foreach ($boutiques as $item)
                                     <option wire:key="{{ $item->id }}" value="{{ $item->id }}">{{ $item->designation }}</option>
                                 @endforeach
@@ -196,4 +170,44 @@
             </tbody>
         </table>
     </div>
+
+    <!-- deleteModal -->
+    @if($confirm_modal)
+        <div class="fixed inset-0 flex items-center justify-center z-50">
+            <div class="bg-white w-96 p-4 rounded-lg shadow-lg">
+                <div class="flex justify-between items-center mb-4">
+                    <h5 class="text-lg font-semibold">Confirmer la suppression</h5>
+                    <button wire:click="deleteCancelled()" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Suppression de &lt; {{ "{$this->nom} {$this->prenom}" }} &gt;</p>
+                </div>
+                <div>
+                    <button wire:click="deleteConfirmed({{ $this->delete_id }})" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                        Valider
+                    </button>
+                    <button wire:click="deleteCancelled" class="py-2 px-4 bg-transparent text-red-600 font-semibold border border-red-600 rounded hover:bg-red-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                        Annuler
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
+    
+    @if (session()->has('status'))
+        <div class="fixed bottom-0 right-0 m-4" id="toast">
+            <div class="bg-blue-500 border-l-4 border-blue-700 py-2 px-3 rounded-lg shadow-md">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center py-2">
+                        <span class="text-white">{{ session('status') }}</span>
+                    </div>
+                    <button class="text-white ml-5" wire:click="closeToast">&times;</button>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>

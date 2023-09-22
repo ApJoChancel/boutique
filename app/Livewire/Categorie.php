@@ -13,7 +13,7 @@ class Categorie extends AppComponent
     #[Rule('required|unique:categories')]
     public $libelle = null;
     #[Rule('sometimes')]
-    public $carac = null;
+    public $carac = [];
 
     public function save()
     {
@@ -24,7 +24,7 @@ class Categorie extends AppComponent
         if($this->carac)
             $item->caracteristiques()->sync($this->carac);
         $this->resetValues();
-        session()->flash('status', 'Saved successfully');
+        $this->notificationToast('Saved successfully');
     }
 
     public function editItem(ModelsCategorie $item)
@@ -38,7 +38,7 @@ class Categorie extends AppComponent
     {
         $item = ModelsCategorie::findOrFail($id);
         if($item->caracteristiques->get(0)){
-            session()->flash('status', 'You cannnot deleted this item');
+            $this->notificationToast('Pour supprimer cette catégorie, retirez-lui les caractéristiques associées');
             $this->resetValues();
             return;
         }
@@ -49,15 +49,14 @@ class Categorie extends AppComponent
     {
         $item = ModelsCategorie::findOrFail($id);
         parent::deleteConfirmed($item);
-        session()->flash('status', 'Deleted successfully');
+        $this->notificationToast('Deleted successfully');
     }
 
     public function resetValues()
     {
         parent::resetValues();
-        $this->libelle =
-            $this->carac = null;
-        $this->dispatch('close-modal');
+        $this->libelle = null;
+        $this->carac = [];
     }
 
     public function changeCarac(ModelsCategorie $item)
@@ -65,16 +64,16 @@ class Categorie extends AppComponent
         $this->edit_id = $item->id;
         $this->libelle = $item->libelle;
         $this->carac = $item->caracteristiques()->pluck('caracteristiques.id');
-        $this->dispatch('show-change');
+        $this->change_modal = true;
     }
 
     public function changeCaracData()
     {
         $item = ModelsCategorie::findOrFail($this->edit_id);
         $item->caracteristiques()->sync($this->carac);
-        $this->dispatch('close-modal'); 
+        $this->change_modal = false;
         $this->resetValues();
-        session()->flash('status', 'Changed successfully');
+        $this->notificationToast('Changed successfully');
     }
 
     #[Layout('livewire.layouts.base')]

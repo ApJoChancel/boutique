@@ -81,7 +81,7 @@ class Vente extends AppComponent
     public function finEtape1()
     {
         if($this->client_id){
-            $client = User::findOrFail($this->client_id);
+            $client = Client::findOrFail($this->client_id);
             $this->nom = $client->nom;
             $this->prenom = $client->prenom;
             $this->telephone = $client->telephone;
@@ -159,25 +159,32 @@ class Vente extends AppComponent
 
     public function hasCarac()
     {
-        $this->selected_article = Article::findOrFail($this->selected_article_id);
-        foreach($this->selected_article->categorie->caracteristiques as $carac){
-            foreach($carac->options as $opt){
-                $this->opts[$carac->id] = [
-                    'carac' => $carac->libelle,
-                    'option' => $opt->libelle
-                ];
+        if($this->selected_article_id){
+            $this->selected_article = Article::findOrFail($this->selected_article_id);
+            foreach($this->selected_article->categorie->caracteristiques as $carac){
+                foreach($carac->options as $opt){
+                    $this->opts[$carac->id] = [
+                        'carac' => $carac->libelle,
+                        'option' => $opt->libelle
+                    ];
+                }
             }
         }
     }
 
     public function addItem()
     {
-        $car = '';
-        foreach($this->selected_article->categorie->caracteristiques as $carac){
-            $car .= "{$this->opts[$carac->id]['carac']} : {$this->opts[$carac->id]['option']} |";
+
+        if($this->selected_article_id){
+            $car = '';
+            foreach($this->selected_article->categorie->caracteristiques as $carac){
+                $car .= "{$this->opts[$carac->id]['carac']} : {$this->opts[$carac->id]['option']} |";
+            }
+            $this->artciles_added[$this->selected_article->id][] = $car;
+            session()->flash('status', 'Added successfully');
+            $this->selected_article_id = 0;
+            $this->selected_article = null;
         }
-        $this->artciles_added[$this->selected_article->id][] = $car;
-        session()->flash('status', 'Added successfully');
     }
 
     public function initEtape4()
@@ -232,13 +239,14 @@ class Vente extends AppComponent
             //Vente
             $vente = new ModelsVente();
             if(!$this->est_concluante){
-                $visite->motif = $this->motif;
-                $visite->comment = nl2br($this->comment);
+                $vente->motif = $this->motif;
+                $vente->comment = nl2br($this->comment);
                 $vente->client_id = $cli->id;
                 $vente->user_id = $user->id;
                 $vente->boutique_id = $user->boutique->id;
                 $vente->date = now();
                 $vente->type = ($this->est_vente) ? 'vente' : 'location';
+                $vente->save();
             } else{
                 $vente = new ModelsVente();
                 $vente->montant = $this->mtt_achat;
@@ -247,27 +255,27 @@ class Vente extends AppComponent
                 $vente->boutique_id = $user->boutique->id ?? 1;
                 $vente->date = now();
                 $vente->type = ($this->est_vente) ? 'vente' : 'location';
-            }
-            $vente->save();
+                $vente->save();
 
-            //Articles
-            foreach($this->artciles_added as $art => $arts){
-                foreach($arts as $carac){
-                    $ligne = new LigneVente();
-                    $ligne->article_id = $art;
-                    $ligne->vente_id = $vente->id;
-                    $ligne->caracteristiques = $carac;
-                    $ligne->save();
+                //Articles
+                foreach($this->artciles_added as $art => $arts){
+                    foreach($arts as $carac){
+                        $ligne = new LigneVente();
+                        $ligne->article_id = $art;
+                        $ligne->vente_id = $vente->id;
+                        $ligne->caracteristiques = $carac;
+                        $ligne->save();
+                    }
                 }
-            }
 
-            //Paiement
-            $paie = new Paiement();
-            $paie->montant = $this->mtt_paye;
-            $paie->reduction = $this->mtt_reduction ?? 0;
-            $paie->vente_id = $vente->id;
-            $paie->date = $vente->date;
-            $paie->save();
+                //Paiement
+                $paie = new Paiement();
+                $paie->montant = $this->mtt_paye;
+                $paie->reduction = $this->mtt_reduction ?? 0;
+                $paie->vente_id = $vente->id;
+                $paie->date = $vente->date;
+                $paie->save();
+            }
         DB::commit();
         $this->resetValues();
         $this->initEtape1();

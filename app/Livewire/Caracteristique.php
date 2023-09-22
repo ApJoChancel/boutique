@@ -27,7 +27,7 @@ class Caracteristique extends AppComponent
                 $item->options()->sync($this->tableOptionsToIds($this->options));
         DB::commit();
         $this->resetValues();
-        session()->flash('status', 'Saved successfully');
+        $this->notificationToast('Saved successfully');
     }
 
     public function editItem(ModelsCaracteristique $item)
@@ -45,7 +45,7 @@ class Caracteristique extends AppComponent
     public function deleteConfirmed(mixed $id)
     {
         parent::deleteConfirmed(ModelsCaracteristique::findOrFail($id));
-        session()->flash('status', 'Deleted successfully');
+        $this->notificationToast('Deleted successfully');
     }
 
     public function resetValues()
@@ -53,7 +53,6 @@ class Caracteristique extends AppComponent
         parent::resetValues();
         $this->libelle =
             $this->options = null;
-        $this->dispatch('close-modal');
     }
 
     public function changeOptions(ModelsCaracteristique $item)
@@ -65,7 +64,7 @@ class Caracteristique extends AppComponent
             $options .= $option->libelle ."\n";
         }
         $this->options = $options;
-        $this->dispatch('show-change');
+        $this->change_modal = true;
     }
 
     public function changeOptionData()
@@ -74,9 +73,9 @@ class Caracteristique extends AppComponent
         DB::beginTransaction();
             $item->options()->sync($this->tableOptionsToIds($this->options));
         DB::commit();
-        $this->dispatch('close-modal'); 
+        $this->change_modal = false;
         $this->resetValues();
-        session()->flash('status', 'Changed successfully');
+        $this->notificationToast('Changed successfully');
     }
 
     private function tableOptionsToIds(string $table)

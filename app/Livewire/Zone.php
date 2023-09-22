@@ -19,7 +19,7 @@ class Zone extends AppComponent
         $item->libelle = $this->libelle;
         $item->save();
         $this->resetValues();
-        session()->flash('status', 'Added successfully');
+        $this->notificationToast('Added successfully');
     }
 
     public function editItem(ModelsZone $item)
@@ -37,7 +37,8 @@ class Zone extends AppComponent
     public function deleteConfirmed(mixed $id)
     {
         parent::deleteConfirmed(ModelsZone::findOrFail($id));
-        session()->flash('status', 'Deleted successfully');
+        $this->notificationToast('Deleted successfully');
+
     }
 
     public function resetValues()

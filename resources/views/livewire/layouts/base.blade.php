@@ -11,7 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
     @livewireStyles
     <script>
-        function graphique(idcanvas, labels, datas){
+        function pieGraphique(idcanvas, labels, datas){
             const pieCanvas = document.getElementById(idcanvas);
             const pieChart = new Chart(pieCanvas, {
                 type: "pie",
@@ -28,6 +28,25 @@
                         hoverOffset: 40,
                         borderWidth: 1
                     }],
+                },
+            });
+        }
+
+        function barGraphique(idcanvas, labels, datas){
+            const barCanvas = document.getElementById(idcanvas);
+            const barChart = new Chart(barCanvas, {
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        labels: labels,
+                        data: datas,
+                        backgroundColor: [
+                            'rgb(255, 99, 132)', 
+                            'rgb(54, 162, 235)', 
+                            'rgb(255, 205, 86)'
+                        ],
+                    }]
                 },
             });
         }
@@ -144,24 +163,14 @@
     </div>
 
     <script>
-        window.addEventListener('close-modal', event => {
-            $('#confirmModal').modal('hide');
-            $('#changeModal').modal('hide');
-            $('#infoModal').modal('hide');
-            $('#paieModal').modal('hide');
+        window.addEventListener('close-toast', event => {
+            $('#toast').modal('hide');
         });
 
-        window.addEventListener('show-confirm', event => {
-            $('#confirmModal').modal('show')
-        });
-        window.addEventListener('show-info', event => {
-            $('#infoModal').modal('show')
-        });
-        window.addEventListener('show-paie', event => {
-            $('#paieModal').modal('show')
-        });
-        window.addEventListener('show-change', event => {
-            $('#changeModal').modal('show')
+        window.addEventListener('close-toast-after-3-seconds', event => {
+            setTimeout(function () {
+                document.getElementById('toast').style.display = 'none';
+            }, 3000);
         });
     </script>
     <script>
@@ -178,6 +187,7 @@
             document.getElementById('groupStatContent').classList.toggle('hidden');
         });
     </script>
+    
     
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

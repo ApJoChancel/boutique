@@ -66,10 +66,17 @@ class StatObjectif extends Component
             $items[] = [$semaine->montant, $mois->montant, $objectif];
             $boutiques[] = $bout->designation;
         }
+        $semDeb = $debutSemaine->format('d');
+        $semFin = $finSemaine->format('d');
+        $mois = $debutSemaine->format('F');
 
         return view('livewire.stat-objectif', [
-            'labels' => ['Semaine', 'Mois', 'Objectif'],
-            'global' => [$semaine_global->montant, $mois_global->montant, $objectif],
+            'labels' => [
+                "Semaine du {$semDeb} au {$semFin}", 
+                $mois, 
+                'Objectif'
+            ],
+            'global' => [$semaine_global->montant, $mois_global->montant, $objectif * count($items)],
             'items' => $items,
             'boutiques' => $boutiques,
         ]);

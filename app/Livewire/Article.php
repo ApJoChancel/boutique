@@ -24,7 +24,7 @@ class Article extends AppComponent
             $item->categorie_id = $this->categorie_id;
         $item->save();
         $this->resetValues();
-        session()->flash('status', 'Saved successfully');
+        $this->notificationToast('Saved successfully');
     }
 
     public function editItem(ModelsArticle $item)
@@ -43,7 +43,7 @@ class Article extends AppComponent
     public function deleteConfirmed(mixed $id)
     {
         parent::deleteConfirmed(ModelsArticle::findOrFail($id));
-        session()->flash('status', 'Deleted successfully');
+        $this->notificationToast('Deleted successfully');
     }
 
     public function resetValues()
@@ -51,7 +51,6 @@ class Article extends AppComponent
         parent::resetValues();
         $this->libelle =
             $this->categorie_id = null;
-        $this->dispatch('close-modal'); 
     }
 
     public function changeCategorie(ModelsArticle $item)
@@ -59,7 +58,7 @@ class Article extends AppComponent
         $this->edit_id = $item->id;
         $this->libelle = $item->categorie->libelle;
         $this->categorie_id = $item->categorie->id;
-        $this->dispatch('show-change');
+        $this->change_modal = true;
     }
 
     public function changeCategorieData()
@@ -69,9 +68,9 @@ class Article extends AppComponent
         $categorie = Categorie::findOrFail($this->categorie_id);
         $item->categorie()->associate($categorie);
         $item->save();
-        $this->dispatch('close-modal'); 
+        $this->change_modal = false;
         $this->resetValues();
-        session()->flash('status', 'Changed successfully');
+        $this->notificationToast('Changed successfully');
     }
 
     #[Layout('livewire.layouts.base')]

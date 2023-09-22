@@ -52,28 +52,41 @@
         </table>
     </div>
     <!-- deleteModal -->
-    <div wire:ignore.self class="modal fade" id="confirmModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="viewModalLabel">Confirmer la suppression</h5>
-                    <button class="btn-close" wire:click="deleteCancelled()" data-bs-dismiss="modal" aria-label="Close"></button>
+    @if($confirm_modal)
+        <div class="fixed inset-0 flex items-center justify-center z-50">
+            <div class="bg-white w-96 p-4 rounded-lg shadow-lg">
+                <div class="flex justify-between items-center mb-4">
+                    <h5 class="text-lg font-semibold">Confirmer la suppression</h5>
+                    <button wire:click="deleteCancelled()" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <p>Suppression de &lt; {{ $this->libelle }} &gt;</p>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary btn-sm" wire:click="deleteConfirmed({{ $this->delete_id }})">
+                <div>
+                    <button wire:click="deleteConfirmed({{ $this->delete_id }})" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                         Valider
                     </button>
-                    <button class="btn btn-primary btn-sm" wire:click="deleteCancelled" data-bs-dismiss="modal">
+                    <button wire:click="deleteCancelled" class="py-2 px-4 bg-transparent text-red-600 font-semibold border border-red-600 rounded hover:bg-red-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                         Annuler
                     </button>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
     @if (session()->has('status'))
-        <div class="alert alert-success text-center">{{ session('status') }}</div>
+        <div class="fixed bottom-0 right-0 m-4" id="toast">
+            <div class="bg-blue-500 border-l-4 border-blue-700 py-2 px-3 rounded-lg shadow-md">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center">
+                        <span class="text-white">{{ session('status') }}</span>
+                    </div>
+                    <button class="text-white ml-5" wire:click="closeToast">&times;</button>
+                </div>
+            </div>
+        </div>
     @endif
 </div>
