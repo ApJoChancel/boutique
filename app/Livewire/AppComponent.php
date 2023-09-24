@@ -13,6 +13,8 @@ class AppComponent extends Component
 
     public $confirm_modal = false;
     public $change_modal = false;
+    public $info_modal = false;
+    public $paie_modal = false;
 
     public function deleteItem(mixed $item)
     {
@@ -47,7 +49,9 @@ class AppComponent extends Component
         $this->textSubmit = self::TEXT_SUBMIT;
 
         $this->confirm_modal =
-            $this->change_modal = false;
+            $this->change_modal =
+            $this->paie_modal =
+            $this->info_modal = false;
     }
 
     public function notificationToast(string $message)

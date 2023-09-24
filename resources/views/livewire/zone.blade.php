@@ -77,6 +77,7 @@
             </div>
         </div>
     @endif
+    
     @if (session()->has('status'))
         <div class="fixed bottom-0 right-0 m-4" id="toast">
             <div class="bg-blue-500 border-l-4 border-blue-700 py-2 px-3 rounded-lg shadow-md">

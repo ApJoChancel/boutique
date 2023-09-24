@@ -15,6 +15,7 @@ use App\Livewire\Sondage;
 use App\Livewire\StatObjectif;
 use App\Livewire\User;
 use App\Livewire\Vente;
+use App\Livewire\Visite;
 use App\Livewire\Zone;
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +41,7 @@ Route::middleware('auth')->group(function() {
     Route::get('carac', Caracteristique::class)->name('carac');
     Route::get('article', Article::class)->name('article');
     Route::get('sondage', Sondage::class)->name('sondage');
+    Route::get('visite', Visite::class)->name('visite');
     Route::get('vente', Vente::class)->name('vente');
     Route::get('rec', Recouvrement::class)->name('rec');
     Route::get('compte', Compte::class)->name('compte');

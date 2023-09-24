@@ -19,24 +19,27 @@ class Recouvrement extends AppComponent
     #[Rule('required|integer')]
     public $reduction = null;
 
+    public $info_modal = false;
 
-    public function infoItem(mixed $id)
+
+    public function infoItem(Vente $item)
     {
-        $this->vente = Vente::find($id);
-        $this->dispatch('show-info');
+        $this->vente = $item;
+        $this->info_modal = true;
     }
 
     public function paiementItem(Vente $item)
     {
         $this->edit_id = $item->id;
         $this->textSubmit = 'Valider le paiement';
-        $this->dispatch('show-paie');
+        $this->info_modal = false;
+        $this->paie_modal = true;
     }
 
     public function paiementItemData(Vente $item)
     {
         $result = DB::table('ventes')->select(
-            DB::raw('(ventes.montant - SUM(paiements.montant + COALESCE(paiements.reduction, 0))) AS reste')
+            DB::raw('(ventes.montant - SUM(paiements.montant + paiements.reduction)) AS reste')
         )
         ->leftJoin('paiements', 'ventes.id', 'paiements.vente_id')
         ->where('ventes.id', $item->id)
@@ -49,12 +52,11 @@ class Recouvrement extends AppComponent
             $paie->date = now();
             $paie->vente_id = $item->id;
             $paie->save();
-            session()->flash('status', 'Saved successfully');
+            $this->notificationToast('Saved successfully');
+            $this->resetValues();
         } else{
-            session()->flash('status', 'Cumul > reste');
+            $this->notificationToast("Attention le reste à payer est de {$result->reste}");
         }
-        $this->resetValues();
-        $this->dispatch('close-modal');
     }
 
     public function resetValues()
@@ -62,7 +64,6 @@ class Recouvrement extends AppComponent
         parent::resetValues();
         $this->montant =
             $this->reduction = null;
-        $this->dispatch('close-modal');
     }
 
     #[Layout('livewire.layouts.base')]
@@ -71,16 +72,17 @@ class Recouvrement extends AppComponent
     {
         $this->ventes = DB::table('ventes')->select(
             'ventes.id AS vente_id',
-            'clients.noms AS client',
+            'clients.nom AS nom',
+            'clients.prenom AS prenom',
             'ventes.date AS date_vente',
             'ventes.montant AS montant_vente',
             DB::raw('SUM(paiements.montant) AS montant_recu'),
             DB::raw('SUM(paiements.reduction) AS reduction'),
-            DB::raw('(ventes.montant - SUM(paiements.montant + COALESCE(paiements.reduction, 0))) AS reste')
+            DB::raw('(ventes.montant - SUM(paiements.montant + paiements.reduction)) AS reste')
         )
         ->leftJoin('paiements', 'ventes.id', 'paiements.vente_id')
         ->leftJoin('clients', 'clients.id', 'ventes.client_id')
-        ->groupBy('ventes.id', 'clients.noms', 'ventes.date', 'ventes.montant')
+        ->groupBy('ventes.id', 'clients.nom', 'clients.prenom', 'ventes.date', 'ventes.montant')
         ->having('reste', '>', 0)
         ->get();
         

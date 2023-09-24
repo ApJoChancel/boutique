@@ -118,6 +118,7 @@
                         </a>
 
                         <div id="groupVenteContent" class="absolute left-14 top-0 hidden mt-2 space-y-2 bg-white border border-gray-200 w-40">
+                            <a href="{{ route('visite') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Visites</a>
                             <a href="{{ route('vente') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Ventes</a>
                             <a href="{{ route('rec') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Recouvrements</a>
                         </div>
