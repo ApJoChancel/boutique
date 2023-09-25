@@ -31,7 +31,6 @@ class StatCa extends AppComponent
     {
         $ventes = DB::table('ventes')
         ->select(
-            DB::raw('paiements.date AS date'),
             DB::raw('ventes.montant AS montant_total'),
             DB::raw('SUM(paiements.montant) AS montant_recu'),
             DB::raw('SUM(paiements.reduction) AS reduction'),
