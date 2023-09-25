@@ -21,9 +21,10 @@
                         labels: labels,
                         data: datas,
                         backgroundColor: [
-                            'rgb(255, 99, 132)', 
-                            'rgb(54, 162, 235)', 
-                            'rgb(255, 205, 86)'
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)',
+                            'rgb(255, 205, 86)',
+                            'rgb(55, 205, 86)'
                         ],
                         hoverOffset: 40,
                         borderWidth: 1
@@ -42,9 +43,10 @@
                         labels: labels,
                         data: datas,
                         backgroundColor: [
-                            'rgb(255, 99, 132)', 
-                            'rgb(54, 162, 235)', 
-                            'rgb(255, 205, 86)'
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)',
+                            'rgb(255, 205, 86)',
+                            'rgb(55, 205, 86)'
                         ],
                     }]
                 },
@@ -133,6 +135,7 @@
 
                         <div id="groupStatContent" class="absolute left-14 top-0 hidden mt-2 space-y-2 bg-white border border-gray-200 w-40">
                             <a href="{{ route('log') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pointeuse</a>
+                            <a href="{{ route('stat_ca') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">CA</a>
                         </div>
                     </div>
                 </nav>
