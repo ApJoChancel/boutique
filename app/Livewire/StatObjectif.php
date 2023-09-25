@@ -21,7 +21,7 @@ class StatObjectif extends AppComponent
         $finSemaine = Carbon::now()->endOfWeek();
         $semaine_global = DB::table('ventes')
             ->select(
-                DB::raw('SUM(ventes.montant) AS montant'),
+                DB::raw('SUM(paiements.montant) AS montant'),
             )
             ->leftJoin('paiements', 'ventes.id', 'paiements.vente_id')
             ->whereBetween('ventes.date', [$debutSemaine, $finSemaine])
@@ -31,7 +31,7 @@ class StatObjectif extends AppComponent
         $moisEnCours = Carbon::now()->startOfMonth();
         $mois_global = DB::table('ventes')
             ->select(
-                DB::raw('SUM(ventes.montant) AS montant'),
+                DB::raw('SUM(paiements.montant) AS montant'),
             )
             ->leftJoin('paiements', 'ventes.id', 'paiements.vente_id')
             ->whereYear('ventes.date', $moisEnCours->year)
@@ -44,7 +44,7 @@ class StatObjectif extends AppComponent
         foreach (Boutique::all() as $bout) {
             $semaine = DB::table('ventes')
                 ->select(
-                    DB::raw('SUM(ventes.montant) AS montant'),
+                    DB::raw('SUM(paiements.montant) AS montant'),
                 )
                 ->leftJoin('paiements', 'ventes.id', 'paiements.vente_id')
                 ->whereBetween('ventes.date', [$debutSemaine, $finSemaine])
@@ -54,7 +54,7 @@ class StatObjectif extends AppComponent
 
             $mois = DB::table('ventes')
                 ->select(
-                    DB::raw('SUM(ventes.montant) AS montant'),
+                    DB::raw('SUM(paiements.montant) AS montant'),
                 )
                 ->leftJoin('paiements', 'ventes.id', 'paiements.vente_id')
                 ->whereYear('ventes.date', $moisEnCours->year)
