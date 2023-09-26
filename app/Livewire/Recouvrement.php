@@ -74,6 +74,7 @@ class Recouvrement extends AppComponent
             'ventes.id AS vente_id',
             'clients.nom AS nom',
             'clients.prenom AS prenom',
+            'clients.telephone AS telephone',
             'ventes.date AS date_vente',
             'ventes.montant AS montant_vente',
             DB::raw('SUM(paiements.montant) AS montant_recu'),
@@ -82,7 +83,7 @@ class Recouvrement extends AppComponent
         )
         ->leftJoin('paiements', 'ventes.id', 'paiements.vente_id')
         ->leftJoin('clients', 'clients.id', 'ventes.client_id')
-        ->groupBy('ventes.id', 'clients.nom', 'clients.prenom', 'ventes.date', 'ventes.montant')
+        ->groupBy('ventes.id', 'clients.nom', 'clients.prenom', 'clients.telephone', 'ventes.date', 'ventes.montant')
         ->having('reste', '>', 0)
         ->get();
         

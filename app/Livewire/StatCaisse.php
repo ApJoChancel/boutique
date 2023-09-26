@@ -42,6 +42,7 @@ class StatCaisse extends Component
                 'reçu' => 0,
                 'reste' => 0,
                 'reduction' => 0,
+                'total' => 0,
             ];
         }
         foreach ($ventes as $vente) {
@@ -52,11 +53,13 @@ class StatCaisse extends Component
                     'reçu' => 0,
                     'reste' => 0,
                     'reduction' => 0,
+                    'total' => 0,
                 ];
             }
             $tab[$mois]['reçu'] += $vente->montant_recu;
             $tab[$mois]['reduction'] += $vente->reduction;
             $tab[$mois]['reste'] += $vente->reste;
+            $tab[$mois]['total'] += $vente->montant_recu + $vente->reduction + $vente->reste;
         }
         $tab = array_values($tab);
 
@@ -66,12 +69,14 @@ class StatCaisse extends Component
         $montantRecu = array_column($tab, 'reçu');
         $reduction = array_column($tab, 'reduction');
         $reste = array_column($tab, 'reste');
+        $total = array_column($tab, 'total');
 
         return view('livewire.stat-caisse',[
             'labels' => $labels,
             'montantRecu' => $montantRecu,
             'reduction' => $reduction,
             'reste' => $reste,
+            'total' => $total,
         ]);
     }
 }

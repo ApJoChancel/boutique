@@ -21,10 +21,10 @@
                         labels: labels,
                         data: datas,
                         backgroundColor: [
-                            'rgb(255, 99, 132)',
-                            'rgb(54, 162, 235)',
-                            'rgb(255, 205, 86)',
-                            'rgb(55, 205, 86)'
+                            'rgb(135, 206, 235)',
+                            'rgb(255, 105, 97)',
+                            'rgb(173, 255, 47)',
+                            'rgb(255, 255, 153)'
                         ],
                         hoverOffset: 40,
                         borderWidth: 1
@@ -43,44 +43,16 @@
                         labels: labels,
                         data: datas,
                         backgroundColor: [
-                            'rgb(255, 99, 132)',
-                            'rgb(54, 162, 235)',
-                            'rgb(255, 205, 86)',
-                            'rgb(55, 205, 86)'
+                            'rgb(135, 206, 235)',
+                            'rgb(255, 105, 97)',
+                            'rgb(173, 255, 47)',
+                            'rgb(255, 255, 153)'
                         ],
                     }
                 ]
                 },
             });
         }
-
-        function courbeGraphique(idcanvas) {
-    const barCanvas = document.getElementById(idcanvas);
-    const barChart = new Chart(barCanvas, {
-        type: "bar",
-        data: {
-            labels: ['Aout', 'Septembre', 'Octobre'],
-            datasets: [
-                {
-                    label: "Reçu",
-                    data: [123, 58, 235],
-                    backgroundColor: 'rgb(255, 99, 132)',
-                },
-                {
-                    label: 'Reste',
-                    data: [13, 8, 55],
-                    backgroundColor: 'rgb(54, 162, 235)',
-                },
-                {
-                    label: 'Reduc',
-                    data: [3, 7, 9],
-                    backgroundColor: 'rgb(54, 162, 235)',
-                },
-            ],
-        },
-    });
-}
-
     </script>
 </head>
 <body>
@@ -166,6 +138,7 @@
                             <a href="{{ route('log') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pointeuse</a>
                             <a href="{{ route('stat_ca') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">CA</a>
                             <a href="{{ route('stat_caisse') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Caisse</a>
+                            <a href="{{ route('stat_decla') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Déclassement</a>
                         </div>
                     </div>
                 </nav>

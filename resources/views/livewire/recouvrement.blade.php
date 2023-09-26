@@ -23,6 +23,8 @@
                     </th>
                     <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
                         Reste à percevoir
+                    </th><th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
+                        Téléphone
                     </th>
                 </tr>
             </thead>
@@ -48,6 +50,9 @@
                         </td>
                         <td class="py-2 px-4 border-b border-grey-light">
                             {{ $item->reste }}
+                        </td>
+                        <td class="py-2 px-4 border-b border-grey-light">
+                            {{ $item->telephone }}
                         </td>
                     </tr>
                 @endforeach

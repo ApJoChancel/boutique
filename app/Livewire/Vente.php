@@ -14,6 +14,22 @@ class Vente extends AppComponent
     
     public $info_modal = false;
 
+    public $date_from = null;
+    public $date_to = null;
+
+    public function mount()
+    {
+        $ventes = DB::table('ventes')
+        ->select(
+            DB::raw('MIN(ventes.date) AS date_from'),
+            DB::raw('MAX(ventes.date) AS date_to'),
+        )
+        ->first();
+
+        $this->date_from = $ventes->date_from;
+        $this->date_to = $ventes->date_to;
+    }
+
     public function infoItem(int $id)
     {
         $this->vente = ModelsVente::findOrFail($id);
@@ -41,12 +57,17 @@ class Vente extends AppComponent
         )
         ->leftJoin('paiements', 'ventes.id', 'paiements.vente_id')
         ->leftJoin('clients', 'clients.id', 'ventes.client_id')
+        ->whereBetween('paiements.date', [$this->date_from, $this->date_to])
         ->groupBy('ventes.id', 'clients.nom', 'clients.prenom', 'ventes.date', 'ventes.montant')
         ->having('reste', 0)
         ->get();
+        $total = $this->ventes->sum('montant_recu');
+        $total += $this->ventes->sum('reduction');
+        // dd($total);
         
         return view('livewire.vente',[
             'vente' => $this->vente,
+            'total' => $total,
         ]);
     }
 }

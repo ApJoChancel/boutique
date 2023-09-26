@@ -19,6 +19,7 @@
                     const montantRecu = <?= json_encode($montantRecu) ?>;
                     const reduction = <?= json_encode($reduction) ?>;
                     const reste = <?= json_encode($reste) ?>;
+                    const total = <?= json_encode($total) ?>;
                     const ctx = document.getElementById('cour').getContext('2d');
                     const cour = new Chart(ctx, {
                         type: 'line',
@@ -28,19 +29,25 @@
                                 {
                                     label: 'Montant Reçu',
                                     data: montantRecu,
-                                    backgroundColor: 'rgb(255, 99, 132)',
+                                    backgroundColor: 'rgb(173, 255, 47)',
                                     fill: false,
                                 },
                                 {
                                     label: 'Réduction',
                                     data: reduction,
-                                    backgroundColor: 'rgb(54, 162, 235)',
+                                    backgroundColor: 'rgb(255, 105, 97)',
                                     fill: false,
                                 },
                                 {
                                     label: 'Reste',
                                     data: reste,
-                                    backgroundColor: 'rgb(75, 192, 192)',
+                                    backgroundColor: 'rgb(255, 255, 153)',
+                                    fill: false,
+                                },
+                                {
+                                    label: 'CA',
+                                    data: total,
+                                    backgroundColor: 'rgb(135, 206, 235)',
                                     fill: false,
                                 },
                             ],
