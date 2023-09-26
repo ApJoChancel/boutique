@@ -63,7 +63,6 @@ class Vente extends AppComponent
         ->get();
         $total = $this->ventes->sum('montant_recu');
         $total += $this->ventes->sum('reduction');
-        // dd($total);
         
         return view('livewire.vente',[
             'vente' => $this->vente,

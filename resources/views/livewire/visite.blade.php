@@ -1,4 +1,9 @@
 <div>
+    <div class="space-x-5">
+        <button wire:click='voirPanier'>
+            <i class="fas fa-shopping-cart text-gray-500 text-lg"></i>
+        </button>
+    </div>
     <div style="margin-top: 40px">
         @if ($etape1)
             @if (!$est_identifie)
@@ -278,6 +283,112 @@
             @endif
         @endif
     </div>
+
+    {{-- <!-- panierModal -->
+    @if($panier_modal)
+        <div class="fixed inset-0 flex items-center justify-center z-50">
+            <div class="bg-white w-96 p-4 rounded-lg shadow-lg">
+                <div class="flex justify-between items-center mb-4">
+                    <h5 class="text-lg font-semibold">Changer les options</h5>
+                    <button wire:click="fermerPanier()" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form wire:submit="changeOptionData">
+                        <div>
+                            <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
+                                Caractéristiques : {{ $this->libelle }}
+                            </label>
+                        </div>
+                        <div>
+                            <label for="options" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
+                                Options
+                            </label>
+                            <textarea wire:model="options" id="options" rows="5" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded"></textarea>
+                        </div>
+                        <div>
+                            <button type="submit" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                {{ $this->textSubmit }}
+                            </button>
+                            <button wire:click='resetValues' type="reset" class="py-2 px-4 bg-transparent text-red-600 font-semibold border border-red-600 rounded hover:bg-red-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                Annuler
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif --}}
+
+    @if($panier_modal)
+        <div class="relative z-10" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+                <div class="fixed inset-0 overflow-hidden">
+                    <div class="absolute inset-0 overflow-hidden">
+                        <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+                            <div class="pointer-events-auto w-screen max-w-md">
+                                <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+                                    <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+                                        <div class="flex items-start justify-between">
+                                            <h2 class="text-lg font-medium text-gray-900" id="slide-over-title">Shopping cart</h2>
+                                            <div class="ml-3 flex h-7 items-center">
+                                                <button wire:click='fermerPanier' type="button" class="relative -m-2 p-2 text-gray-400 hover:text-gray-500">
+                                                    <span class="absolute -inset-0.5"></span>
+                                                    <span class="sr-only">Close panel</span>
+                                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                        
+                                        <div class="mt-8">
+                                            <div class="flow-root">
+                                                <ul role="list" class="-my-6 divide-y divide-gray-200">
+                                                    @foreach ($panier as $item)
+                                                        @if ($item)
+                                                            <li class="flex py-6">
+                                                                <div class="ml-4 flex flex-1 flex-col">
+                                                                    <div>
+                                                                        <div class="flex justify-between text-base font-medium text-gray-900">
+                                                                            <h3>
+                                                                                {{ $item->libelle }}
+                                                                            </h3>
+                                                                        </div>
+                                                                        <p class="mt-1 text-sm text-gray-500">{{ $item->carac }}</p>
+                                                                    </div>
+                                                                    <div class="flex flex-1 items-end justify-between text-sm">
+                                                                        <div class="flex">
+                                                                            <button wire:click='deleteItemCart({{ $item->id }})' type="button" class="font-medium text-indigo-600 hover:text-indigo-500">
+                                                                                Suprimer
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        @endif
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
+                                        <div class="mt-6">
+                                            <button wire:click='fermerPanier' class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700">Fermer</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 
     @if (session()->has('status'))
         <div class="fixed bottom-0 right-0 m-4" id="toast">

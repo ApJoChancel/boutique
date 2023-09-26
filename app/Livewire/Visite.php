@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Vente;
 use App\Models\Visite as ModelsVisite;
 use Illuminate\Support\Facades\Auth;
+use stdClass;
 
 class Visite extends AppComponent
 {
@@ -50,9 +51,14 @@ class Visite extends AppComponent
     public $mtt_paye;
     public $mtt_reduction;
 
+    public $panier_modal; //panier
+    public $panier;
+
 
     public function mount()
     {
+        $this->panier_modal = false;
+        $this->panier = null;
         $this->initEtape1();
     }
 
@@ -173,7 +179,6 @@ class Visite extends AppComponent
 
     public function addItem()
     {
-
         if($this->selected_article_id){
             $car = '';
             foreach($this->selected_article->categorie->caracteristiques as $carac){
@@ -184,6 +189,13 @@ class Visite extends AppComponent
             $this->selected_article_id = 0;
             $this->selected_article = null;
         }
+    }
+
+    public function deleteItemCart(int $id)
+    {
+        unset($this->artciles_added[$id]);
+        $this->remplirPanier();
+        session()->flash('status', 'Deleted successfully');
     }
 
     public function initEtape4()
@@ -316,6 +328,36 @@ class Visite extends AppComponent
         $this->mtt_achat = null;
         $this->mtt_paye = null;
         $this->mtt_reduction = null;
+    }
+
+    public function voirPanier()
+    {
+        // dd($this->panier);
+        $this->remplirPanier();
+        $this->panier_modal = true;
+    }
+
+    public function fermerPanier()
+    {
+        $this->panier_modal = false;
+    }
+
+    private function remplirPanier()
+    {
+        $this->panier = [];
+        $item = null;
+        if($this->artciles_added){
+            foreach($this->artciles_added as $art => $arts){
+                foreach($arts as $carac){
+                    $article = Article::findOrFail($art);
+                    $item = new stdClass();
+                    $item->id = $article->id;
+                    $item->libelle = $article->libelle;
+                    $item->carac = $carac;
+                    $this->panier[] = $item;
+                }
+            }
+        }
     }
 
     #[Layout('livewire.layouts.base')]
