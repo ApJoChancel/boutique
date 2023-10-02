@@ -8,9 +8,16 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
 use Livewire\Attributes\Title;
+use Livewire\WithPagination;
 
 class Caracteristique extends AppComponent
 {
+    use WithPagination;
+
+    private static array $headers = [
+        'Caractéristique',
+    ];
+    
     #[Rule('required|min:2|unique:caracteristiques')]
     public $libelle = null;
     #[Rule('sometimes')]
@@ -100,7 +107,8 @@ class Caracteristique extends AppComponent
     public function render()
     {
         return view('livewire.caracteristique', [
-            'caracteristiques' => ModelsCaracteristique::all(),
+            'caracteristiques' => ModelsCaracteristique::paginate(10),
+            'headers' => self::$headers,
         ]);
     }
 }

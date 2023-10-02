@@ -11,9 +11,21 @@ use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
 use Livewire\Attributes\Title;
+use Livewire\WithPagination;
 
 class User extends AppComponent
 {
+    use WithPagination;
+
+    private static array $headers = [
+        'Login',
+        'Noms et prénoms',
+        'Type',
+        'Role',
+        'Zone',
+        'Boutique',
+    ];
+    
     const DEFAULT_PASSWORD = 'password';
 
     #[Rule('required|min:5|unique:users')]
@@ -135,7 +147,8 @@ class User extends AppComponent
             'types' => Type::all(),
             'zones' => Zone::all(),
             'boutiques' => Boutique::all(),
-            'users' => ModelsUser::all(),
+            'users' => ModelsUser::paginate(10),
+            'headers' => self::$headers,
         ]);
     }
 }

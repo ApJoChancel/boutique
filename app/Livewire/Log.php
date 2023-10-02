@@ -11,6 +11,12 @@ use Livewire\Component;
 
 class Log extends Component
 {
+    private static array $headers = [
+        'Login',
+        'Utilisateur',
+        'Heure',
+    ];
+
     #[Url]
     public $date_search = null;
 
@@ -34,7 +40,8 @@ class Log extends Component
         ->groupBy('users.login')
         ->get();
         return view('livewire.log', [
-            'items' => $items
+            'items' => $items,
+            'headers' => self::$headers,
         ]);
     }
 }

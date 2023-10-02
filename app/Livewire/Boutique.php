@@ -9,9 +9,18 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
 use Livewire\Attributes\Title;
+use Livewire\WithPagination;
 
 class Boutique extends AppComponent
 {
+    use WithPagination;
+
+    private static array $headers = [
+        'Boutique',
+        'Zone',
+        'Manager',
+    ];
+    
     #[Rule('required|min:5|unique:boutiques')]
     public $designation = null;
     #[Rule('sometimes')]
@@ -121,7 +130,8 @@ class Boutique extends AppComponent
         return view('livewire.boutique', [
             'users' => User::where('role_id', 1)->get(), //Manager
             'zones' => Zone::all(),
-            'boutiques' => ModelsBoutique::all(),
+            'boutiques' => ModelsBoutique::paginate(10),
+            'headers' => self::$headers,
         ]);
     }
 }

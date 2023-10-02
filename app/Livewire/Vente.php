@@ -9,6 +9,14 @@ use Livewire\Attributes\Title;
 
 class Vente extends AppComponent
 {
+    private static array $headers = [
+        'Date de vente',
+        'Client',
+        'Montant vente',
+        'Réduction accordée',
+        'Montant reçu',
+    ];
+    
     public $ventes = null;
     public $vente = null;
     
@@ -67,6 +75,7 @@ class Vente extends AppComponent
         return view('livewire.vente',[
             'vente' => $this->vente,
             'total' => $total,
+            'headers' => self::$headers,
         ]);
     }
 }

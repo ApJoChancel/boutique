@@ -7,9 +7,17 @@ use App\Models\Categorie;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
 use Livewire\Attributes\Title;
+use Livewire\WithPagination;
 
 class Article extends AppComponent
 {
+    use WithPagination;
+
+    private static array $headers = [
+        'Article',
+        'Catégorie',
+    ];
+    
     #[Rule('required|unique:articles')]
     public $libelle = null;
     #[Rule('sometimes')]
@@ -79,7 +87,8 @@ class Article extends AppComponent
     {
         return view('livewire.article', [
             'categories' => Categorie::all(),
-            'articles' => ModelsArticle::all(),
+            'articles' => ModelsArticle::paginate(10),
+            'headers' => self::$headers,
         ]);
     }
 }

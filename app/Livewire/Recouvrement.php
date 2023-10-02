@@ -11,6 +11,16 @@ use Livewire\Attributes\Title;
 
 class Recouvrement extends AppComponent
 {
+    private static array $headers = [
+        'Date de vente',
+        'Client',
+        'Montant vente',
+        'Réduction accordée',
+        'Montant reçu',
+        'Reste à percevoir',
+        'Téléphone',
+    ];
+
     public $ventes = null;
     public $vente = null;
     
@@ -86,9 +96,12 @@ class Recouvrement extends AppComponent
         ->groupBy('ventes.id', 'clients.nom', 'clients.prenom', 'clients.telephone', 'ventes.date', 'ventes.montant')
         ->having('reste', '>', 0)
         ->get();
+        $total = $this->ventes->sum('reste');
         
         return view('livewire.recouvrement',[
             'vente' => $this->vente,
+            'total' => $total,
+            'headers' => self::$headers,
         ]);
     }
 }
