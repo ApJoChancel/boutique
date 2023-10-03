@@ -5,9 +5,26 @@ namespace App\Livewire;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
+use Livewire\WithPagination;
 
 class StatDeclassement extends AppComponent
 {
+    use WithPagination;
+
+    private static array $headers = [
+        'Client',
+        'Type',
+        'Montant vente',
+        'Reste à percevoir',
+        'Téléphone',
+        'Dans les temps',
+        '1 semaine',
+        '2 semaines',
+        '3 semaines',
+        '4 semaines',
+        'Plus',
+    ];
+    
     #[Layout('livewire.layouts.base')]
     #[Title('Boutique | Statistiques - Déclassement')]
     public function render()
@@ -29,9 +46,12 @@ class StatDeclassement extends AppComponent
         ->groupBy('ventes.montant', 'ventes.date', 'ventes.type', 'clients.nom', 'clients.prenom', 'clients.telephone')
         ->having('reste', '>', 0)
         ->get();
+        $total = $ventes->sum('reste');
 
         return view('livewire.stat-declassement', [
-            'ventes' => $ventes
+            'ventes' => $ventes,
+            'total' => $total,
+            'headers' => self::$headers,
         ]);
     }
 }
