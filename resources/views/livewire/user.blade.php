@@ -112,7 +112,7 @@
         <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
             <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
-                    <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+                    {{-- <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                         <div class="w-full md:w-1/2">
                             <div class="relative w-full">
                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -123,7 +123,7 @@
                                 <input wire:model.debounce.500ms="search" type="search" id="search" placeholder="Search" required name="search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="overflow-x-auto">
                         <x-table.table :headers="$headers">
                             @foreach ($users as $item)
