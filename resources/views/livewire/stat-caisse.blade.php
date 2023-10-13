@@ -88,7 +88,7 @@
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                     <div class="overflow-x-auto">
                         <h2>Toutes les boutiques</h2>
-                        <div style="width: 50%;margin: 20px">
+                        <div style="margin: 20px">
                             <div>
                                 <canvas id="cour"></canvas>
                                 <script>

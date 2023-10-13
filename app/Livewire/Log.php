@@ -37,7 +37,7 @@ class Log extends Component
             DB::raw('MIN(logs.date) as connexion'))
         ->where('logs.libelle', 'connexion')
         ->whereDate('logs.date', $this->date_search)
-        ->groupBy('users.login')
+        ->groupBy('users.login', 'users.nom', 'users.prenom')
         ->get();
         return view('livewire.log', [
             'items' => $items,

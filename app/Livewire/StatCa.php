@@ -38,7 +38,7 @@ class StatCa extends AppComponent
         )
         ->leftJoin('paiements', 'ventes.id', 'paiements.vente_id')
         ->whereBetween('paiements.date', [$this->date_from, $this->date_to])
-        ->groupBy('ventes.id', 'paiements.date')
+        ->groupBy('ventes.id', 'paiements.date', 'ventes.montant')
         ->get();
         
         $totaux = new stdClass();
