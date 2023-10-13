@@ -13,4 +13,9 @@ class Article extends Model
     {
         return $this->belongsTo(Categorie::class);
     }
+
+    public function ligneVentes()
+    {
+        return $this->hasMany(LigneVente::class);
+    }
 }

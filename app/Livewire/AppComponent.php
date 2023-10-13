@@ -34,7 +34,7 @@ class AppComponent extends Component
         $item->delete();
         $this->resetValues();
         $this->confirm_modal = false;
-        $this->dispatch('close-toast-after-3-seconds'); 
+        $this->dispatch('close-toast-after-3-seconds');
     }
 
     public function closeToast()

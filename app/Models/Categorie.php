@@ -13,4 +13,9 @@ class Categorie extends Model
     {
         return $this->belongsToMany(Caracteristique::class, 'carac_cat');
     }
+
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
+    }
 }

@@ -45,7 +45,14 @@ class Article extends AppComponent
 
     public function deleteItem(mixed $id)
     {
-        parent::deleteItem(ModelsArticle::findOrFail($id));
+        $item = ModelsArticle::findOrFail($id);
+        if($item->ligneVentes->get(0)){
+            $this->notificationToast('Suppression refusée. L\'article est impliquée
+                dans une ou plusieurs ventes');
+            $this->resetValues();
+            return;
+        }
+        parent::deleteItem($item);
     }
 
     public function deleteConfirmed(mixed $id)

@@ -38,7 +38,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('auth', Auth::class)->middleware('guest')->name('login');
 
 Route::middleware('auth')->group(function() {
-    Route::get('logout', Logout::class)->name('logout');
+    Route::post('logout', Logout::class)->name('logout');
     Route::get('user', User::class)->name('user');
     Route::get('role', Role::class)->name('role');
     Route::get('boutique', Boutique::class)->name('boutique');

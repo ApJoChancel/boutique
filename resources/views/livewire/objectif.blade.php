@@ -1,23 +1,44 @@
 <div>
-    @if (session()->has('status'))
-        <div class="alert alert-success text-center">{{ session('status') }}</div>
-    @endif
-    <form wire:submit="save">
-        <div class="mt-8 bg-white p-4 shadow rounded-lg">
-            <div class="-mx-3 md:flex mb-2">
-                <div class="md:w-1/2 px-3 mb-6 md:mb-0">
-                    <label for="montant" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
-                        Objectif mensuel par défaut
-                    </label>
-                    <input wire:model.live="montant" id="montant" type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
-                    @error('montant') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+    <div>
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-auto shadow-sm sm:rounded-lg">
+                    <div class="p-6 bg-white border-b border-gray-200">
+                        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                            {{ __('Objectif mensuel') }}
+                        </h2>
+                        @if (session()->has('status'))
+                            <div class="fixed bottom-0 right-0 m-4" id="toast">
+                                <div class="bg-blue-500 border-l-4 border-blue-700 py-2 px-3 rounded-lg shadow-md">
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex items-center">
+                                            <span class="text-white">{{ session('status') }}</span>
+                                        </div>
+                                        <button class="text-white ml-5" wire:click="closeToast">&times;</button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif 
+                    </div>
+                    <div class="flex items-center justify-center flex-col">
+                        <div class="p-6 bg-white border-b border-gray-200">
+                            <form wire:submit="save">
+                                <div>
+                                    <x-label for="montant" :value="__('Objectif mensuel par défaut')" />
+                                    <x-input wire:model.live="montant" id="montant" type="text" class="block mt-1 w-full" />
+                                    @error('montant') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
+                                </div>
+                    
+                                <div class="flex items-center justify-end mt-4">
+                                    <x-button class="ml-4">
+                                        {{ $this->textSubmit }}
+                                    </x-button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div>
-                <button type="submit" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                    {{ $this->textSubmit }}
-                </button>
-            </div>
         </div>
-    </form>
+    </div>
 </div>

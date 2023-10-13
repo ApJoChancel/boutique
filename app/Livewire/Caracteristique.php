@@ -46,7 +46,13 @@ class Caracteristique extends AppComponent
 
     public function deleteItem(mixed $id)
     {
-        parent::deleteItem(ModelsCaracteristique::findOrFail($id));
+        $item = ModelsCaracteristique::findOrFail($id);
+        if($item->categories->get(0)){
+            $this->notificationToast('Pour supprimer cette caractéristiques, retirez-lui les catégorie associées');
+            $this->resetValues();
+            return;
+        }
+        parent::deleteItem($item);
     }
 
     public function deleteConfirmed(mixed $id)

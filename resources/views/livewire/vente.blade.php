@@ -37,20 +37,22 @@
             <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                     <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-                        {{-- <div class="w-full md:w-1/2">
+                        <div class="w-full md:w-1/2">
                             <div class="relative w-full">
                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                     <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                                     </svg>
                                 </div>
-                                <input wire:model.debounce.500ms="search" type="search" id="search" placeholder="Search" required name="search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                {{-- <input wire:model.debounce.500ms="search" type="search" id="search" placeholder="Search" required name="search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"> --}}
                             </div>
-                        </div> --}}
+                        </div>
                         <div class="md:w-1/2">
-                            <h2 style="text-align: right" class="font-semibold text-xl text-gray-800 leading-tight">
-                                {{ $total }}
-                            </h2>
+                            <div class="min-w-0 flex-1">
+                                <h2 style="text-align: right" class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                                    Total reçu : {{ formatNombre($total) }}
+                                </h2>
+                            </div>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
@@ -61,9 +63,9 @@
                                 >
                                     <x-table.td>{{ $item->date_vente }}</x-table.td>
                                     <x-table.td>{{ "{$item->nom} {$item->prenom}" }}</x-table.td>
-                                    <x-table.td>{{ $item->montant_vente }}</x-table.td>
-                                    <x-table.td>{{ $item->reduction ?? 0 }}</x-table.td>
-                                    <x-table.td>{{ $item->montant_recu }}</x-table.td>
+                                    <x-table.td>{{ formatNombre($item->montant_vente) }}</x-table.td>
+                                    <x-table.td>{{ formatNombre($item->reduction) ?? 0 }}</x-table.td>
+                                    <x-table.td>{{ formatNombre($item->montant_recu) }}</x-table.td>
                                 </tr>
                             @endforeach
                         </x-table.table>

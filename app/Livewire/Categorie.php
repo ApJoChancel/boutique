@@ -48,6 +48,10 @@ class Categorie extends AppComponent
             $this->notificationToast('Pour supprimer cette catégorie, retirez-lui les caractéristiques associées');
             $this->resetValues();
             return;
+        }elseif ($item->articles->get(0)) {
+            $this->notificationToast('Pour supprimer cette catégorie, retirez-lui les articles associés');
+            $this->resetValues();
+            return;
         }
         parent::deleteItem($item);
     }
