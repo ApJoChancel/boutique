@@ -65,9 +65,29 @@ class Visite extends AppComponent
     public function initEtape1()
     {
         $this->etape1 = true;
-        $this->etape2 = false;
-
         $this->est_identifie = false;
+
+        $this->etape2 = false;
+        $this->currentQuestion = 0;
+
+        $this->etape3 = false;
+        $this->est_concluante = false;
+        $this->visite_conclue = false;
+        $this->motif = 'article';
+        $this->comment = null;
+        $this->nature_operation = false;
+        $this->est_vente = false;
+        $this->articles = null;
+        $this->selected_article_id = null;
+        $this->selected_article = null;
+        $this->opts = [];
+        $this->artciles_added = [];
+
+        $this->etape4 = false;
+        $this->mtt_achat = null;
+        $this->mtt_paye = null;
+        $this->mtt_reduction = null;
+
         $this->clients = Client::all();
         $this->client_id = null;
     }
@@ -102,7 +122,9 @@ class Visite extends AppComponent
         }
         $this->etape2 = true;
         $this->etape1 = false;
-
+        $this->etape3 = false;
+        $this->etape4 = false;
+        
         $this->currentQuestion = 0;
         $this->questions = Question::all();
         $this->question = $this->questions[$this->currentQuestion];
@@ -134,12 +156,13 @@ class Visite extends AppComponent
         $this->etape3 = true;
         $this->etape1 = false;
         $this->etape2 = false;
+        $this->etape4 = false;
 
-        $this->est_concluante = false;
-        $this->visite_conclue = false;
+        $this->est_concluante = null;
+        $this->visite_conclue = null;
         $this->motif = 'article';
         $this->comment = null;
-        $this->nature_operation = false;
+        $this->nature_operation = null;
         $this->est_vente = false;
         $this->articles = null;
         $this->selected_article_id = null;
@@ -150,16 +173,27 @@ class Visite extends AppComponent
 
     public function estVente(bool $value)
     {
-        $this->nature_operation = true;;
+        $this->nature_operation = true;
         $this->est_vente = $value;
+    }
+    public function annuleEstVente()
+    {
+        $this->nature_operation = false;
+        $this->est_vente = null;
     }
     
     public function estConcluante(bool $value)
     {
-        $this->visite_conclue = true;;
+        $this->visite_conclue = true;
         $this->est_concluante = $value;
         if($this->est_concluante)
             $this->articles = ($this->est_vente) ? Article::all() : Article::all();
+    }
+
+    public function annuleEstConcluante()
+    {
+        $this->visite_conclue = false;
+        $this->est_concluante = null;
     }
 
     public function hasCarac()
@@ -214,8 +248,9 @@ class Visite extends AppComponent
     {
         //Utilisateur
         $user = Auth::user();
-        if(!$user->boutique->id){
+        if(!$user->boutique){
             session()->flash('status', 'Vous ne pouvez pas enregistrer une vente !!');
+            return;
         }
         DB::beginTransaction();
             //Client

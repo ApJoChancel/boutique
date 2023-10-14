@@ -76,10 +76,50 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                         {{ __('Visites') }}
-                        <button wire:click='voirPanier'>
-                            <i class="fas fa-shopping-cart text-gray-500 text-lg"></i>
-                        </button>
+                        @if ($etape3 && $est_concluante)
+                            <button class="relative" wire:click='voirPanier'>
+                                <i class="fas fa-shopping-cart text-gray-500 text-lg"></i>
+                                <span class="bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center absolute -top-1 -right-1 text-xs">
+                                    {{ count($artciles_added, 1) - count($artciles_added) }}
+                                </span>
+                            </button>
+                        @endif
                     </h2>
+                    <p>
+                        @if ($etape4)
+                            1️⃣ 2️⃣ 3️⃣ 4️⃣
+                        @elseif ($etape3)
+                            @if (!$nature_operation)
+                                1️⃣ 2️⃣ 3️⃣ ◾ ◽ ◽ ◻️
+                            @elseif (!$visite_conclue)
+                                1️⃣ 2️⃣ 3️⃣ ◾ ◾ ◽ ◻️
+                            @else
+                                1️⃣ 2️⃣ 3️⃣ ◾ ◾ ◾ ◻️
+                            @endif
+                        @elseif ($etape2)
+                            1️⃣ 2️⃣ ◻️ ◻️
+                        @else
+                            1️⃣ ◻️ ◻️ ◻️
+                        @endif
+                    </p>
+                    <p>
+                        @if ($etape4)
+                            Facturation
+                        @elseif ($etape3)
+                           Informations sur la visite
+                            @if (!$nature_operation)
+                                > Nature de la visite
+                            @elseif (!$visite_conclue)
+                                > Visite conclue ?
+                            @else
+                                > Finaliser la visite
+                            @endif
+                        @elseif ($etape2)
+                            Sondage
+                        @else
+                           Identification du visiteur
+                        @endif
+                    </p>
                     @if (session()->has('status'))
                         <div class="fixed bottom-0 right-0 m-4" id="toast">
                             <div class="bg-blue-500 border-l-4 border-blue-700 py-2 px-3 rounded-lg shadow-md">
@@ -156,11 +196,11 @@
                                         @endif
                                     </div>
                                     <div>
-                                        <button type="submit" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                                            Suivant
-                                        </button>
                                         <button wire:click='estIdentifie(false)' type="button" class="py-2 px-4 bg-transparent text-red-600 font-semibold border border-red-600 rounded hover:bg-red-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                                             Retour
+                                        </button>
+                                        <button type="submit" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                            Suivant
                                         </button>
                                     </div>
                                 </div>
@@ -213,14 +253,14 @@
                                         @endforeach
                                     </div>
                                     <div>
-                                        <button wire:click='questionSuivante' type="button" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                                            Suivant
-                                        </button>
                                         @if ($currentQuestion > 0)
-                                            <button  wire:click='questionPrecedente' type="button" class="py-2 px-4 bg-transparent text-purple-600 font-semibold border border-purple-600 rounded hover:bg-purple-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                            <button  wire:click='questionPrecedente' type="button" class="py-2 px-4 bg-transparent text-red-600 font-semibold border border-red-600 rounded hover:bg-red-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                                                 Précédent
                                             </button>
                                         @endif
+                                        <button wire:click='questionSuivante' type="button" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                            Suivant
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -244,12 +284,13 @@
                                     @if (!$visite_conclue)
                                         <div class="flex items-center justify-center flex-col">
                                             <div>
-                                                <button wire:click='estConcluante(true)' type="button" class="py-2 px-4 bg-transparent text-purple-600 font-semibold border border-purple-600 rounded hover:bg-purple-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                                                    Visite concluante
+                                                <button wire:click='estConcluante(false)' type="button" class="py-2 px-4 bg-transparent text-red-600 font-semibold border border-red-600 rounded hover:bg-red-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                                    Non concluante
                                                 </button>
-                                                <button wire:click='estConcluante(false)' type="button" class="py-2 px-4 bg-transparent text-blue-600 font-semibold border border-blue-600 rounded hover:bg-blue-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                                                    Visite non concluante
+                                                <button wire:click='estConcluante(true)' type="button" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                                    Concluante
                                                 </button>
+                                                
                                             </div>
                                         </div>
                                     @else
@@ -292,7 +333,7 @@
                                         @else
                                             <div class="min-w-0 flex-1">
                                                 <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-                                                    {{ ($est_vente) ? 'Vente' : 'Facture' }}
+                                                    {{ ($est_vente) ? 'Vente' : 'Location' }}
                                                 </h2>
                                             </div>
                                             <div class="flex items-center justify-center flex-col">
@@ -337,7 +378,7 @@
                                                 </div>
                                                 <div class="mt-8 bg-white p-4 shadow rounded-lg">
                                                     <button wire:click='addItem' type="button" wire:click='changeOptions({{ $this->edit_id }})' class="py-2 px-4 bg-transparent text-blue-600 font-semibold border border-blue-600 rounded hover:bg-blue-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                                                        Ajouter l'article
+                                                        Ajouter au panier
                                                     </button>
                                                     <button wire:click='initEtape4' type="button" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                                                         Passer à la facturation
@@ -347,9 +388,14 @@
                                         @endif
                                     @endif
                                 @endif
-                                <button wire:click='initEtape1' type="button" class="py-2 px-4 bg-transparent text-red-600 font-semibold border border-red-600 rounded hover:bg-red-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                <button @if ($est_nouveau) wire:click='initEtape2' @else wire:click='initEtape1' @endif type="button" class="py-2 px-4 bg-transparent text-red-600 font-semibold border border-red-600 rounded hover:bg-red-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                                     Etape précédente
                                 </button>
+                                @if ($nature_operation != null)
+                                    <button @if ($visite_conclue != null) wire:click='annuleEstConcluante' @else wire:click='annuleEstVente' @endif type="button" class="py-2 px-4 bg-transparent text-purple-600 font-semibold border border-purple-600 rounded hover:bg-purple-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                        <
+                                    </button>
+                                @endif
                             @else
                                 @if ($etape4)
                                     <div class="min-w-0 flex-1">

@@ -13,12 +13,16 @@ use Livewire\Attributes\Title;
 
 class Auth extends AppComponent
 {
-    
     #[Rule('required')]
     public $login = null;
     #[Rule('required')]
     public $password = null;
-
+    
+    public function mount()
+    {
+        $this->textSubmit = 'Se connecter';
+    }
+    
     public function save(Request $request)
     {
         $this->validate();
