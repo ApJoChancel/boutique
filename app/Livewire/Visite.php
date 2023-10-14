@@ -212,6 +212,11 @@ class Visite extends AppComponent
 
     public function venteTerminee()
     {
+        //Utilisateur
+        $user = Auth::user();
+        if(!$user->boutique->id){
+            session()->flash('status', 'Vous ne pouvez pas enregistrer une vente !!');
+        }
         DB::beginTransaction();
             //Client
             $cli = null;
@@ -225,8 +230,7 @@ class Visite extends AppComponent
                 $cli = Client::findOrFail($this->client_id);
             }
 
-            //Utilisateur
-            $user = Auth::user();
+            
 
             //Visite
             if($this->est_nouveau){

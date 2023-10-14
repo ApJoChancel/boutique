@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('libelle');
             $table->string('type');
             $table->foreignIdFor(Question::class)->constrained();
-            $table->unsignedInteger('choix_id')->nullable();
             $table->timestamps();
         });
     }
