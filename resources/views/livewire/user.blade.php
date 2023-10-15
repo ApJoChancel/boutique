@@ -27,20 +27,20 @@
                             <x-input wire:model.live="login" id="login" type="text" placeholder="Ex : COM0101" class="block mt-1 w-full" />
                             @error('login') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
                         </div>
-                        <div class="mt-4">
-                            <x-label for="nom" :value="__('Nom')" />
-                            <x-input wire:model.live="nom" id="nom" type="text" placeholder="Ex : DOE" class="block mt-1 w-full" />
-                            @error('nom') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
-                        </div>
-                        <div class="mt-4">
-                            <x-label for="prenom" :value="__('Prénom')" />
-                            <x-input wire:model.live="prenom" id="prenom" type="text" placeholder="Ex : John" class="block mt-1 w-full" />
-                            @error('prenom') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
-                        </div>
                         @empty($this->edit_id)
                             <div class="mt-4">
+                                <x-label for="nom" :value="__('Nom')" />
+                                <x-input wire:model.live="nom" id="nom" type="text" placeholder="Ex : ZOCK" class="block mt-1 w-full" />
+                                @error('nom') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
+                            </div>
+                            <div class="mt-4">
+                                <x-label for="prenom" :value="__('Prénom')" />
+                                <x-input wire:model.live="prenom" id="prenom" type="text" placeholder="Ex : Corlette" class="block mt-1 w-full" />
+                                @error('prenom') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
+                            </div>
+                            <div class="mt-4">
                                 <x-label for="type" :value="__('Type')" />
-                                <x-forms.select wire:model="type_id" id="type_id" class="block mt-1 w-full">
+                                <x-forms.select wire:change.lazy='changeType' wire:model="type_id" id="type_id" class="block mt-1 w-full">
                                     <option>Choisir un type...</option>
                                     @foreach ($types as $type)
                                         <option value="{{ $type->id }}" wire:key="{{ $type->id }}">
@@ -50,54 +50,67 @@
                                 </x-forms.select>
                                 @error('type_id') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
                             </div>
-                            <div class="mt-4">
-                                <x-label for="role" :value="__('Role')" />
-                                <x-forms.select wire:model="role_id" id="role_id" class="block mt-1 w-full">
-                                    <option>Choisir un rôle...</option>
-                                    @foreach ($roles as $role)
-                                        <option value="{{ $role->id }}" wire:key="{{ $role->id }}">
-                                            {{ $role->libelle }}
-                                        </option>
-                                    @endforeach
-                                </x-forms.select>
-                                @error('role_id') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
-                            </div>
-                            <div class="mt-4">
-                                <x-label for="zone" :value="__('Zone')" />
-                                <x-forms.select wire:model="zone_id" id="zone_id" class="block mt-1 w-full">
-                                    <option>Choisir une zone...</option>
-                                    @foreach ($zones as $zone)
-                                        <option value="{{ $zone->id }}" wire:key="{{ $zone->id }}">
-                                            {{ $zone->libelle }}
-                                        </option>
-                                    @endforeach
-                                </x-forms.select>
-                                @error('zone_id') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
-                            </div>
-                            <div class="mt-4">
-                                <x-label for="boutique" :value="__('Boutique')" />
-                                <x-forms.select wire:model="boutique_id" id="boutique_id" class="block mt-1 w-full">
-                                    <option>Choisir une boutique...</option>
-                                    @foreach ($boutiques as $boutique)
-                                        <option value="{{ $boutique->id }}" wire:key="{{ $boutique->id }}">
-                                            {{ $boutique->designation }}
-                                        </option>
-                                    @endforeach
-                                </x-forms.select>
-                                @error('boutique_id') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
-                            </div>
+                            @if ($voirRole)
+                                <div class="mt-4">
+                                    <x-label for="role" :value="__('Role')" />
+                                    <x-forms.select wire:model="role_id" id="role_id" class="block mt-1 w-full">
+                                        <option>Choisir un rôle...</option>
+                                        @foreach ($roles as $role)
+                                            <option value="{{ $role->id }}" wire:key="{{ $role->id }}">
+                                                {{ $role->libelle }}
+                                            </option>
+                                        @endforeach
+                                    </x-forms.select>
+                                    @error('role_id') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
+                                </div>
+                            @endif
+
+                            @if ($voirZone)
+                                <div class="mt-4">
+                                    <x-label for="zone" :value="__('Zone')" />
+                                    <x-forms.select wire:change.lazy='changeZone' wire:model="zone_id" id="zone_id" class="block mt-1 w-full">
+                                        <option value="0">Choisir une zone...</option>
+                                        @foreach ($zones as $zone)
+                                            <option value="{{ $zone->id }}" wire:key="{{ $zone->id }}">
+                                                {{ $zone->libelle }}
+                                            </option>
+                                        @endforeach
+                                    </x-forms.select>
+                                    @error('zone_id') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
+                                </div>
+                            @endif
+
+                            @if ($voirBoutique)
+                                <div class="mt-4">
+                                    <x-label for="boutique" :value="__('Boutique')" />
+                                    <x-forms.select wire:model="boutique_id" id="boutique_id" class="block mt-1 w-full">
+                                        <option>Choisir une boutique...</option>
+                                        @foreach ($boutiques as $boutique)
+                                            <option value="{{ $boutique->id }}" wire:key="{{ $boutique->id }}">
+                                                {{ $boutique->designation }}
+                                            </option>
+                                        @endforeach
+                                    </x-forms.select>
+                                    @error('boutique_id') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
+                                </div>
+                            @endif
                         @endempty
             
                         <div class="flex items-center justify-end mt-4">
-                            <x-button class="ml-4">
-                                {{ __('Enregistrer') }}
-                            </x-button>
+                            @if (!$this->edit_id)
+                                <x-button class="ml-4">
+                                    {{ __('Enregistrer') }}
+                                </x-button>
+                            @endif
                             <button  wire:click='resetValues' type="reset" class="py-2 px-4 bg-transparent text-purple-600 font-semibold border border-purple-600 rounded hover:bg-purple-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                                 Annuler
                             </button>
                             @if ($this->edit_id)
                                 <button type="button" wire:click='resetPassword({{ $this->edit_id }})' class="py-2 px-4 bg-transparent text-blue-600 font-semibold border border-blue-600 rounded hover:bg-blue-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                                     Réinitialiser le mot de passe
+                                </button>
+                                <button type="button" wire:click='changeInfo({{ $this->edit_id }})' class="py-2 px-4 bg-transparent text-blue-600 font-semibold border border-blue-600 rounded hover:bg-blue-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                    Changer les infos.
                                 </button>
                                 <button type="button" wire:click='deleteItem({{ $this->edit_id }})' class="py-2 px-4 bg-transparent text-red-600 font-semibold border border-red-600 rounded hover:bg-red-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                                     Supprimer
@@ -134,7 +147,7 @@
                                     <x-table.td>{{ "{$item->nom} {$item->prenom}" }}</x-table.td>
                                     <x-table.td>{{ $item->type->libelle }}</x-table.td>
                                     <x-table.td>{{ $item->role?->libelle }}</x-table.td>
-                                    <x-table.td>{{ $item->zone?->libelle }}</x-table.td>
+                                    <x-table.td>{{ $item->zone?->libelle ?? $item->boutique?->zone->libelle }}</x-table.td>
                                     <x-table.td>{{ $item->boutique?->designation }}</x-table.td>
                                 </tr>
                             @endforeach
@@ -144,6 +157,44 @@
                 </div>
             </div>
         </section>
+
+        <!-- changeModal -->
+        @if($change_modal)
+            <div class="fixed inset-0 flex items-center justify-center z-50">
+                <div class="bg-white w-96 p-4 rounded-lg shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h5 class="text-lg font-semibold">Changer</h5>
+                        <button wire:click="deleteCancelled()" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form wire:submit="changeInfoData">
+                            <div>
+                                <x-label for="nom" :value="__('Nom')" />
+                                <x-input wire:model.live="nom" id="nom" type="text" placeholder="Ex : ZOCK" class="block mt-1 w-full" />
+                                @error('nom') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
+                            </div>
+                            <div class="mt-4">
+                                <x-label for="prenom" :value="__('Prénom')" />
+                                <x-input wire:model.live="prenom" id="prenom" type="text" placeholder="Ex : Corlette" class="block mt-1 w-full" />
+                                @error('prenom') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
+                            </div>
+                            <div>
+                                <button type="submit" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                    {{ $this->textSubmit }}
+                                </button>
+                                <button wire:click='resetValues' type="reset" class="py-2 px-4 bg-transparent text-red-600 font-semibold border border-red-600 rounded hover:bg-red-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                    Annuler
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @endif
 
         <!-- deleteModal -->
         @if($confirm_modal)

@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\Type;
 use App\Models\User as ModelsUser;
 use App\Models\Zone;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
@@ -25,71 +26,123 @@ class User extends AppComponent
         'Zone',
         'Boutique',
     ];
-    
+
     const DEFAULT_PASSWORD = 'password';
 
     #[Rule('required|min:5|unique:users')]
-    public $login = null;
+    public $login;
     #[Rule('required')]
-    public $nom = null;
+    public $nom;
     #[Rule('required')]
-    public $prenom = null;
-    public $role_id = null;
-    public $type_id = null;
-    public $zone_id = null;
-    public $boutique_id = null;
+    public $prenom;
+
+    public $role_id;
+    public $type_id;
+    public $zone_id;
+    public $boutique_id;
+
+    public $voirRole;
+    public $voirZone;
+    public $voirBoutique;
+
+    public $boutiques;
+
+    public function mount()
+    {
+        $this->boutiques = Boutique::all();
+
+        $this->type_id = 4; //Commercial
+        $this->role_id = 2; //Commercial
+        $this->voirRole =
+            $this->voirZone =
+            $this->voirBoutique = true;
+    }
+
+    public function changeType()
+    {
+        if($this->type_id == 1 || $this->type_id == 2){
+            $this->voirRole =
+            $this->voirZone =
+            $this->voirBoutique = false;
+        } elseif($this->type_id == 3){
+            $this->voirZone = true;
+
+            $this->voirRole =
+            $this->voirBoutique = false;
+        } elseif($this->type_id == 4){
+            $this->voirZone =
+            $this->voirRole =
+            $this->voirBoutique = true;
+        }
+    }
+
+    public function changeZone()
+    {
+        if($this->zone_id){
+            $zone = Zone::findOrFail($this->zone_id);
+            $this->boutiques = $zone->boutiques;
+        }
+    }
 
     public function save()
     {
         $this->validate();
-        $item = (!$this->edit_id) ? new ModelsUser() : ModelsUser::findOrFail($this->edit_id);
-        $item->login = $this->login;
-        $item->nom = $this->nom;
-        $item->prenom = $this->prenom;
-        $item->password = Hash::make(self::DEFAULT_PASSWORD);
-        switch ($this->type_id) {
-            case 1 : //Admin
-            case 2 : //Suppléant
-                //On s'assure qu'il n'y a qu'un suppléant
-                if($this->type_id == 2){ //Suppléant
-                    $exist = ModelsUser::where('type_id', $this->type_id)->first();
-                    if($exist){
-                        $this->addError('type_id', 'Un suppléant existe déjà');
-                        return;
+        //Nom et prenom unique
+        $exite = DB::table('users')->where('nom', $this->nom)
+            ->where('prenom', $this->prenom)
+            ->first();
+        if(!$exite){
+            $item = new ModelsUser();
+            $item->login = $this->login;
+            $item->nom = $this->nom;
+            $item->prenom = $this->prenom;
+            $item->password = Hash::make(self::DEFAULT_PASSWORD);
+            switch ($this->type_id) {
+                case 1 : //Admin
+                case 2 : //Suppléant
+                    //On s'assure qu'il n'y a qu'un suppléant
+                    if($this->type_id == 2){ //Suppléant
+                        $exist = ModelsUser::where('type_id', $this->type_id)->first();
+                        if($exist){
+                            $this->addError('type_id', 'Un suppléant existe déjà');
+                            return;
+                        }
                     }
-                }
-                $item->type_id = $this->type_id;
-                break;
+                    $item->type_id = $this->type_id;
+                    break;
 
-            case 3 : //Superviseur
-                //On s'assure qu'il n'y a aucun superviseur dans cette zone
-                $exist = ModelsUser::where('zone_id', $this->zone_id)->first();
-                if($exist){
-                    $this->addError('zone_id', 'Cette zone a déjà un superviseur');
-                    return;
-                }
-                $item->type_id = $this->type_id;
-                $item->zone_id = $this->zone_id;
-                break;
-            
-            case 4 : //Commercial
-                if($this->role_id == 1){ //Manager
-                    //On s'assure qu'il n'y a pas déjà un manager dans la boutique
-                    $exist = ModelsUser::where('boutique_id', $this->boutique_id)
-                        ->where('role_id', $this->role_id)->first();
+                case 3 : //Superviseur
+                    //On s'assure qu'il n'y a aucun superviseur dans cette zone
+                    $exist = ModelsUser::where('zone_id', $this->zone_id)->first();
                     if($exist){
-                        $this->addError('boutique_id', 'Cette boutique a déjà un manager');
+                        $this->addError('zone_id', 'Cette zone a déjà un superviseur');
                         return;
                     }
-                }
-                $item->type_id = $this->type_id;
-                $item->role_id = $this->role_id;
-                $item->boutique_id = $this->boutique_id;
-                break;
+                    $item->type_id = $this->type_id;
+                    $item->zone_id = $this->zone_id;
+                    break;
+                
+                case 4 : //Commercial
+                    if($this->role_id == 1){ //Manager
+                        //On s'assure qu'il n'y a pas déjà un manager dans la boutique
+                        $exist = ModelsUser::where('boutique_id', $this->boutique_id)
+                            ->where('role_id', $this->role_id)->first();
+                        if($exist){
+                            $this->addError('boutique_id', 'Cette boutique a déjà un manager');
+                            return;
+                        }
+                    }
+                    $item->type_id = $this->type_id;
+                    $item->role_id = $this->role_id;
+                    $item->boutique_id = $this->boutique_id;
+                    break;
+            }
+            $item->save();
+            $this->resetValues();
+            $this->notificationToast('Added successfully');
+        } else{
+            $this->addError('nom', 'Un utilisateur existe avec ce nom et ce prénom');
         }
-        $item->save();
-        $this->resetValues();
-        $this->notificationToast('Added successfully');
     }
 
     public function editItem(ModelsUser $user)
@@ -132,10 +185,26 @@ class User extends AppComponent
         $this->notificationToast('Changed successfully');
     }
 
-    public function mount()
+    public function changeInfo(ModelsUser $item)
     {
-        $this->type_id = 4; //Commercial
-        $this->role_id = 2; //Commercial
+        $this->edit_id = $item->id;
+        $this->login = $item->nom;
+        $this->nom = $item->nom;
+        $this->prenom = $item->prenom;
+        $this->textSubmit = 'Modifier';
+        $this->change_modal = true;
+    }
+
+    public function changeInfoData()
+    {
+        $this->validate();
+        $item = ModelsUser::findOrFail($this->edit_id);
+        $item->nom = $this->nom;
+        $item->prenom = $this->prenom;
+        $item->save();
+        $this->change_modal = false;
+        $this->resetValues();
+        $this->notificationToast('Changed successfully');
     }
 
     #[Layout('livewire.layouts.base')]
@@ -146,7 +215,7 @@ class User extends AppComponent
             'roles' => Role::all(),
             'types' => Type::all(),
             'zones' => Zone::all(),
-            'boutiques' => Boutique::all(),
+            // 'boutiques' => Boutique::all(),
             'users' => ModelsUser::paginate(10),
             'headers' => self::$headers,
         ]);

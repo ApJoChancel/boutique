@@ -60,9 +60,11 @@
                         @endempty
             
                         <div class="flex items-center justify-end mt-4">
-                            <x-button class="ml-4">
-                                {{ __('Enregistrer') }}
-                            </x-button>
+                            @if (!$this->edit_id)
+                                <x-button class="ml-4">
+                                    {{ __('Enregistrer') }}
+                                </x-button>
+                            @endif
                             <button  wire:click='resetValues' type="reset" class="py-2 px-4 bg-transparent text-purple-600 font-semibold border border-purple-600 rounded hover:bg-purple-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                                 Annuler
                             </button>
