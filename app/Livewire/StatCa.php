@@ -9,8 +9,8 @@ use stdClass;
 
 class StatCa extends AppComponent
 {
-    public $date_from = null;
-    public $date_to = null;
+    public $date_from;
+    public $date_to;
 
     public function mount()
     {

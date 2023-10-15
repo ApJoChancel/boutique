@@ -15,7 +15,6 @@ class StatObjectif extends AppComponent
     #[Title('Boutique | Statistiques - Objectifs')]
     public function render()
     {
-        $objectif = Objectif::findOrFail(1)->montant;
         //Semaine
         $debutSemaine = Carbon::now()->startOfWeek();
         $finSemaine = Carbon::now()->endOfWeek();
@@ -58,12 +57,14 @@ class StatObjectif extends AppComponent
                 ->where('ventes.boutique_id', $bout->id)
                 ->first()
             ;
-            $items[] = [$semaine->montant, $mois->montant, $objectif];
+            $items[] = [$semaine->montant, $mois->montant, $bout->objectif];
             $boutiques[] = $bout->designation;
         }
         $semDeb = $debutSemaine->format('d');
         $semFin = $finSemaine->format('d');
         $mois = $debutSemaine->format('F');
+
+        $objectifGlobal = Boutique::all()->sum('objectif');
 
         return view('livewire.stat-objectif', [
             'labels' => [
@@ -71,7 +72,7 @@ class StatObjectif extends AppComponent
                 $mois, 
                 'Objectif mensuel'
             ],
-            'global' => [$semaine_global->montant, $mois_global->montant, $objectif * count($items)],
+            'global' => [$semaine_global->montant, $mois_global->montant, $objectifGlobal],
             'items' => $items,
             'boutiques' => $boutiques,
         ]);
