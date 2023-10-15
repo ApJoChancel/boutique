@@ -212,6 +212,9 @@
                     </x-slot>
 
                     <x-slot name="content">
+                        <x-nav-link :href="route('compte')" :active="request()->routeIs('compte')">
+                            {{ __('♟️ Mon compte') }}
+                        </x-nav-link>
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -219,7 +222,7 @@
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Déconnexion') }}
+                                {{ __('🚪 Déconnexion') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -392,6 +395,9 @@
                     </x-slot>
 
                     <x-slot name="content">
+                        <x-responsive-nav-link :href="route('compte')" :active="request()->routeIs('compte')">
+                            {{ __('♟️ Mon compte') }}
+                        </x-responsive-nav-link>
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -399,7 +405,7 @@
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Déconnexion') }}
+                                {{ __('🚪 Déconnexion') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
