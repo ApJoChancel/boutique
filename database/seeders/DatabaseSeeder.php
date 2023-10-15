@@ -9,9 +9,8 @@ use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
+    const DEFAULT_OBJECTIF = 2000000;
+    
     public function run(): void
     {
         DB::table('questions')->insert([
@@ -290,12 +289,14 @@ class DatabaseSeeder extends Seeder
         DB::table('boutiques')->insert([
             [
                 'designation' => 'CN Ynde Vallée Nlongkak',
+                'objectif' => self::DEFAULT_OBJECTIF,
                 'zone_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'designation' => 'CN Dla Akwa Bonakouamouang',
+                'objectif' => self::DEFAULT_OBJECTIF,
                 'zone_id' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -530,12 +531,6 @@ class DatabaseSeeder extends Seeder
                 'prenom' => 'Corlette',
                 'password' => Hash::make('password'),
                 'type_id' => 1,
-            ],
-        ]);
-
-        DB::table('objectifs')->insert([
-            [
-                'montant' => '8000000'
             ],
         ]);
     }

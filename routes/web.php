@@ -49,10 +49,10 @@ Route::middleware('auth')->group(function() {
     Route::get('visite', Visite::class)->name('visite');
     Route::get('vente', Vente::class)->name('vente');
     Route::get('rec', Recouvrement::class)->name('rec');
-    Route::get('compte', Compte::class)->name('compte');
+    // Route::get('compte', Compte::class)->name('compte');
     Route::get('zone', Zone::class)->name('zone');
     Route::get('log', Log::class)->name('log');
-    Route::get('obj', Objectif::class)->name('objectif');
+    // Route::get('obj', Objectif::class)->name('objectif');
     Route::get('/', StatObjectif::class)->name('stat_objectif');
     Route::get('ca', StatCa::class)->name('stat_ca');
     Route::get('caisse', StatCaisse::class)->name('stat_caisse');

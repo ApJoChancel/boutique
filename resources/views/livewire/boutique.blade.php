@@ -29,6 +29,11 @@
                         </div>
                         @empty($this->edit_id)
                             <div class="mt-4">
+                                <x-label for="objectif" :value="__('Objectif mensuel')" />
+                                <x-input wire:model.live="objectif" id="objectif" type="text" placeholder="Ex : 2000000" class="block mt-1 w-full" />
+                                @error('objectif') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
+                            </div>
+                            <div class="mt-4">
                                 <x-label for="zone" :value="__('Zone')" />
                                 <x-forms.select wire:model="zone_id" id="zone_id" class="block mt-1 w-full">
                                     <option>Choisir une zone...</option>
@@ -68,6 +73,9 @@
                                 <button type="button" wire:click='changeZone({{ $this->edit_id }})' class="py-2 px-4 bg-transparent text-blue-600 font-semibold border border-blue-600 rounded hover:bg-blue-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                                     Changer la zone
                                 </button>
+                                <button type="button" wire:click='changeObjectif({{ $this->edit_id }})' class="py-2 px-4 bg-transparent text-blue-600 font-semibold border border-blue-600 rounded hover:bg-blue-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                    Changer l'objectif
+                                </button>
                                 <button type="button" wire:click='deleteItem({{ $this->edit_id }})' class="py-2 px-4 bg-transparent text-red-600 font-semibold border border-red-600 rounded hover:bg-red-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                                     Supprimer
                                 </button>
@@ -102,6 +110,7 @@
                                     <x-table.td>{{ $item->designation }}</x-table.td>
                                     <x-table.td>{{ $item->zone->libelle }}</x-table.td>
                                     <x-table.td>{{ "{$item->manager?->nom} {$item->manager?->prenom}" }}</x-table.td>
+                                    <x-table.td>{{ formatNombre($item->objectif) }}</x-table.td>
                                 </tr>
                             @endforeach
                         </x-table.table>
@@ -147,6 +156,22 @@
                                         </div>
                                         @error('boutique_id') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                                     </div>
+                                </div>
+                                <div>
+                                    <button type="submit" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                        {{ $this->textSubmit }}
+                                    </button>
+                                    <button wire:click='resetValues' type="reset" class="py-2 px-4 bg-transparent text-red-600 font-semibold border border-red-600 rounded hover:bg-red-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                        Annuler
+                                    </button>
+                                </div>
+                            </form>
+                        @elseif ($this->change_objectif)
+                            <form wire:submit="changeObjectifData">
+                                <div>
+                                    <x-label for="objectif" :value="__('Objectif mensuel')" />
+                                    <x-input wire:model="objectif" id="objectif" type="text" placeholder="Ex : 2000000" class="block mt-1 w-full" />
+                                    @error('objectif') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
                                     <button type="submit" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">

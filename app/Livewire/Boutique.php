@@ -15,6 +15,8 @@ class Boutique extends AppComponent
 {
     use WithPagination;
 
+    const DEFAULT_OBJECTIF = 2000000;
+
     private static array $headers = [
         'Boutique',
         'Zone',
@@ -28,13 +30,24 @@ class Boutique extends AppComponent
     #[Rule('sometimes')]
     public $user_id = null;
 
-    public $change_zone = false;
+    public $objectif = null;
+
+    public $change_zone;
+    public $change_objectif;
+
+    public function mount()
+    {
+        $this->objectif = self::DEFAULT_OBJECTIF;
+        $this->change_zone = false;
+        $this->change_objectif = false;
+    }
 
     public function save()
     {
         $this->validate();
         $item = (!$this->edit_id) ? new ModelsBoutique() : ModelsBoutique::findOrFail($this->edit_id);
         $item->designation = $this->designation;
+        $item->objectif = $this->objectif;
         $item->zone_id = $this->zone_id;
         $user = User::find($this->user_id);
         DB::beginTransaction();
@@ -52,6 +65,7 @@ class Boutique extends AppComponent
     {
         $this->edit_id = $item->id;
         $this->designation = $item->designation;
+        $this->objectif = $item->objectif;
         $this->user_id = null;
         $this->zone_id = $item->zone->id;
         $this->textSubmit = 'Modifier';
@@ -72,10 +86,32 @@ class Boutique extends AppComponent
     {
         parent::resetValues();
         $this->designation =
+            $this->objectif =
             $this->zone_id =
             $this->user_id = null;
             $this->change_zone = false;
+            $this->change_objectif = false;
         $this->dispatch('close-modal'); 
+    }
+
+    public function changeObjectif(ModelsBoutique $item)
+    {
+        $this->edit_id = $item->id;
+        $this->change_objectif = true;
+        $this->designation = $item->objectif;
+        $this->objectif = $item->objectif;
+        $this->change_modal = true;
+    }
+
+    public function changeObjectifData()
+    {
+        $this->validate();
+        $item = ModelsBoutique::findOrFail($this->edit_id);
+        $item->objectif = $this->objectif;
+        $item->save();
+        $this->change_modal = false;
+        $this->resetValues();
+        $this->notificationToast('Changed successfully');
     }
 
     public function changeManager(ModelsBoutique $item)
