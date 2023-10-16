@@ -10,6 +10,7 @@ use App\Livewire\Declassement;
 use App\Livewire\Log;
 use App\Livewire\Logout;
 use App\Livewire\Objectif;
+use App\Livewire\Parametre;
 use App\Livewire\Recouvrement;
 use App\Livewire\Role;
 use App\Livewire\Sondage;
@@ -57,4 +58,5 @@ Route::middleware('auth')->group(function() {
     Route::get('ca', StatCa::class)->name('stat_ca');
     Route::get('caisse', StatCaisse::class)->name('stat_caisse');
     Route::get('dec', StatDeclassement::class)->name('stat_decla');
+    Route::get('parametre', Parametre::class)->name('parametre');
 });

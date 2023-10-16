@@ -33,7 +33,7 @@
                                         <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                                     </svg>
                                 </div>
-                                {{-- <input wire:model.debounce.500ms="search" type="search" id="search" placeholder="Search" required name="search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"> --}}
+                                {{-- <input wire:model.debounce.500ms="search" type="search" id="search" placeholder="Search" required name="search" class="bg-gray-50 border border-gray-$parametre->delais_location0 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"> --}}
                             </div>
                         </div>
                         <div class="md:w-1/2">
@@ -55,12 +55,12 @@
                                     <x-table.td>{{ formatNombre($item->telephone, '.') }}</x-table.td>
                                     <x-table.td>
                                         @if ($item->type === 'vente')
-                                            @if ($item->jours_ecoules < 45)
-                                                Oui ({{ $item->jours_ecoules - 45 }})
+                                            @if ($item->jours_ecoules < $parametre->delais_vente)
+                                                Oui ({{ $item->jours_ecoules - $parametre->delais_vente }})
                                             @endif
                                         @else
-                                            @if ($item->jours_ecoules < 30)
-                                                Oui ({{ $item->jours_ecoules - 30 }})
+                                            @if ($item->jours_ecoules < $parametre->delais_location)
+                                                Oui ({{ $item->jours_ecoules - $parametre->delais_location }})
                                             @endif
                                         @endif
                                     </x-table.td>
@@ -68,29 +68,29 @@
                                         <x-table.td>
                                             @if ($item->type === 'vente')
                                                 @if (
-                                                    $item->jours_ecoules > (45 + $j) &&
-                                                    $item->jours_ecoules <= (45 + $k)
+                                                    $item->jours_ecoules > ($parametre->delais_vente + $j) &&
+                                                    $item->jours_ecoules <= ($parametre->delais_vente + $k)
                                                 )
-                                                    Oui ({{ $item->jours_ecoules - 45 }})
+                                                    Oui ({{ $item->jours_ecoules - $parametre->delais_vente }})
                                                 @endif
                                             @else
                                                 @if (
-                                                    $item->jours_ecoules > (30 + $j) &&
-                                                    $item->jours_ecoules <= (30 + $k)
+                                                    $item->jours_ecoules > ($parametre->delais_location + $j) &&
+                                                    $item->jours_ecoules <= ($parametre->delais_location + $k)
                                                 )
-                                                    Oui ({{ $item->jours_ecoules - 30 }})
+                                                    Oui ({{ $item->jours_ecoules - $parametre->delais_location }})
                                                 @endif
                                             @endif
                                         </x-table.td>
                                     @endfor
                                     <x-table.td>
                                         @if ($item->type === 'vente')
-                                            @if ($item->jours_ecoules > (45 + 28))
-                                                Oui ({{ $item->jours_ecoules - 45 }})
+                                            @if ($item->jours_ecoules > ($parametre->delais_vente + 28))
+                                                Oui ({{ $item->jours_ecoules - $parametre->delais_vente }})
                                             @endif
                                         @else
-                                            @if ($item->jours_ecoules > (30 + 28))
-                                                Oui ({{ $item->jours_ecoules - 30 }})
+                                            @if ($item->jours_ecoules > ($parametre->delais_location + 28))
+                                                Oui ({{ $item->jours_ecoules - $parametre->delais_location }})
                                             @endif
                                         @endif
                                     </x-table.td>

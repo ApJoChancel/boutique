@@ -533,5 +533,14 @@ class DatabaseSeeder extends Seeder
                 'type_id' => 1,
             ],
         ]);
+
+        DB::table('parametres')->insert([
+            [
+                'delais_vente' => 30,
+                'delais_location' => 45,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
     }
 }

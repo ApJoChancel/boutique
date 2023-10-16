@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Parametre;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -51,6 +52,7 @@ class StatDeclassement extends AppComponent
         return view('livewire.stat-declassement', [
             'ventes' => $ventes,
             'total' => $total,
+            'parametre' => Parametre::findOrFail(1),
             'headers' => self::$headers,
         ]);
     }
