@@ -85,7 +85,7 @@
                             </button>
                         @endif
                     </h2>
-                    <p>
+                    <p class="font-semibold text-xl">
                         @if ($etape4)
                             1️⃣ 2️⃣ 3️⃣ 4️⃣
                         @elseif ($etape3)
@@ -102,7 +102,7 @@
                             1️⃣ ◻️ ◻️ ◻️
                         @endif
                     </p>
-                    <p>
+                    <p class="font-semibold text-xl">
                         @if ($etape4)
                             Facturation
                         @elseif ($etape3)
@@ -315,6 +315,7 @@
                                                                     <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                                                                 </div>
                                                             </div>
+                                                            @error('mtt_achat') <p class="mt-4 text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                                                         </div>
                                                         <div class="md:w-1/2 px-3 mb-6 md:mb-0">
                                                             <label for="comment" class="block text-sm font-medium leading-6 text-gray-900">
@@ -339,13 +340,13 @@
                                             <div class="flex items-center justify-center flex-col">
                                                 <div class="mt-8 bg-white p-4 shadow rounded-lg">
                                                     <div class="md:w-1/2 px-3 mb-2">
-                                                        <label for="article" class="block text-sm font-medium leading-6 text-gray-900">
-                                                            Article
+                                                        <label for="categorie" class="block text-sm font-medium leading-6 text-gray-900">
+                                                            Categorie
                                                         </label>
                                                         <div class="relative">
-                                                            <select wire:change.lazy='hasCarac' wire:model="selected_article_id" id="article" class="block appearance-none bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded">
-                                                                <option value="0">Choisir un article...</option>
-                                                                @foreach ($articles as $item)
+                                                            <select wire:change.lazy='hasCarac' wire:model="selected_categorie_id" id="categorie" class="block appearance-none bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded">
+                                                                <option value="0">Choisir une categorie...</option>
+                                                                @foreach ($categories as $item)
                                                                     <option wire:key="{{ $item->id }}" value="{{ $item->id }}">{{ $item->libelle }}</option>
                                                                 @endforeach
                                                             </select>
@@ -354,24 +355,11 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    @if ($this->selected_article?->categorie?->caracteristiques())
+                                                    @if ($this->caracs)
                                                         <div>
-                                                            @foreach ($this->selected_article->categorie->caracteristiques as $item)
-                                                                <div class="md:w-1/2 px-3 mb-2">
-                                                                    <label class="block text-sm font-medium leading-6 text-gray-900">
-                                                                        {{ $item['libelle'] }}
-                                                                    </label>
-                                                                    <div class="relative">
-                                                                        <select wire:model="opts.{{ $item->id }}.option" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded">
-                                                                            @foreach ($item->options as $opt)
-                                                                                <option value="{{ $opt->libelle }}">{{ $opt->libelle }}</option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                        <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
-                                                                            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                            <x-label :value="__('Caractéristiques')" />
+                                                            @foreach ($this->caracs as $item)
+                                                                <x-label wire:click='changeOption({{ $item->id }})' value="{{ $item->libelle }}" class="inline mr-3" />
                                                             @endforeach
                                                         </div>
                                                     @endif
@@ -450,4 +438,38 @@
             </div>
         </div>
     </div>
+
+    <!-- optionModal -->
+    @if($option_modal)
+        <div class="fixed inset-0 flex items-center justify-center z-50">
+            <div class="bg-white w-96 p-4 rounded-lg shadow-lg">
+                <div class="flex justify-between items-center mb-4">
+                    <h5 class="text-lg font-semibold">Choisir les caractéristiques</h5>
+                    <button wire:click="fermer" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div>
+                            @foreach ($optionOf->options as $option)
+                                @if ($option->categories->contains($this->selected_categorie))
+                                    <x-input wire:model="options" value="{{ $option->id }}" id="{{ $option->id }}" type="checkbox" class="inline" />
+                                    <x-label for="{{ $option->id }}" value="{{ $option->libelle }}" class="inline mr-3" />
+                                @endif
+                            @endforeach
+                        </div>
+                        
+                        <div class="mt-4">
+                            <span wire:click='fermer' class="py-2 px-4 bg-transparent text-purple-600 font-semibold border border-purple-600 rounded hover:bg-purple-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"">
+                                Fermer
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>

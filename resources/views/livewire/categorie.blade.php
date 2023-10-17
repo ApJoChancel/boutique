@@ -31,7 +31,6 @@
                         @else
                             <div>
                                 <span>{{ $this->libelle }}</span>
-                                @error('libelle') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
                             </div>
                         @endif
                         @if(empty($this->edit_id) || $this->change_carac)
@@ -39,11 +38,7 @@
                                 <x-label :value="__('Caractéristiques')" />
                                 @foreach ($caracs as $item)
                                     <x-label wire:click='changeOption({{ $item->id }})' value="{{ $item->libelle }}" class="inline mr-3" />
-                                    
-                                    {{-- <x-input wire:model="carac" value="{{ $item->id }}" id="{{ $item->id }}" type="checkbox" class="inline" />
-                                    <x-label for="{{ $item->id }}" value="{{ $item->libelle }}" class="inline mr-3" />
-                                 --}}
-                                        @endforeach
+                                @endforeach
                                 @error('carac') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
                             </div>
                         @endif

@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Article;
+use App\Models\Categorie;
 use App\Models\Vente;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('ligne_ventes', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Article::class)->constrained();
+            $table->foreignIdFor(Categorie::class)->constrained();
             $table->foreignIdFor(Vente::class)->constrained();
             $table->string('caracteristiques')->nullable();
             $table->timestamps();

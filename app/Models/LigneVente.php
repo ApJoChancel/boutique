@@ -9,8 +9,8 @@ class LigneVente extends Model
 {
     use HasFactory;
 
-    public function article()
+    public function categorie()
     {
-        return $this->belongsTo(Article::class);
+        return $this->belongsTo(Categorie::class);
     }
 }

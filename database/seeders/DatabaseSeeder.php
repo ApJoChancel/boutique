@@ -336,122 +336,122 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
-        DB::table('articles')->insert([
-            [
-                'libelle' => 'Robe de mariage sirène',
-                'categorie_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'libelle' => 'Robe de mariage princesse',
-                'categorie_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'libelle' => 'Chaussure escarpins',
-                'categorie_id' => 2,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'libelle' => 'Chaussure sandale',
-                'categorie_id' => 2,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'libelle' => 'Colliers',
-                'categorie_id' => 3,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'libelle' => 'Bagues',
-                'categorie_id' => 3,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'libelle' => 'Couronne',
-                'categorie_id' => 3,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'libelle' => 'Barettes',
-                'categorie_id' => 3,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'libelle' => 'Boucles',
-                'categorie_id' => 3,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'libelle' => 'Bracelets',
-                'categorie_id' => 3,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'libelle' => 'Cerceaux',
-                'categorie_id' => 4,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'libelle' => 'Voiles',
-                'categorie_id' => 4,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'libelle' => 'Bibi',
-                'categorie_id' => 4,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'libelle' => 'Pochettes',
-                'categorie_id' => 4,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'libelle' => "Livre d'or",
-                'categorie_id' => 5,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'libelle' => 'Bouquets de fleurs',
-                'categorie_id' => 5,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'libelle' => "Billet d'invitation",
-                'categorie_id' => 5,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'libelle' => 'Gadgets',
-                'categorie_id' => 5,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'libelle' => 'Porte alliance',
-                'categorie_id' => 5,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+        // DB::table('articles')->insert([
+        //     [
+        //         'libelle' => 'Robe de mariage sirène',
+        //         'categorie_id' => 1,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'libelle' => 'Robe de mariage princesse',
+        //         'categorie_id' => 1,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'libelle' => 'Chaussure escarpins',
+        //         'categorie_id' => 2,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'libelle' => 'Chaussure sandale',
+        //         'categorie_id' => 2,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'libelle' => 'Colliers',
+        //         'categorie_id' => 3,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'libelle' => 'Bagues',
+        //         'categorie_id' => 3,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'libelle' => 'Couronne',
+        //         'categorie_id' => 3,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'libelle' => 'Barettes',
+        //         'categorie_id' => 3,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'libelle' => 'Boucles',
+        //         'categorie_id' => 3,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'libelle' => 'Bracelets',
+        //         'categorie_id' => 3,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'libelle' => 'Cerceaux',
+        //         'categorie_id' => 4,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'libelle' => 'Voiles',
+        //         'categorie_id' => 4,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'libelle' => 'Bibi',
+        //         'categorie_id' => 4,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'libelle' => 'Pochettes',
+        //         'categorie_id' => 4,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'libelle' => "Livre d'or",
+        //         'categorie_id' => 5,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'libelle' => 'Bouquets de fleurs',
+        //         'categorie_id' => 5,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'libelle' => "Billet d'invitation",
+        //         'categorie_id' => 5,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'libelle' => 'Gadgets',
+        //         'categorie_id' => 5,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'libelle' => 'Porte alliance',
+        //         'categorie_id' => 5,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        // ]);
 
         DB::table('caracteristiques')->insert([
             [

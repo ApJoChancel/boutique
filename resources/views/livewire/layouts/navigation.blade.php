@@ -109,9 +109,9 @@
                                 <x-nav-link :href="route('categorie')" :active="request()->routeIs('categorie')">
                                     {{ __('📚 Catégories') }}
                                 </x-nav-link>
-                                <x-nav-link :href="route('article')" :active="request()->routeIs('article')">
+                                {{-- <x-nav-link :href="route('article')" :active="request()->routeIs('article')">
                                     {{ __('👢 Articles') }}
-                                </x-nav-link>
+                                </x-nav-link> --}}
                             </x-slot>
                         </x-dropdown>
                     </div>
@@ -276,9 +276,9 @@
                         <x-responsive-nav-link :href="route('categorie')" :active="request()->routeIs('categorie')">
                             {{ __('📚 Catégories') }}
                         </x-responsive-nav-link>
-                        <x-responsive-nav-link :href="route('article')" :active="request()->routeIs('article')">
+                        {{-- <x-responsive-nav-link :href="route('article')" :active="request()->routeIs('article')">
                             {{ __('👢 Articles') }}
-                        </x-responsive-nav-link>
+                        </x-responsive-nav-link> --}}
                     </x-slot>
                 </x-dropdown>
             </div>

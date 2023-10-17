@@ -13,4 +13,9 @@ class Option extends Model
     {
         return $this->belongsToMany(Categorie::class, 'cate_opt');
     }
+
+    public function caracteristique()
+    {
+        return $this->belongsTo(Caracteristique::class);
+    }
 }

@@ -45,7 +45,7 @@ Route::middleware('auth')->group(function() {
     Route::get('boutique', Boutique::class)->name('boutique');
     Route::get('categorie', Categorie::class)->name('categorie');
     Route::get('carac', Caracteristique::class)->name('carac');
-    Route::get('article', Article::class)->name('article');
+    // Route::get('article', Article::class)->name('article');
     Route::get('sondage', Sondage::class)->name('sondage');
     Route::get('visite', Visite::class)->name('visite');
     Route::get('vente', Vente::class)->name('vente');
