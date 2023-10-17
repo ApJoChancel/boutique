@@ -2,6 +2,8 @@
 
 use App\Models\Boutique;
 use App\Models\Role;
+use App\Models\Type;
+use App\Models\Zone;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -21,6 +23,8 @@ return new class extends Migration
             $table->string('password');
             $table->foreignIdFor(Role::class)->nullable()->constrained();
             $table->foreignIdFor(Boutique::class)->nullable()->constrained();
+            $table->foreignIdFor(Type::class)->constrained();
+            $table->foreignIdFor(Zone::class)->nullable()->constrained();
             $table->timestamps();
         });
     }

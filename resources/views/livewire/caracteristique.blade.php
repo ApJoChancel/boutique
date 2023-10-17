@@ -29,8 +29,17 @@
                         </div>
                         @empty($this->edit_id)
                             <div class="mt-4">
+                                <x-label for="type" :value="__('Type')" />
+                                <x-forms.select wire:model="type" id="type" class="block mt-1 w-full">
+                                    <option value="0">Choisir un type...</option>
+                                    <option value="unique">Unique</option>
+                                    <option value="multiple">Multiple</option>
+                                </x-forms.select>
+                                @error('type') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
+                            </div>
+                            <div class="mt-4">
                                 <x-label for="options" :value="__('options')" />
-                                <x-textarea id="options" rows="5" placeholder="Une option par ligne" class="block mt-1 w-full" />
+                                <x-textarea wire:model="options" id="options" rows="5" placeholder="Une option par ligne" class="block mt-1 w-full" />
                                 @error('options') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
                             </div>
                         @endempty
@@ -78,6 +87,7 @@
                                     wire:click='editItem({{ $item->id }})'
                                 >
                                     <x-table.td>{{ $item->libelle }}</x-table.td>
+                                    <x-table.td>{{ ucwords($item->type) }}</x-table.td>
                                 </tr>
                             @endforeach
                         </x-table.table>

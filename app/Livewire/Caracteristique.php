@@ -16,22 +16,37 @@ class Caracteristique extends AppComponent
 
     private static array $headers = [
         'Caractéristique',
+        'type',
     ];
     
     #[Rule('required|min:2|unique:caracteristiques')]
-    public $libelle = null;
+    public $libelle;
     #[Rule('sometimes')]
-    public $options = null;
+    public $options;
+    #[Rule('required')]
+    public $type;
 
     public function save()
     {
         $this->validate();
-        $item = (!$this->edit_id) ? new ModelsCaracteristique() : ModelsCaracteristique::findOrFail($this->edit_id);
+        $item = new ModelsCaracteristique();
         $item->libelle = $this->libelle;
+        $item->type = $this->type;
         DB::beginTransaction();
             $item->save();
-            if($this->options)
-                $item->options()->sync($this->tableOptionsToIds($this->options));
+            if($this->options){
+                $tab = nl2br($this->options);
+                foreach(explode('<br />', $tab) as $option){
+                    $option = trim($option);
+                    $opt = Option::where('libelle', $option)->first();
+                    if(!$opt){
+                        $opt = new Option();
+                        $opt->libelle = $option;
+                        $opt->caracteristique_id = $item->id;
+                        $opt->save();
+                    }
+                }
+            }
         DB::commit();
         $this->resetValues();
         $this->notificationToast('Saved successfully');
@@ -39,6 +54,7 @@ class Caracteristique extends AppComponent
 
     public function editItem(ModelsCaracteristique $item)
     {
+        $this->resetValidation();
         $this->edit_id = $item->id;
         $this->libelle = $item->libelle;
         $this->textSubmit = 'Modifier';
@@ -47,9 +63,8 @@ class Caracteristique extends AppComponent
     public function deleteItem(mixed $id)
     {
         $item = ModelsCaracteristique::findOrFail($id);
-        if($item->categories->get(0)){
-            $this->notificationToast('Pour supprimer cette caractéristiques, retirez-lui les catégorie associées');
-            $this->resetValues();
+        if($item->options->get(0)){
+            $this->addError('libelle', 'Pour supprimer cette caractéristiques, retirez-lui les options associées');
             return;
         }
         parent::deleteItem($item);
@@ -65,11 +80,13 @@ class Caracteristique extends AppComponent
     {
         parent::resetValues();
         $this->libelle =
+            $this->type =
             $this->options = null;
     }
 
     public function changeOptions(ModelsCaracteristique $item)
     {
+        $this->resetValidation();
         $this->edit_id = $item->id;
         $this->libelle = $item->libelle;
         $options = '';
@@ -84,26 +101,28 @@ class Caracteristique extends AppComponent
     {
         $item = ModelsCaracteristique::findOrFail($this->edit_id);
         DB::beginTransaction();
-            $item->options()->sync($this->tableOptionsToIds($this->options));
+            $item->options()->delete();
+            $item->options()->saveMany($this->tabOptionsToIds($this->options, $item));
         DB::commit();
         $this->change_modal = false;
         $this->resetValues();
         $this->notificationToast('Changed successfully');
     }
 
-    private function tableOptionsToIds(string $table)
+    private function tabOptionsToIds(string $tab, ModelsCaracteristique $item)
     {
         $options = [];
-        $table = nl2br($table);
-        foreach(explode('<br />', $table) as $option){
+        $tab = nl2br($tab);
+        foreach(explode('<br />', $tab) as $option){
             $option = trim($option);
             $opt = Option::where('libelle', $option)->first();
             if(!$opt){
                 $opt = new Option();
                 $opt->libelle = $option;
+                $opt->caracteristique_id = $item->id;
                 $opt->save();
             }
-            $options[] = $opt->id;
+            $options[] = $opt;
         }
         return $options;
     }

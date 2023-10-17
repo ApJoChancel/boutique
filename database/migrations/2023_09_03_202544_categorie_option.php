@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Caracteristique;
+use App\Models\Categorie;
 use App\Models\Option;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('carac_opt', function (Blueprint $table) {
+        Schema::create('cate_opt', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Caracteristique::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Categorie::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Option::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('carac_opt');
+        Schema::dropIfExists('cate_opt');
     }
 };
