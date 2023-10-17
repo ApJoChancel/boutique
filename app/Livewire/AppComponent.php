@@ -52,6 +52,7 @@ class AppComponent extends Component
             $this->change_modal =
             $this->paie_modal =
             $this->info_modal = false;
+        $this->resetValidation();
     }
 
     public function notificationToast(string $message)

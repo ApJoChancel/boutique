@@ -22,20 +22,38 @@ class Categorie extends AppComponent
     #[Rule('sometimes')]
     public $carac = [];
 
+    public $option_modal;
+    public $change_carac;
+    public $optionOf;
+    public $options;
+
     public function save()
     {
-        $this->validate();
+        if(!$this->change_carac)
+            $this->validate();
         $item = (!$this->edit_id) ? new ModelsCategorie() : ModelsCategorie::findOrFail($this->edit_id);
         $item->libelle = $this->libelle;
         $item->save();
         if($this->carac)
-            $item->caracteristiques()->sync($this->carac);
+            $item->options()->sync($this->carac);
         $this->resetValues();
         $this->notificationToast('Saved successfully');
     }
 
+    public function fermer()
+    {
+        $this->option_modal = false;
+    }
+
+    public function changeOption(Caracteristique $item)
+    {
+        $this->optionOf = $item;
+        $this->option_modal = true;
+    }
+
     public function editItem(ModelsCategorie $item)
     {
+        $this->change_carac = false;
         $this->edit_id = $item->id;
         $this->libelle = $item->libelle;
         $this->textSubmit = 'Modifier';
@@ -44,7 +62,7 @@ class Categorie extends AppComponent
     public function deleteItem(mixed $id)
     {
         $item = ModelsCategorie::findOrFail($id);
-        if($item->caracteristiques->get(0)){
+        if($item->options->get(0)){
             $this->notificationToast('Pour supprimer cette catégorie, retirez-lui les caractéristiques associées');
             $this->resetValues();
             return;
@@ -68,14 +86,18 @@ class Categorie extends AppComponent
         parent::resetValues();
         $this->libelle = null;
         $this->carac = [];
+        $this->option_modal = false;
+        $this->change_carac = false;
+        $this->optionOf = null;
+        $this->options = null;
     }
 
     public function changeCarac(ModelsCategorie $item)
     {
         $this->edit_id = $item->id;
         $this->libelle = $item->libelle;
-        $this->carac = $item->caracteristiques()->pluck('caracteristiques.id');
-        $this->change_modal = true;
+        $this->carac = $item->options()->pluck('options.id');
+        $this->change_carac = true;
     }
 
     public function changeCaracData()

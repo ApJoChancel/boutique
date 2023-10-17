@@ -13,9 +13,4 @@ class Caracteristique extends Model
     {
         return $this->hasMany(Option::class);
     }
-
-    public function categories()
-    {
-        return $this->belongsToMany(Categorie::class, 'carac_cat');
-    }
 }

@@ -9,9 +9,9 @@ class Categorie extends Model
 {
     use HasFactory;
 
-    public function caracteristiques()
+    public function options()
     {
-        return $this->belongsToMany(Caracteristique::class, 'carac_cat');
+        return $this->belongsToMany(Option::class, 'cate_opt');
     }
 
     public function articles()

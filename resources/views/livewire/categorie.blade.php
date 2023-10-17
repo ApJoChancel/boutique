@@ -22,30 +22,40 @@
 
                 <div class="p-6 bg-white border-b border-gray-200">
                     <form wire:submit="save">
-                        <div>
-                            <x-label for="libelle" :value="__('Libellé')" />
-                            <x-input wire:model.live="libelle" id="libelle" type="text" placeholder="Ex : Catégorie" class="block mt-1 w-full" />
-                            @error('libelle') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
-                        </div>
-                        @empty($this->edit_id)
+                        @if(empty($this->change_carac))
+                            <div>
+                                <x-label for="libelle" :value="__('Libellé')" />
+                                <x-input wire:model.live="libelle" id="libelle" type="text" placeholder="Ex : Catégorie" class="block mt-1 w-full" />
+                                @error('libelle') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
+                            </div>
+                        @else
+                            <div>
+                                <span>{{ $this->libelle }}</span>
+                                @error('libelle') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
+                            </div>
+                        @endif
+                        @if(empty($this->edit_id) || $this->change_carac)
                             <div class="mt-4">
                                 <x-label :value="__('Caractéristiques')" />
                                 @foreach ($caracs as $item)
-                                    <x-input wire:model="carac" value="{{ $item->id }}" id="{{ $item->id }}" type="checkbox" class="inline" />
+                                    <x-label wire:click='changeOption({{ $item->id }})' value="{{ $item->libelle }}" class="inline mr-3" />
+                                    
+                                    {{-- <x-input wire:model="carac" value="{{ $item->id }}" id="{{ $item->id }}" type="checkbox" class="inline" />
                                     <x-label for="{{ $item->id }}" value="{{ $item->libelle }}" class="inline mr-3" />
-                                @endforeach
+                                 --}}
+                                        @endforeach
                                 @error('carac') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
                             </div>
-                        @endempty
+                        @endif
             
                         <div class="flex items-center justify-end mt-4">
                             <x-button class="ml-4">
-                                {{ __('Enregistrer') }}
+                                {{ $this->textSubmit }}
                             </x-button>
                             <button  wire:click='resetValues' type="reset" class="py-2 px-4 bg-transparent text-purple-600 font-semibold border border-purple-600 rounded hover:bg-purple-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                                 Annuler
                             </button>
-                            @if ($this->edit_id)
+                            @if ($this->edit_id && empty($change_carac))
                                 <button type="button" wire:click='changeCarac({{ $this->edit_id }})' class="py-2 px-4 bg-transparent text-blue-600 font-semibold border border-blue-600 rounded hover:bg-blue-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                                     Changer les caractéristiques
                                 </button>
@@ -158,6 +168,38 @@
                         <button wire:click="deleteCancelled" class="py-2 px-4 bg-transparent text-red-600 font-semibold border border-red-600 rounded hover:bg-red-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                             Annuler
                         </button>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        <!-- optionModal -->
+        @if($option_modal)
+            <div class="fixed inset-0 flex items-center justify-center z-50">
+                <div class="bg-white w-96 p-4 rounded-lg shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h5 class="text-lg font-semibold">Choisir les caractéristiques</h5>
+                        <button wire:click="fermer" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <div>
+                                @foreach ($optionOf->options as $option)
+                                    <x-input wire:model="carac" value="{{ $option->id }}" id="{{ $option->id }}" type="checkbox" class="inline" />
+                                    <x-label for="{{ $option->id }}" value="{{ $option->libelle }}" class="inline mr-3" />
+                                @endforeach
+                            </div>
+                            
+                            <div class="mt-4">
+                                <span wire:click='fermer' class="py-2 px-4 bg-transparent text-purple-600 font-semibold border border-purple-600 rounded hover:bg-purple-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"">
+                                    Fermer
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

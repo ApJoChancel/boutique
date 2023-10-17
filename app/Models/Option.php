@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Option extends Model
 {
     use HasFactory;
+
+    public function categories()
+    {
+        return $this->belongsToMany(Categorie::class, 'cate_opt');
+    }
 }
