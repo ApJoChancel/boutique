@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 class DatabaseSeeder extends Seeder
 {
     const DEFAULT_OBJECTIF = 2000000;
-    
+
     public function run(): void
     {
         DB::table('questions')->insert([
@@ -61,6 +61,13 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'libelle' => 'De passage',
+                'type' => 'text',
+                'question_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'libelle' => 'Ancien client',
                 'type' => 'text',
                 'question_id' => 1,
                 'created_at' => now(),

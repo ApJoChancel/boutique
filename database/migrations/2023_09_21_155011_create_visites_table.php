@@ -17,6 +17,7 @@ return new class extends Migration
         Schema::create('visites', function (Blueprint $table) {
             $table->id();
             $table->dateTime('date');
+            $table->boolean('conclue');
             $table->foreignIdFor(Client::class)->constrained();
             $table->foreignIdFor(User::class)->constrained();
             $table->foreignIdFor(Boutique::class)->constrained();

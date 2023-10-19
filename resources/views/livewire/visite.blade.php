@@ -267,6 +267,11 @@
                             <button wire:click='initEtape1' type="button" class="py-2 px-4 bg-transparent text-red-600 font-semibold border border-red-600 rounded hover:bg-red-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                                 Etape précédente
                             </button>
+                            @if (!$this->est_nouveau)
+                                <button wire:click='passer' type="button" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                    Passer cette étape
+                                </button>
+                            @endif
                         @else
                             @if ($etape3)
                                 @if (!$nature_operation)

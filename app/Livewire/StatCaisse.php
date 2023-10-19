@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;

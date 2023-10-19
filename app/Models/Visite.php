@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Visite extends Model
 {
     use HasFactory;
+
+    public function reponses()
+    {
+        return $this->belongsToMany(Choix::class, 'reponses');
+    }
 }

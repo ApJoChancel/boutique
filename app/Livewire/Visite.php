@@ -126,18 +126,33 @@ class Visite extends AppComponent
     public function initEtape2()
     {
         if(!$this->est_nouveau){
-            $this->initEtape3();
-            return;
+            //On récupère la dernière visite du client
+            $lastVisite = DB::table('visites')
+                ->where('client_id', $this->client_id)
+                ->orderByDesc('id')
+                ->first()
+            ;
+            $last = ModelsVisite::findOrFail($lastVisite->id);
+            $i = 0;
+            foreach ($last->reponses as $choix) {
+                $this->reponses[$i] = ['val' => $choix->id];
+                $i++;
+            }
         }
         $this->etape2 = true;
         $this->etape1 = false;
         $this->etape3 = false;
         $this->etape4 = false;
-        
+
         $this->currentQuestion = 0;
         $this->questions = Question::all();
         $this->question = $this->questions[$this->currentQuestion];
         $this->reponses[$this->currentQuestion] = ['val' => $this->reponses[$this->currentQuestion]['val'] ?? 0];
+    }
+
+    public function passer()
+    {
+        $this->initEtape3();
     }
 
     public function questionPrecedente()
@@ -243,7 +258,9 @@ class Visite extends AppComponent
             session()->flash('status', 'Added successfully');
             $this->selected_categorie_id = 0;
             $this->selected_categorie = null;
-            $this->options = null;
+            $this->options = [];
+            $this->optionOf = null;
+            $this->caracs = [];
         }
     }
 
@@ -288,22 +305,21 @@ class Visite extends AppComponent
             }
 
             //Visite
-            if($this->est_nouveau){
-                $visite = new ModelsVisite();
-                $visite->client_id = $cli->id;
-                $visite->user_id = $user->id;
-                $visite->boutique_id = $user->boutique->id;
-                $visite->date = now();
-                $visite->save();
-                //Le sondage
-                foreach($this->reponses as $opt){
-                    DB::table('reponses')->insert([
-                        'visite_id' => $visite->id,
-                        'choix_id' => $opt['val'],
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-                }
+            $visite = new ModelsVisite();
+            $visite->client_id = $cli->id;
+            $visite->user_id = $user->id;
+            $visite->boutique_id = $user->boutique->id;
+            $visite->date = now();
+            $visite->conclue = ($this->est_concluante) ? true : false;
+            $visite->save();
+            //Le sondage
+            foreach($this->reponses as $opt){
+                DB::table('reponses')->insert([
+                    'visite_id' => $visite->id,
+                    'choix_id' => $opt['val'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
             }
 
             //Vente
