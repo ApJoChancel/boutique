@@ -19,6 +19,7 @@ class Parametre extends AppComponent
         $item = ModelsParametre::findOrFail(1);
         $this->delais_vente = $item->delais_vente;
         $this->delais_location = $item->delais_location;
+        $this->textSubmit = 'Modifier';
     }
 
     public function save()
@@ -28,6 +29,7 @@ class Parametre extends AppComponent
         $item->delais_vente = $this->delais_vente;
         $item->delais_location = $this->delais_location;
         $item->save();
+        $this->resetValues();
         session()->flash('status', 'Change successfully');
     }
 

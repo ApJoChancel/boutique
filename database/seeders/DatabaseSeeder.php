@@ -67,13 +67,6 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'libelle' => 'Ancien client',
-                'type' => 'text',
-                'question_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
                 'libelle' => 'Facebook',
                 'type' => 'text',
                 'question_id' => 1,
@@ -96,6 +89,13 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'libelle' => "Recommandation d'un proche",
+                'type' => 'text',
+                'question_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'libelle' => 'Ancien client',
                 'type' => 'text',
                 'question_id' => 1,
                 'created_at' => now(),
@@ -145,6 +145,13 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'libelle' => '25 - 34',
+                'type' => 'text',
+                'question_id' => 3,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'libelle' => '35 - 44',
                 'type' => 'text',
                 'question_id' => 3,
                 'created_at' => now(),

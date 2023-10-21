@@ -60,4 +60,16 @@ class AppComponent extends Component
         session()->flash('status', $message);
         $this->dispatch('close-toast-after-3-seconds');
     }
+
+    public function count_recursive($array, $limit) {
+        $count = 0;
+        foreach ($array as $id => $_array) {
+            if (is_array ($_array) && $limit > 0) {
+                $count += self::count_recursive($_array, $limit - 1);
+            } else {
+                $count += 1;
+            }
+        }
+        return $count;
+    }
 }

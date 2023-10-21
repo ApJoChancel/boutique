@@ -1,8 +1,5 @@
 <div>
-    
-
     <!-- panierModal -->
-
     @if($panier_modal)
         <div class="relative z-10" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
             <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
@@ -13,7 +10,17 @@
                                 <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                                     <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                                         <div class="flex items-start justify-between">
-                                            <h2 class="text-lg font-medium text-gray-900" id="slide-over-title">Votre Panier</h2>
+                                            <h2 class="text-lg font-medium text-gray-900" id="slide-over-title">
+                                                Votre Panier : {{ $count_panier }}
+                                                @switch($count_panier)
+                                                    @case(0)
+                                                    @case(1)
+                                                        article
+                                                        @break
+                                                    @default
+                                                        articles
+                                                @endswitch
+                                            </h2>
                                             <div class="ml-3 flex h-7 items-center">
                                                 <button wire:click='fermerPanier' type="button" class="relative -m-2 p-2 text-gray-400 hover:text-gray-500">
                                                     <span class="absolute -inset-0.5"></span>
@@ -35,10 +42,10 @@
                                                                     <div>
                                                                         <div class="flex justify-between text-base font-medium text-gray-900">
                                                                             <h3>
-                                                                                {{ $item->libelle }}
+                                                                                {{ $item->categorie }}
                                                                             </h3>
                                                                         </div>
-                                                                        <p class="mt-1 text-sm text-gray-500">{{ $item->carac }}</p>
+                                                                        <p class="mt-1 text-sm text-gray-500">{{ $item->carac_texte }}</p>
                                                                     </div>
                                                                     <div class="flex flex-1 items-end justify-between text-sm">
                                                                         <div class="flex">
@@ -80,7 +87,7 @@
                             <button class="relative" wire:click='voirPanier'>
                                 <i class="fas fa-shopping-cart text-gray-500 text-lg"></i>
                                 <span class="bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center absolute -top-1 -right-1 text-xs">
-                                    {{ count($artciles_added, 1) - count($artciles_added) }}
+                                    {{ $count_panier }}
                                 </span>
                             </button>
                         @endif
@@ -228,29 +235,14 @@
                                 <div class="flex items-center justify-center flex-col">
                                     <div class="mb-2">
                                         @foreach ($question->choix as $item)
-                                            @empty($item->choix_id)
-                                                @if ($item->type === 'text')
-                                                    <div class="flex items-center gap-x-3">
-                                                        <input wire:model="reponses.{{ $currentQuestion }}.val" id="{{ $item->id }}" type="radio" value="{{ $item->id }}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                                                        <label for="{{ $item->id }}" class="block text-sm font-medium leading-6 text-gray-900">
-                                                            {{ $item->libelle }}
-                                                        </label>
-                                                    </div>
-                                                @else
-                                                    <label class="block text-sm font-medium leading-6 text-gray-900">
-                                                        {{ $item->libelle }}
-                                                    </label>
-                                                    @foreach ($item->sousChoix as $choix)
-                                                        <div class="flex items-center mb-2yyyy" style="margin-left: 3%">
-                                                            <input wire:model="reponses.{{ $currentQuestion }}.val" id="{{ $choix->id }}" type="radio" value="{{ $choix->id }}" class="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-blue-300 h-4 w-4 rounded">
-                                                            <label for="{{ $choix->id }}" class="block text-sm font-medium leading-6 text-gray-900">
-                                                                {{ $choix->libelle }}
-                                                            </label>
-                                                        </div>
-                                                    @endforeach
-                                                @endif
-                                            @endempty
+                                            <div class="flex items-center gap-x-3">
+                                                <input wire:model="reponses.{{ $currentQuestion }}.val" id="{{ $item->id }}" type="radio" value="{{ $item->id }}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                                <label for="{{ $item->id }}" class="block text-sm font-medium leading-6 text-gray-900">
+                                                    {{ $item->libelle }}
+                                                </label>
+                                            </div>
                                         @endforeach
+                                        @error('uneReponse') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
                                     </div>
                                     <div>
                                         @if ($currentQuestion > 0)
@@ -295,7 +287,6 @@
                                                 <button wire:click='estConcluante(true)' type="button" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                                                     Concluante
                                                 </button>
-                                                
                                             </div>
                                         </div>
                                     @else
@@ -309,7 +300,7 @@
                                                             </label>
                                                             <div class="relative">
                                                                 <select wire:model="motif" id="motif" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded">
-                                                                    <option>Choisir un motif...</option>
+                                                                    <option value="0">Choisir un motif...</option>
                                                                     <option value="article">Article</option>
                                                                     <option value="modele">Modèle</option>
                                                                     <option value="taille">Taille</option>
@@ -320,13 +311,14 @@
                                                                     <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                                                                 </div>
                                                             </div>
-                                                            @error('mtt_achat') <p class="mt-4 text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                                                            @error('motif') <p class="mt-4 text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                                                         </div>
                                                         <div class="md:w-1/2 px-3 mb-6 md:mb-0">
                                                             <label for="comment" class="block text-sm font-medium leading-6 text-gray-900">
                                                                 Commentaire
                                                             </label>
                                                             <textarea wire:model="comment" id="comment" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded"></textarea>
+                                                            @error('comment') <p class="mt-4 text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                                                         </div>
                                                     </div>
                                                     <div>
@@ -359,6 +351,7 @@
                                                                 <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                                                             </div>
                                                         </div>
+                                                        @error('panier') <p class="mt-4 text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                                                     </div>
                                                     @if ($this->caracs)
                                                         <div>
@@ -398,33 +391,39 @@
                                     </div>
                                     <div class="flex items-center justify-center flex-col">
                                         <div class="mt-8 bg-white p-4 shadow rounded-lg">
-                                            <div class="-mx-3 md:flex mb-2">
-                                                <div class="px-3 mb-6 md:mb-0">
-                                                    <label for="mtt_achat" class="block text-sm font-medium leading-6 text-gray-900">
-                                                        Montant des achats
-                                                    </label>
-                                                    <input wire:model.live="mtt_achat" id="mtt_achat" type="text" placeholder="Ex : 500000" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
-                                                    @error('mtt_achat') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                                            @for ($i = 0; $i < count($panier); $i++)
+                                                <div class="-mx-3 md:flex mb-2">
+                                                    <div>
+                                                        <div class="flex justify-between text-base font-medium text-gray-900">
+                                                            <h3>
+                                                                {{ $panier[$i]['categorie'] }}
+                                                            </h3>
+                                                        </div>
+                                                        <p class="mt-1 text-sm text-gray-500">{{ $panier[$i]['carac_texte'] }}</p>
+                                                    </div>
+                                                    <div>
+                                                        <label for="qte" class="block text-sm font-medium leading-6 text-gray-900">
+                                                            Quantité
+                                                        </label>
+                                                        <input wire:model="panier.{{ $i }}.qte" id="qte" type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                                        @error('qte') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                                                    </div>
+                                                    <div>
+                                                        <label for="prix" class="block text-sm font-medium leading-6 text-gray-900">
+                                                            Prix
+                                                        </label>
+                                                        <input wire:model="panier.{{ $i }}.prix" id="prix" type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                                        @error('prix') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                                                    </div>
+                                                    <div>
+                                                        <label for="reduction" class="block text-sm font-medium leading-6 text-gray-900">
+                                                            Réduction
+                                                        </label>
+                                                        <input wire:model="panier.{{ $i }}.reduction" id="reduction" type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                                        @error('reduction') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="-mx-3 md:flex mb-2">
-                                                <div class="px-3 mb-6 md:mb-0">
-                                                    <label for="mtt_paye" class="block text-sm font-medium leading-6 text-gray-900">
-                                                        Montant payé
-                                                    </label>
-                                                    <input wire:model.live="mtt_paye" id="mtt_paye" type="text" placeholder="Ex: 500000" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
-                                                    @error('mtt_paye') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
-                                                </div>
-                                            </div>
-                                            <div class="-mx-3 md:flex mb-2">
-                                                <div class="px-3 mb-6 md:mb-0">
-                                                    <label for="mtt_reduction" class="block text-sm font-medium leading-6 text-gray-900">
-                                                        Réduction accordée
-                                                    </label>
-                                                    <input wire:model.live="mtt_reduction" id="mtt_reduction" type="text" placeholder="Ex : 10000" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
-                                                    @error('mtt_reduction') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
-                                                </div>
-                                            </div>
+                                            @endfor
                                         </div>
                                         <div class="mt-8 bg-white p-4 shadow rounded-lg">
                                             <button wire:click='venteTerminee' type="button" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
@@ -469,7 +468,41 @@
                         
                         <div class="mt-4">
                             <span wire:click='fermer' class="py-2 px-4 bg-transparent text-purple-600 font-semibold border border-purple-600 rounded hover:bg-purple-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"">
-                                Fermer
+                                Valider
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- boutiqueModal -->
+    @if($boutique_modal)
+        <div class="fixed inset-0 flex items-center justify-center z-50">
+            <div class="bg-white w-96 p-4 rounded-lg shadow-lg">
+                <div class="flex justify-between items-center mb-4">
+                    <h5 class="text-lg font-semibold">Choisir la boutique</h5>
+                    <button wire:click="fermer" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div>
+                            @foreach ($this->boutiques as $boutique)
+                                <div>
+                                    <x-input wire:model="boutique_id" value="{{ $boutique->id }}" id="{{ $boutique->id }}" type="radio" class="inline" />
+                                    <x-label for="{{ $boutique->id }}" value="{{ $boutique->designation }}" class="inline mr-3" />
+                                </div>
+                            @endforeach
+                        </div>
+                        
+                        <div class="mt-4">
+                            <span wire:click='venteTerminee' class="py-2 px-4 bg-transparent text-purple-600 font-semibold border border-purple-600 rounded hover:bg-purple-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"">
+                                Valider
                             </span>
                         </div>
                     </div>

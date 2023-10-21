@@ -3,11 +3,11 @@
 namespace App\Livewire;
 
 use App\Models\Client;
-use App\Models\Article;
 use App\Models\Paiement;
 use App\Models\Question;
 use App\Models\LigneVente;
 use App\Livewire\AppComponent;
+use App\Models\Boutique;
 use App\Models\Caracteristique;
 use App\Models\Categorie;
 use App\Models\Option;
@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Vente;
 use App\Models\Visite as ModelsVisite;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Rule;
 use stdClass;
 
 class Visite extends AppComponent
@@ -24,9 +25,13 @@ class Visite extends AppComponent
     public $etape1; //Identification
     public $est_nouveau;
     public $est_identifie;
+    #[Rule('required')]
     public $nom;
+    #[Rule('required')]
     public $prenom;
+    #[Rule('required')]
     public $telephone;
+    #[Rule('required')]
     public $client_id;
     public $clients;
 
@@ -51,6 +56,10 @@ class Visite extends AppComponent
     public $option_modal;
     public $optionOf;
     public $options;
+    public $boutiques;
+    public $boutique_modal;
+    public $boutique_id;
+    public $count_panier;
 
     public $etape4; //Facture
     public $mtt_achat;
@@ -64,7 +73,7 @@ class Visite extends AppComponent
     public function mount()
     {
         $this->panier_modal = false;
-        $this->panier = null;
+        $this->panier = [];
         $this->initEtape1();
     }
 
@@ -83,7 +92,8 @@ class Visite extends AppComponent
         $this->comment = null;
         $this->nature_operation = false;
         $this->est_vente = false;
-        $this->artciles_added = [];
+        // $this->artciles_added = [];
+        // $this->count_panier = 0;
         $this->categories = null;
         $this->selected_categorie_id = null;
         $this->selected_categorie = null;
@@ -91,6 +101,9 @@ class Visite extends AppComponent
         $this->option_modal = false;
         $this->optionOf = null;
         $this->options = [];
+        $this->boutiques = null;
+        $this->boutique_modal = false;
+        $this->boutique_id = null;
 
         $this->etape4 = false;
         $this->mtt_achat = null;
@@ -114,6 +127,13 @@ class Visite extends AppComponent
 
     public function finEtape1()
     {
+        if($this->est_nouveau){
+            $this->validateOnly('nom');
+            $this->validateOnly('prenom');
+            $this->validateOnly('telephone');
+        } else{
+            $this->validateOnly('client_id');
+        }
         if($this->client_id){
             $client = Client::findOrFail($this->client_id);
             $this->nom = $client->nom;
@@ -125,6 +145,8 @@ class Visite extends AppComponent
 
     public function initEtape2()
     {
+        $this->resetValidation();
+
         if(!$this->est_nouveau){
             //On récupère la dernière visite du client
             $lastVisite = DB::table('visites')
@@ -157,6 +179,8 @@ class Visite extends AppComponent
 
     public function questionPrecedente()
     {
+        $this->resetValidation();
+
         if(array_key_exists($this->currentQuestion-1, $this->questions->toArray())){
             $this->currentQuestion--;
         }
@@ -166,6 +190,12 @@ class Visite extends AppComponent
 
     public function questionSuivante()
     {
+        $this->resetValidation();
+
+        if(empty($this->reponses[$this->currentQuestion]['val'])){
+            $this->addError('uneReponse', 'Une réponse est obligatoire');
+            return;
+        }
         $this->currentQuestion++;
         if(array_key_exists($this->currentQuestion, $this->questions->toArray())){
             $this->question = $this->questions[$this->currentQuestion];
@@ -192,10 +222,15 @@ class Visite extends AppComponent
         $this->selected_categorie_id = null;
         $this->selected_categorie = null;
         $this->caracs = [];
-        $this->artciles_added = [];
+        $this->artciles_added = $this->artciles_added ?? [];
+        $this->count_panier = self::count_recursive($this->artciles_added, 1);
+        self::remplirPanier();
         $this->option_modal = false;
         $this->optionOf = null;
         $this->options = [];
+        $this->boutiques = null;
+        $this->boutique_modal = false;
+        $this->boutique_id = null;
     }
 
     public function estVente(bool $value)
@@ -225,6 +260,7 @@ class Visite extends AppComponent
 
     public function hasCarac()
     {
+        $this->resetValidation();
         if($this->selected_categorie_id){
             $this->selected_categorie = Categorie::findOrFail($this->selected_categorie_id);
             $this->caracs = [];
@@ -244,23 +280,51 @@ class Visite extends AppComponent
     public function fermer()
     {
         $this->option_modal = false;
+        $this->boutique_modal = false;
     }
 
     public function addItem()
     {
+        $this->resetValidation();
         if($this->selected_categorie_id){
             $car = '';
+            if(!$this->caracs){
+                $this->addError('panier', 'Renseignez les caractéristiques');
+                return;
+            }
+            if(!$this->options){
+                $this->addError('panier', 'Renseignez les caractéristiques');
+                return;
+            }
+            $lesCaracs = array_column($this->caracs, 'id');
+            $lesOptions = [];
             foreach($this->options as $optionId){
                 $option = Option::findOrFail($optionId);
+                $lesOptions[] = $option->caracteristique->id;
                 $car .= "{$option->caracteristique->libelle} : {$option->libelle} |";
             }
-            $this->artciles_added[$this->selected_categorie_id][] = $car;
+            if(count(array_diff($lesCaracs, $lesOptions)) > 0){
+                $this->addError('panier', 'Renseignez toutes les caractéristiques de la catégorie');
+                return;
+            }
+
+            $this->artciles_added[$this->selected_categorie_id][] = [
+                'categorie' => $this->selected_categorie->libelle,
+                'carac_ids' => $this->options,
+                'carac_texte' => $car,
+                'qte' => 1,
+                'prix' => 1,
+                'reduction' => 0
+            ];
+            $this->count_panier = self::count_recursive($this->artciles_added, 1);
             session()->flash('status', 'Added successfully');
             $this->selected_categorie_id = 0;
             $this->selected_categorie = null;
             $this->options = [];
             $this->optionOf = null;
             $this->caracs = [];
+        } else{
+            $this->addError('panier', 'Veuillez choisir une catégorie');
         }
     }
 
@@ -273,10 +337,35 @@ class Visite extends AppComponent
 
     public function initEtape4()
     {
+        if(count($this->artciles_added) < 1){
+            $this->addError('panier', 'Il faut au moins un article dans le panier');
+            return;
+        }
         $this->etape4 = true;
         $this->etape1 = false;
         $this->etape2 = false;
         $this->etape3 = false;
+
+        // self::remplirPanier();
+        // dd($this->panier[0]);
+        $this->panier = [];
+        $item = null;
+        if($this->artciles_added){
+            foreach($this->artciles_added as $cat => $arts){
+                foreach($arts as $art){
+                    $categorie = Categorie::findOrFail($cat);
+                    $item = [];
+                    $item['id'] = $categorie->id;
+                    $item['categorie'] = $categorie->libelle;
+                    $item['carac_ids'] = $art['carac_ids'];
+                    $item['carac_texte'] = $art['carac_texte'];
+                    $item['qte'] = $art['qte'];
+                    $item['prix'] = $art['prix'];
+                    $item['reduction'] = $art['reduction'];
+                    $this->panier[] = $item;
+                }
+            }
+        }
 
         $this->mtt_achat = null;
         $this->mtt_paye = null;
@@ -285,10 +374,17 @@ class Visite extends AppComponent
 
     public function venteTerminee()
     {
+        dd($this->panier);
+
+        $this->resetValidation();
+        $this->boutique_modal = false;
+
         //Utilisateur
         $user = Auth::user();
-        if(!$user->boutique){
-            $this->addError('mtt_achat', 'Vous ne pouvez pas enregistrer une vente, car vous n\'êtes pas un commercial !!');
+        // dd($user->boutique);
+        if(!$user->boutique && !$this->boutique_id){
+            $this->boutiques = Boutique::all();
+            $this->boutique_modal = true;
             return;
         }
         DB::beginTransaction();
@@ -308,7 +404,7 @@ class Visite extends AppComponent
             $visite = new ModelsVisite();
             $visite->client_id = $cli->id;
             $visite->user_id = $user->id;
-            $visite->boutique_id = $user->boutique->id;
+            $visite->boutique_id = $user->boutique->id ?? $this->boutique_id;
             $visite->date = now();
             $visite->conclue = ($this->est_concluante) ? true : false;
             $visite->save();
@@ -325,11 +421,19 @@ class Visite extends AppComponent
             //Vente
             $vente = new Vente();
             if(!$this->est_concluante){
+                if(empty($this->motif)){
+                    $this->addError('motif', 'Le motif est obligatoire');
+                    return;
+                }
+                if(empty($this->comment)){
+                    $this->addError('comment', 'Le commentaire est obligatoire');
+                    return;
+                }
                 $vente->motif = $this->motif;
                 $vente->comment = nl2br($this->comment);
                 $vente->client_id = $cli->id;
                 $vente->user_id = $user->id;
-                $vente->boutique_id = $user->boutique->id;
+                $vente->boutique_id = $user->boutique->id ?? $this->boutique_id;
                 $vente->date = now();
                 $vente->type = ($this->est_vente) ? 'vente' : 'location';
                 $vente->save();
@@ -338,7 +442,7 @@ class Visite extends AppComponent
                 $vente->montant = $this->mtt_achat;
                 $vente->client_id = $cli->id;
                 $vente->user_id = $user->id;
-                $vente->boutique_id = $user->boutique->id ?? 1;
+                $vente->boutique_id = $user->boutique->id ?? $this->boutique_id;
                 $vente->date = now();
                 $vente->type = ($this->est_vente) ? 'vente' : 'location';
                 $vente->save();
@@ -402,6 +506,10 @@ class Visite extends AppComponent
         $this->option_modal = false;
         $this->optionOf = null;
         $this->options = [];
+        $this->boutiques = null;
+        $this->boutique_modal = false;
+        $this->boutique_id = null;
+        $this->count_panier = 0;
 
         $this->etape4 = null; //Facture
         $this->mtt_achat = null;
@@ -427,12 +535,16 @@ class Visite extends AppComponent
         $item = null;
         if($this->artciles_added){
             foreach($this->artciles_added as $cat => $arts){
-                foreach($arts as $carac){
+                foreach($arts as $art){
                     $categorie = Categorie::findOrFail($cat);
                     $item = new stdClass();
                     $item->id = $categorie->id;
-                    $item->libelle = $categorie->libelle;
-                    $item->carac = $carac;
+                    $item->categorie = $categorie->libelle;
+                    $item->carac_ids = $art['carac_ids'];
+                    $item->carac_texte = $art['carac_texte'];
+                    $item->qte = $art['qte'];
+                    $item->prix = $art['prix'];
+                    $item->reduction = $art['reduction'];
                     $this->panier[] = $item;
                 }
             }
