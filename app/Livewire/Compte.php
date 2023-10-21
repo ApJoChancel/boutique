@@ -41,6 +41,14 @@ class Compte extends AppComponent
         }
     }
 
+    public function resetValues()
+    {
+        parent::resetValues();
+        $this->ancien = null;
+        $this->nouveau = null;
+        $this->confirm = null;
+    }
+
     #[Layout('livewire.layouts.base')]
     #[Title('Boutique | Compte')]
     public function render()

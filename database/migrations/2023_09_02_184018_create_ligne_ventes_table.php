@@ -17,7 +17,11 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Categorie::class)->constrained();
             $table->foreignIdFor(Vente::class)->constrained();
-            $table->string('caracteristiques')->nullable();
+            $table->string('carac_ids')->nullable();
+            $table->string('carac_texte')->nullable();
+            $table->string('qte')->nullable();
+            $table->string('prix')->nullable();
+            $table->string('reduction')->nullable();
             $table->timestamps();
         });
     }

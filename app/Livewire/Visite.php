@@ -374,7 +374,7 @@ class Visite extends AppComponent
 
     public function venteTerminee()
     {
-        dd($this->panier);
+        // dd($this->panier);
 
         $this->resetValidation();
         $this->boutique_modal = false;
@@ -419,6 +419,7 @@ class Visite extends AppComponent
             }
 
             //Vente
+            $mtt = $reduc = 0;
             $vente = new Vente();
             if(!$this->est_concluante){
                 if(empty($this->motif)){
@@ -438,8 +439,13 @@ class Visite extends AppComponent
                 $vente->type = ($this->est_vente) ? 'vente' : 'location';
                 $vente->save();
             } else{
+                //Le montant des achats
+                foreach ($this->panier as $item) {
+                    $mtt += ($item['prix'] * $item['qte']);
+                    $reduc += $item['reduction'];
+                }
                 $vente = new Vente();
-                $vente->montant = $this->mtt_achat;
+                $vente->montant = $mtt + $reduc;
                 $vente->client_id = $cli->id;
                 $vente->user_id = $user->id;
                 $vente->boutique_id = $user->boutique->id ?? $this->boutique_id;
@@ -448,20 +454,22 @@ class Visite extends AppComponent
                 $vente->save();
 
                 //Articles
-                foreach($this->artciles_added as $cart => $arts){
-                    foreach($arts as $carac){
-                        $ligne = new LigneVente();
-                        $ligne->categorie_id = $cart;
-                        $ligne->vente_id = $vente->id;
-                        $ligne->caracteristiques = $carac;
-                        $ligne->save();
-                    }
+                foreach($this->panier as $art){
+                    $ligne = new LigneVente();
+                    $ligne->categorie_id = $art['id'];
+                    $ligne->vente_id = $vente->id;
+                    $ligne->carac_ids = implode(',', $art['carac_ids']);
+                    $ligne->carac_texte = $art['carac_texte'];
+                    $ligne->qte = $art['qte'];
+                    $ligne->prix = $art['prix'];
+                    $ligne->reduction = $art['reduction'] ?? 0;
+                    $ligne->save();
                 }
 
                 //Paiement
                 $paie = new Paiement();
-                $paie->montant = $this->mtt_paye;
-                $paie->reduction = $this->mtt_reduction ?? 0;
+                $paie->montant = $mtt;
+                $paie->reduction = $reduc;
                 $paie->vente_id = $vente->id;
                 $paie->date = $vente->date;
                 $paie->save();
