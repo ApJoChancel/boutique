@@ -181,20 +181,28 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div>
+                        @if (!empty($optionOf->options[0]))
                             <div>
-                                @foreach ($optionOf->options as $option)
-                                    <x-input wire:model="carac" value="{{ $option->id }}" id="{{ $option->id }}" type="checkbox" class="inline" />
-                                    <x-label for="{{ $option->id }}" value="{{ $option->libelle }}" class="inline mr-3" />
-                                @endforeach
+                                <div>
+                                    <x-input wire:model='selectAll' wire:click="selectedAll({{ $optionOf->options[0]->caracteristique->id }})" id="selectAll" type="checkbox" class="inline" />
+                                    <x-label for="selectAll" value="Tout cocher" class="inline mr-3" />
+                                </div>
+                                <div>
+                                    @foreach ($optionOf->options as $option)
+                                        <x-input wire:model="carac.{{ $option->caracteristique->id }}" value="{{ $option->id }}" id="{{ $option->id }}" type="checkbox" class="inline" />
+                                        <x-label for="{{ $option->id }}" value="{{ $option->libelle }}" class="inline mr-3" />
+                                    @endforeach
+                                </div>
+                                
+                                <div class="mt-4">
+                                    <span wire:click='fermer' class="py-2 px-4 bg-transparent text-purple-600 font-semibold border border-purple-600 rounded hover:bg-purple-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"">
+                                        Valider
+                                    </span>
+                                </div>
                             </div>
-                            
-                            <div class="mt-4">
-                                <span wire:click='fermer' class="py-2 px-4 bg-transparent text-purple-600 font-semibold border border-purple-600 rounded hover:bg-purple-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"">
-                                    Valider
-                                </span>
-                            </div>
-                        </div>
+                        @else
+                            Aucun élément
+                        @endif
                     </div>
                 </div>
             </div>

@@ -459,8 +459,9 @@
                     <div>
                         <div>
                             @foreach ($optionOf->options as $option)
-                                @if ($option->categories->contains($this->selected_categorie))
-                                    <x-input wire:model="options" value="{{ $option->id }}" id="{{ $option->id }}" type="checkbox" class="inline" />
+                                @if (in_array($option->id, $selected_categorie->options->pluck('id')->toArray()))
+                                    <x-input wire:model="options.{{ $optionOf->id }}" value="{{ $option->id }}" id="{{ $option->id }}" 
+                                        :type="$optionOf->type === 'unique' ? 'radio' : 'checkbox'" class="inline" />
                                     <x-label for="{{ $option->id }}" value="{{ $option->libelle }}" class="inline mr-3" />
                                 @endif
                             @endforeach

@@ -174,6 +174,8 @@ class User extends AppComponent
             $this->nom =
             $this->prenom =
             $this->type_id =
+            $this->boutique_id =
+            $this->zone_id =
             $this->role_id = null;
     }
 

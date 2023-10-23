@@ -18,14 +18,25 @@ class Categorie extends AppComponent
     ];
     
     #[Rule('required|unique:categories')]
-    public $libelle = null;
-    #[Rule('sometimes')]
-    public $carac = [];
+    public $libelle;
+    public $carac;
 
     public $option_modal;
     public $change_carac;
     public $optionOf;
     public $options;
+    public $selectAll;
+
+    public function mount()
+    {
+        $this->selectAll = false;
+        $this->libelle = null;
+        foreach (Caracteristique::all() as $item) {
+            $this->carac[$item->id] = [];
+        }
+        // dd($this->carac);
+
+    }
 
     public function save()
     {
@@ -35,7 +46,7 @@ class Categorie extends AppComponent
         $item->libelle = $this->libelle;
         $item->save();
         if($this->carac)
-            $item->options()->sync($this->carac);
+            $item->options()->sync(array_merge(...$this->carac));
         $this->resetValues();
         $this->notificationToast('Saved successfully');
     }
@@ -48,11 +59,45 @@ class Categorie extends AppComponent
     public function changeOption(Caracteristique $item)
     {
         $this->optionOf = $item;
+        if($this->edit_id){
+            $categorie = ModelsCategorie::findOrFail($this->edit_id);
+            if(empty($this->carac[$item->id])){
+                foreach ($categorie->options as $option) {
+                    if($item->id == $option->caracteristique_id)
+                        $this->carac[$item->id][] = $option->id;
+                }
+            }
+            // $this->carac[$item->id] = $this->optionOf->options->pluck('id')->toArray();
+            // dd($categorie->options->pluck('id')->toArray(), $this->optionOf->options->pluck('id')->toArray());
+            // dd($this->optionOf->options->pluck('id')->toArray());
+            // if(!is_array($this->carac[$item->id]))
+            //     $this->carac[$item->id] = $this->carac[$item->id]->toArray();
+            // $this->carac[$item->id] = array_intersect($this->carac[$item->id], $categorie->options->pluck('id')->toArray());
+            // dd($this->carac);
+            if(array_diff($this->optionOf->options->pluck('id')->toArray(), $this->carac[$item->id]) === [])
+                $this->selectAll = true;
+            else
+                $this->selectAll = false;
+        } else{
+            if(empty($this->carac[$item->id])){
+                $this->carac[$item->id] = [];
+            }
+            if(array_diff($this->optionOf->options->pluck('id')->toArray(), $this->carac[$item->id]) === [])
+                $this->selectAll = true;
+            else
+                $this->selectAll = false;
+        }
         $this->option_modal = true;
+    }
+
+    public function selectedAll(int $idCarac)
+    {
+        $this->carac[$idCarac] = ($this->selectAll) ? $this->optionOf->options->pluck('id')->toArray() : [];
     }
 
     public function editItem(ModelsCategorie $item)
     {
+        $this->resetValidation();
         $this->change_carac = false;
         $this->edit_id = $item->id;
         $this->libelle = $item->libelle;
@@ -63,12 +108,14 @@ class Categorie extends AppComponent
     {
         $item = ModelsCategorie::findOrFail($id);
         if($item->options->get(0)){
-            $this->notificationToast('Pour supprimer cette catégorie, retirez-lui les caractéristiques associées');
             $this->resetValues();
+            $this->libelle = $item->libelle;
+            $this->addError('libelle', 'Pour supprimer cette catégorie, retirez-lui les caractéristiques associées');
             return;
         }elseif ($item->articles->get(0)) {
-            $this->notificationToast('Pour supprimer cette catégorie, retirez-lui les articles associés');
             $this->resetValues();
+            $this->libelle = $item->libelle;
+            $this->addError('libelle', 'Pour supprimer cette catégorie, retirez-lui les articles associés');
             return;
         }
         parent::deleteItem($item);
@@ -96,7 +143,10 @@ class Categorie extends AppComponent
     {
         $this->edit_id = $item->id;
         $this->libelle = $item->libelle;
-        $this->carac = $item->options()->pluck('options.id');
+        foreach (Caracteristique::all() as $car) {
+            $this->carac[$car->id] = [];
+        }
+        // $this->carac = $item->options()->pluck('options.id');
         $this->change_carac = true;
     }
 

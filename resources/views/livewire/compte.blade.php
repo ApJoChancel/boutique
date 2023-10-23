@@ -22,7 +22,13 @@
 
                 <div class="p-6 bg-white border-b border-gray-200">
                     <form wire:submit="changePassword">
-                        <div>
+                        {{-- <div class="relative flex mb-3">
+                            <x-label for="ancien" :value="__('Ancien')" />
+                            <x-input wire:model="ancien" id="ancien" type="password" class="block mt-1 w-full" />
+                            <button class="bg-red-500 py-2 px-4 rounded-r absolute right-0 top-0 bottom-0">Go</button>
+                            @error('ancien') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
+                        </div> --}}
+                        <div class="relative flex mb-3">
                             <x-label for="ancien" :value="__('Ancien')" />
                             <x-input wire:model="ancien" id="ancien" type="password" class="block mt-1 w-full" />
                             @error('ancien') <p class="font-medium text-red-600">{{ $message }}</p> @enderror

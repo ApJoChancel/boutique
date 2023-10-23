@@ -62,9 +62,6 @@ class Visite extends AppComponent
     public $count_panier;
 
     public $etape4; //Facture
-    public $mtt_achat;
-    public $mtt_paye;
-    public $mtt_reduction;
 
     public $panier_modal; //Panier
     public $panier;
@@ -81,9 +78,14 @@ class Visite extends AppComponent
     {
         $this->etape1 = true;
         $this->est_identifie = false;
-
+        $this->nom = null;
+        $this->prenom = null;
+        $this->telephone = null;
+        $this->client_id = null;
+        
         $this->etape2 = false;
         $this->currentQuestion = 0;
+        $this->reponses = null;
 
         $this->etape3 = false;
         $this->est_concluante = false;
@@ -106,9 +108,6 @@ class Visite extends AppComponent
         $this->boutique_id = null;
 
         $this->etape4 = false;
-        $this->mtt_achat = null;
-        $this->mtt_paye = null;
-        $this->mtt_reduction = null;
 
         $this->clients = Client::all();
         $this->client_id = null;
@@ -116,7 +115,7 @@ class Visite extends AppComponent
 
     public function estNouveau(bool $value)
     {
-        $this->est_identifie = true;;
+        $this->est_identifie = true;
         $this->est_nouveau = $value;
     }
 
@@ -274,6 +273,11 @@ class Visite extends AppComponent
     public function changeOption(Caracteristique $item)
     {
         $this->optionOf = $item;
+        if(!array_key_exists($this->optionOf->id, $this->options)){
+            $this->options[$this->optionOf->id] =
+                ($this->optionOf->type === 'unique') ? '' : [];
+        }
+        
         $this->option_modal = true;
     }
 
@@ -285,9 +289,9 @@ class Visite extends AppComponent
 
     public function addItem()
     {
+        // dd($this->caracs, $this->options);
         $this->resetValidation();
         if($this->selected_categorie_id){
-            $car = '';
             if(!$this->caracs){
                 $this->addError('panier', 'Renseignez les caractéristiques');
                 return;
@@ -296,21 +300,32 @@ class Visite extends AppComponent
                 $this->addError('panier', 'Renseignez les caractéristiques');
                 return;
             }
-            $lesCaracs = array_column($this->caracs, 'id');
-            $lesOptions = [];
-            foreach($this->options as $optionId){
-                $option = Option::findOrFail($optionId);
-                $lesOptions[] = $option->caracteristique->id;
-                $car .= "{$option->caracteristique->libelle} : {$option->libelle} |";
-            }
-            if(count(array_diff($lesCaracs, $lesOptions)) > 0){
+            if(count($this->caracs) != count($this->options)){
                 $this->addError('panier', 'Renseignez toutes les caractéristiques de la catégorie');
                 return;
+            }
+            $car = '';
+            $ids = [];
+            foreach($this->options as $caracteristiqueId => $opts){
+                $carac = Caracteristique::findOrFail($caracteristiqueId);
+                if(!is_array($opts)){
+                    $ids[] = $opts;
+                    $opt = Option::findOrFail($opts);
+                    $car .= "{$carac->libelle} : {$opt->libelle} |";
+                } else{
+                    $car .= "{$carac->libelle} : ";
+                    foreach($opts as $optId){
+                        $ids[] = $optId;
+                        $opt = Option::findOrFail($optId);
+                        $car .= "{$opt->libelle},";
+                    }
+                    $car .= " |";
+                }
             }
 
             $this->artciles_added[$this->selected_categorie_id][] = [
                 'categorie' => $this->selected_categorie->libelle,
-                'carac_ids' => $this->options,
+                'option_ids' => implode(',', $ids),
                 'carac_texte' => $car,
                 'qte' => 1,
                 'prix' => 1,
@@ -357,7 +372,7 @@ class Visite extends AppComponent
                     $item = [];
                     $item['id'] = $categorie->id;
                     $item['categorie'] = $categorie->libelle;
-                    $item['carac_ids'] = $art['carac_ids'];
+                    $item['option_ids'] = $art['option_ids'];
                     $item['carac_texte'] = $art['carac_texte'];
                     $item['qte'] = $art['qte'];
                     $item['prix'] = $art['prix'];
@@ -366,10 +381,6 @@ class Visite extends AppComponent
                 }
             }
         }
-
-        $this->mtt_achat = null;
-        $this->mtt_paye = null;
-        $this->mtt_reduction = null;
     }
 
     public function venteTerminee()
@@ -458,7 +469,7 @@ class Visite extends AppComponent
                     $ligne = new LigneVente();
                     $ligne->categorie_id = $art['id'];
                     $ligne->vente_id = $vente->id;
-                    $ligne->carac_ids = implode(',', $art['carac_ids']);
+                    $ligne->option_ids = $art['option_ids'];
                     $ligne->carac_texte = $art['carac_texte'];
                     $ligne->qte = $art['qte'];
                     $ligne->prix = $art['prix'];
@@ -520,9 +531,6 @@ class Visite extends AppComponent
         $this->count_panier = 0;
 
         $this->etape4 = null; //Facture
-        $this->mtt_achat = null;
-        $this->mtt_paye = null;
-        $this->mtt_reduction = null;
     }
 
     public function voirPanier()
