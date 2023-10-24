@@ -19,6 +19,7 @@ use App\Livewire\StatCa;
 use App\Livewire\StatCaisse;
 use App\Livewire\StatConclue;
 use App\Livewire\StatDeclassement;
+use App\Livewire\StatNonConclue;
 use App\Livewire\StatObjectif;
 use App\Livewire\User;
 use App\Livewire\Vente;
@@ -61,4 +62,5 @@ Route::middleware('auth')->group(function() {
     Route::get('dec', StatDeclassement::class)->name('stat_decla');
     Route::get('parametre', Parametre::class)->name('parametre');
     Route::get('conclue', StatConclue::class)->name('conclue');
+    Route::get('nonconclue', StatNonConclue::class)->name('nonconclue');
 });

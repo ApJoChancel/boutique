@@ -8,10 +8,10 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-class StatConclue extends Component
+class StatNonConclue extends Component
 {
     #[Layout('livewire.layouts.base')]
-    #[Title('Boutique | Statistiques - Visites conclues')]
+    #[Title('Boutique | Statistiques - Visites non conclues')]
     public function render()
     {
         $total = DB::table('visites')
@@ -39,7 +39,7 @@ class StatConclue extends Component
             ->join('visites', 'reponses.visite_id', 'visites.id')
             ->join('choix', 'reponses.choix_id', 'choix.id')
             ->join('questions', 'choix.question_id', 'questions.id')
-            ->where('visites.conclue', true)
+            ->where('visites.conclue', false)
             // ->join('users', 'visites.user_id', 'users.id')
             // ->join('boutiques', 'users.boutique_id', 'boutiques.id')
             ->groupBy('questions.id', 'choix.id')
@@ -69,10 +69,42 @@ class StatConclue extends Component
         }
         // dd($all);
 
-        return view('livewire.stat-conclue', [
+        $visites = DB::table('ventes')
+            ->selectRaw("
+                ventes.motif,
+                GROUP_CONCAT(ventes.comment) AS comments,
+                COUNT(ventes.id) AS nombre
+            ")
+            ->whereNotNull('ventes.motif')
+            // ->join('users', 'visites.user_id', 'users.id')
+            // ->join('boutiques', 'users.boutique_id', 'boutiques.id')
+            ->groupBy('ventes.motif')
+            ->get()
+        ;
+        // dd($visites);
+        $tab = [];
+        $comments = [];
+        foreach($visites as $visite){
+            $tab[$visite->motif] = $visite->nombre;
+            $comments[$visite->motif] = $visite->comments;
+        }
+        foreach(['article', 'modele', 'taille', 'couleur', 'prix'] as $motif){
+            if(!isset($tab[$motif]))
+                $tab[$motif] = 0;
+        }
+        // dd($tab);
+        $vis = [];
+        $vis['label'] = array_keys($tab);
+        $vis['totaux'] = array_values($tab);
+        // dd($vis);
+        // dd($comments);
+        
+        return view('livewire.stat-non-conclue', [
             'datas' => $all,
             'total' => $total->nombre,
             'total_conclue' => $total_conclue->nombre,
+            'visites' => $vis,
+            'comments' => $comments,
         ]);
     }
 }
