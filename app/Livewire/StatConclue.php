@@ -4,10 +4,14 @@ namespace App\Livewire;
 
 use App\Models\Question;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
 class StatConclue extends Component
 {
+    #[Layout('livewire.layouts.base')]
+    #[Title('Boutique | Statistiques - Visites conclues')]
     public function render()
     {
         $total = DB::table('visites')
@@ -16,7 +20,7 @@ class StatConclue extends Component
             ")
             ->get()
         ;
-
+        // dd($total);
         $ventes = DB::table('reponses')
             ->selectRaw("
                 choix.libelle AS choix,
@@ -33,29 +37,32 @@ class StatConclue extends Component
             ->groupBy('questions.id', 'choix.id')
             ->get()
         ;
-        dd($ventes);
-        $questions = Question::all();
-        foreach($questions as $question){
+        // dd($ventes);
+        // $questions = Question::all();
+        $tab = [];
+        foreach($ventes as $vente){
             // ${"label$question->id"} = $question->choix()->pluck('choix.libelle');
-            ${"label$question->id"} = [
-                
-            ];
+            $tab[$vente->question][$vente->choix] = $vente->nombre;
         }
-        dd($label2);
+        foreach(Question::all() as $question){
+            foreach($question->choix as $choix){
+                if(!isset($tab[$question->libelle][$choix->libelle]))
+                    $tab[$question->libelle][$choix->libelle] = 0;
+            }
+        }
+        // dd($tab);
+        $i = 0;
+        $all = [];
+        foreach($tab as $question => $reponses){
+            $all[$i]['titre'] = $question;
+            $all[$i]['label'] = array_keys($reponses);
+            $all[$i]['totaux'] = array_values($reponses);
+            $i++;
+        }
+        // dd($all);
 
         return view('livewire.stat-conclue', [
-            'labels' => [
-                "CA", 
-                'Réduction', 
-                'Reçu', 
-                'Reste'
-            ],
-            'totaux' => [
-                $totaux->montant_total,
-                $totaux->reduction,
-                $totaux->montant_recu,
-                $totaux->reste
-            ],
+            'datas' => $all,
         ]);
     }
 }

@@ -1,52 +1,3 @@
-{{-- <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
-    <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-        <ul class="space-y-2 font-medium">
-            <x-nav-link :href="route('stat_objectif')">
-                🏫{{ __('Tableau de bord') }}
-            </x-nav-link>
-            <x-nav-link :href="route('zone')">
-                👥{{ __('Zones') }}
-            </x-nav-link>
-            <x-nav-link :href="route('user')">
-                🗂️{{ __('Utilisateurs') }}
-            </x-nav-link>
-            <x-nav-link :href="route('boutique')">
-                🤵{{ __('Boutiques') }}
-            </x-nav-link>
-            <x-nav-link :href="route('carac')">
-                📚{{ __('Caractéristiques') }}
-            </x-nav-link>
-            <x-nav-link :href="route('categorie')">
-                📚{{ __('Catégories') }}
-            </x-nav-link>
-            <x-nav-link :href="route('article')">
-                📚{{ __('Articles') }}
-            </x-nav-link>
-            <x-nav-link :href="route('visite')">
-                📚{{ __('Visites') }}
-            </x-nav-link>
-            <x-nav-link :href="route('vente')">
-                📚{{ __('Ventes') }}
-            </x-nav-link>
-            <x-nav-link :href="route('rec')">
-                📚{{ __('Recouvrements') }}
-            </x-nav-link>
-            <x-nav-link :href="route('log')">
-                📚{{ __('Pointeuse') }}
-            </x-nav-link>
-            <x-nav-link :href="route('stat_ca')">
-                📚{{ __('CA') }}
-            </x-nav-link>
-            <x-nav-link :href="route('stat_caisse')">
-                📚{{ __('Caisse') }}
-            </x-nav-link>
-            <x-nav-link :href="route('stat_decla')">
-                📚{{ __('Déclassement') }}
-            </x-nav-link>
-        </ul>
-    </div>
-</aside> --}}
-
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -172,7 +123,7 @@
                             </x-slot>
                         </x-dropdown>
                     </div>
-                    {{-- <div class="hidden sm:flex sm:items-center sm:ml-6">
+                    <div class="hidden sm:flex sm:items-center sm:ml-6">
                         <x-dropdown align="right" width="48">
                             <x-slot name="trigger">
                                 <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -190,12 +141,12 @@
                                 <x-nav-link :href="route('conclue')" :active="request()->routeIs('conclue')">
                                     {{ __('⏳ Conclue') }}
                                 </x-nav-link>
-                                <x-nav-link :href="route('stat_ca')" :active="request()->routeIs('stat_ca')">
+                                {{-- <x-nav-link :href="route('stat_ca')" :active="request()->routeIs('stat_ca')">
                                     {{ __('📝 Non conclue') }}
-                                </x-nav-link>
+                                </x-nav-link> --}}
                             </x-slot>
                         </x-dropdown>
-                    </div> --}}
+                    </div>
                     <div class="hidden sm:flex sm:items-center sm:ml-6">
                         <x-nav-link :href="route('parametre')" :active="request()->routeIs('parametre')">
                             {{ __('⚙️ Paramètres') }}
@@ -359,6 +310,27 @@
                         </x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('stat_decla')" :active="request()->routeIs('stat_decla')">
                             {{ __('📉 Déclassement') }}
+                        </x-responsive-nav-link>
+                    </x-slot>
+                </x-dropdown>
+            </div>
+            <div class="">
+                <x-dropdown align="right" width="48">
+                    <x-slot name="trigger">
+                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                            <div>📊 Données visites</div>
+
+                            <div class="ml-1">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </button>
+                    </x-slot>
+
+                    <x-slot name="content">
+                        <x-responsive-nav-link :href="route('conclue')" :active="request()->routeIs('conclue')">
+                            {{ __('⏳ Conclue') }}
                         </x-responsive-nav-link>
                     </x-slot>
                 </x-dropdown>
