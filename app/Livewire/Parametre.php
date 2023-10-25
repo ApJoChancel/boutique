@@ -14,11 +14,14 @@ class Parametre extends AppComponent
     #[Rule('required|integer|min:1')]
     public $delais_location;
 
+    public $heure;
+
     public function mount()
     {
         $item = ModelsParametre::findOrFail(1);
         $this->delais_vente = $item->delais_vente;
         $this->delais_location = $item->delais_location;
+        $this->heure = date('H:i:s', strtotime($item->heure));
         $this->textSubmit = 'Modifier';
     }
 
@@ -28,6 +31,7 @@ class Parametre extends AppComponent
         $item = ModelsParametre::findOrFail(1);
         $item->delais_vente = $this->delais_vente;
         $item->delais_location = $this->delais_location;
+        $item->heure = $this->heure;
         $item->save();
         session()->flash('status', 'Change successfully');
     }

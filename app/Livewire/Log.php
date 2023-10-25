@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Parametre;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
@@ -39,8 +40,11 @@ class Log extends Component
         ->whereDate('logs.date', $this->date_search)
         ->groupBy('users.login', 'users.nom', 'users.prenom')
         ->get();
+
+        $parametre = Parametre::findOrFail(1);
         return view('livewire.log', [
             'items' => $items,
+            'parametre' => $parametre,
             'headers' => self::$headers,
         ]);
     }
