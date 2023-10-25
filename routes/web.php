@@ -8,6 +8,7 @@ use App\Livewire\Categorie;
 use App\Livewire\Compte;
 use App\Livewire\Declassement;
 use App\Livewire\Log;
+use App\Livewire\LogAgent;
 use App\Livewire\Logout;
 use App\Livewire\Objectif;
 use App\Livewire\Parametre;
@@ -63,4 +64,5 @@ Route::middleware('auth')->group(function() {
     Route::get('parametre', Parametre::class)->name('parametre');
     Route::get('conclue', StatConclue::class)->name('conclue');
     Route::get('nonconclue', StatNonConclue::class)->name('nonconclue');
+    Route::get('logagent', LogAgent::class)->name('logagent');
 });

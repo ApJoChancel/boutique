@@ -162,7 +162,7 @@
                                 <x-nav-link :href="route('log')" :active="request()->routeIs('log')">
                                     {{ __('⏳ Pour tous') }}
                                 </x-nav-link>
-                                <x-nav-link :href="route('stat_ca')" :active="request()->routeIs('stat_ca')">
+                                <x-nav-link :href="route('logagent')" :active="request()->routeIs('logagent')">
                                     {{ __('📝 Par agent') }}
                                 </x-nav-link>
                             </x-slot>
@@ -374,7 +374,7 @@
                         <x-responsive-nav-link :href="route('log')" :active="request()->routeIs('log')">
                             {{ __('⏳ Pour tous') }}
                         </x-responsive-nav-link>
-                        <x-responsive-nav-link :href="route('stat_ca')" :active="request()->routeIs('stat_ca')">
+                        <x-responsive-nav-link :href="route('logagent')" :active="request()->routeIs('logagent')">
                             {{ __('📝 Par agent') }}
                         </x-responsive-nav-link>
                     </x-slot>
