@@ -63,7 +63,7 @@
                                     $user = new DateTime($item->connexion);
                                     $retard = $pointeuse->format('H:i:s') < $user->format('H:i:s');
                                 @endphp
-                                <tr class="border-2 @if ($retard) text-red-500 @endif">
+                                <tr class="border-2" @if ($retard) style="color: red;" @endif>
                                     <x-table.td>{{ $item->day }}</x-table.td>
                                     <x-table.td>{{ date('H:i:s', strtotime($item->connexion)) }}</x-table.td>
                                 </tr>

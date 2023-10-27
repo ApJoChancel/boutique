@@ -556,7 +556,7 @@ class Visite extends AppComponent
                     $item = new stdClass();
                     $item->id = $categorie->id;
                     $item->categorie = $categorie->libelle;
-                    $item->carac_ids = $art['carac_ids'];
+                    $item->option_ids = $art['option_ids'];
                     $item->carac_texte = $art['carac_texte'];
                     $item->qte = $art['qte'];
                     $item->prix = $art['prix'];

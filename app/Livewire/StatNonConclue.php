@@ -42,7 +42,7 @@ class StatNonConclue extends Component
             ->where('visites.conclue', false)
             // ->join('users', 'visites.user_id', 'users.id')
             // ->join('boutiques', 'users.boutique_id', 'boutiques.id')
-            ->groupBy('questions.id', 'choix.id')
+            ->groupBy('questions.id', 'choix.id', 'questions.libelle', 'choix.libelle')
             ->get()
         ;
         // dd($sondage);

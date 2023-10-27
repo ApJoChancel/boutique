@@ -51,8 +51,9 @@
                                     $pointeuse = new DateTime($parametre->heure);
                                     $user = new DateTime($item->connexion);
                                     $retard = $pointeuse->format('H:i:s') < $user->format('H:i:s');
+                                    var_dump($retard)
                                 @endphp
-                                <tr class="border-2 @if ($retard) text-red-500 @endif">
+                                <tr class="border-2" @if ($retard) style="color: red;" @endif>
                                     <x-table.td>{{ $item->login }}</x-table.td>
                                     <x-table.td>{{ "{$item->nom} {$item->prenom}" }}</x-table.td>
                                     <x-table.td>{{ date('H:i:s', strtotime($item->connexion)) }}</x-table.td>
