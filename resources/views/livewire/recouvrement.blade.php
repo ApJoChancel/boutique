@@ -93,10 +93,10 @@
                                         @foreach ($vente->ligneVentes as $item)
                                             <tr class="hover:bg-grey-lighter">
                                                 <td class="py-2 px-4 border-b border-grey-light">
-                                                    {{ $item->article->libelle }}
+                                                    {{ $item->categorie->libelle }}
                                                 </td>
                                                 <td class="py-2 px-4 border-b border-grey-light">
-                                                    {{ $item->caracteristiques }}
+                                                    {{ $item->carac_texte }}
                                                 </td>
                                             </tr>
                                         @endforeach
