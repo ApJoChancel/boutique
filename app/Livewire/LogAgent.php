@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Parametre;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
@@ -24,7 +25,9 @@ class LogAgent extends AppComponent
     public function mount()
     {
         $this->date_search = now()->format('Y-m');
-        $this->users = User::all();
+        $this->users = in_array(Auth::user()->type_id, [1, 2]) ?
+            User::all() :
+            User::where('zone_id', Auth::user()->zone_id)->get();
         $this->textSubmit = 'Rapport';
         // dd($this->date_search);
     }
