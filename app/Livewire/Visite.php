@@ -589,6 +589,7 @@ class Visite extends AppComponent
                 }
             }
         }
+        $this->count_panier = self::count_recursive($this->artciles_added, 1);
     }
 
     #[Layout('livewire.layouts.base')]
