@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use App\Models\Boutique;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class AppComponent extends Component
@@ -18,6 +20,27 @@ class AppComponent extends Component
     public $change_modal = false;
     public $info_modal = false;
     public $paie_modal = false;
+
+    //Pour les rôles
+    public $is_admin;
+    public $is_com;
+    public $is_admin_or_suppleant;
+
+    public function boutiqueValide()
+    {
+        switch (Auth::user()->type_id) {
+            case 1:
+            case 2:
+                return Boutique::all()->pluck('id')->toArray();
+                break;
+            case 3:
+                return Auth::user()->zone->boutiques->pluck('id')->toArray();
+                break;
+            case 4:
+                return [Auth::user()->boutique_id];
+                break;
+        }
+    }
 
     public function deleteItem(mixed $item)
     {
