@@ -28,19 +28,27 @@
                             <button class="bg-red-500 py-2 px-4 rounded-r absolute right-0 top-0 bottom-0">Go</button>
                             @error('ancien') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
                         </div> --}}
-                        <div class="relative flex mb-3">
+                        <div class="">
                             <x-label for="ancien" :value="__('Ancien')" />
-                            <x-input wire:model="ancien" id="ancien" type="password" class="block mt-1 w-full" />
+                            <x-input wire:model="ancien" id="ancien" type="{{ ($voir_mdp) ? 'text' : 'password' }}" class="block mt-1 w-full" />
                             @error('ancien') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
                         </div>
                         <div class="mt-4">
                             <x-label for="nouveau" :value="__('Nouveau')" />
-                            <x-input wire:model="nouveau" id="nouveau" type="password" class="block mt-1 w-full" />
+                            <x-input wire:model="nouveau" id="nouveau" type="{{ ($voir_mdp) ? 'text' : 'password' }}" class="block mt-1 w-full" />
                             @error('nouveau') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
                         </div>
                         <div class="mt-4">
                             <x-label for="confirm" :value="__('Confirmer le nouveau')" />
-                            <x-input wire:model="confirm" id="confirm" type="password" class="block mt-1 w-full" />
+                            <x-input wire:model="confirm" id="confirm" type="{{ ($voir_mdp) ? 'text' : 'password' }}" class="block mt-1 w-full" />
+                            @error('confirm') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div class="mt-4">
+                            <label class="inline-flex items-center mr-4 mb-2">
+                                <input wire:model.live='voir_mdp' type="checkbox" class="form-checkbox h-5 w-5 text-blue-600">
+                                <span class="ml-2">Afficher mot de passe</span>
+                            </label>
                         </div>
             
                         <div class="flex items-center justify-end mt-4">

@@ -13,9 +13,10 @@ class Compte extends AppComponent
 {
     #[Rule('required')]
     public $ancien;
-    #[Rule('required|same:confirm')]
     public $nouveau;
+    #[Rule('required|same:nouveau')]
     public $confirm;
+    public $voir_mdp;
 
     // public function changeNoms()
     // {
@@ -47,6 +48,7 @@ class Compte extends AppComponent
         $this->ancien = null;
         $this->nouveau = null;
         $this->confirm = null;
+        $this->voir_mdp = null;
     }
 
     #[Layout('livewire.layouts.base')]

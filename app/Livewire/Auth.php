@@ -17,6 +17,7 @@ class Auth extends AppComponent
     public $login = null;
     #[Rule('required')]
     public $password = null;
+    public $voir_mdp;
     
     public function mount()
     {
@@ -50,6 +51,7 @@ class Auth extends AppComponent
         parent::resetValues();
         $this->login =
         $this->password = null;
+        $this->voir_mdp = null;
     }
 
     #[Layout('livewire.layouts.login')]
