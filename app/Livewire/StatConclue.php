@@ -9,6 +9,12 @@ use Livewire\Attributes\Title;
 
 class StatConclue extends AppComponent
 {
+    public function mount()
+    {
+        //Boutiques valides
+        $this->boutiques_valides = $this->boutiqueValide();
+    }
+
     #[Layout('livewire.layouts.base')]
     #[Title('Boutique | Statistiques - Visites conclues')]
     public function render()
@@ -17,6 +23,7 @@ class StatConclue extends AppComponent
             ->selectRaw("
                 COUNT(visites.id) AS nombre
             ")
+            ->whereIn('visites.boutique_id', $this->boutiques_valides)
             ->first()
         ;
 
@@ -25,6 +32,7 @@ class StatConclue extends AppComponent
                 COUNT(visites.id) AS nombre
             ")
             ->where('visites.conclue', true)
+            ->whereIn('visites.boutique_id', $this->boutiques_valides)
             ->first()
         ;
         // dd($total);
@@ -39,6 +47,7 @@ class StatConclue extends AppComponent
             ->join('choix', 'reponses.choix_id', 'choix.id')
             ->join('questions', 'choix.question_id', 'questions.id')
             ->where('visites.conclue', true)
+            ->whereIn('visites.boutique_id', $this->boutiques_valides)
             // ->join('users', 'visites.user_id', 'users.id')
             // ->join('boutiques', 'users.boutique_id', 'boutiques.id')
             ->groupBy('questions.id', 'choix.id', 'questions.libelle', 'choix.libelle')
