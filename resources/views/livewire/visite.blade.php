@@ -357,7 +357,13 @@
                                                         <div>
                                                             <x-label :value="__('Caractéristiques')" />
                                                             @foreach ($this->caracs as $item)
-                                                                <x-label wire:click='changeOption({{ $item->id }})' value="{{ $item->libelle }}" class="inline mr-3" />
+                                                                @php
+                                                                    $couleur = empty($options[$item->id]) ? 'red' : 'green';
+                                                                @endphp
+                                                                <x-label wire:click='changeOption({{ $item->id }})' class="inline mr-3" style="color: {{ $couleur }}">
+                                                                    {{ $item->libelle }}
+                                                                </x-label>
+                                                                {{-- <x-label wire:click='changeOption({{ $item->id }})' value="{{ $item->libelle }}" class="inline mr-3" /> --}}
                                                             @endforeach
                                                         </div>
                                                     @endif

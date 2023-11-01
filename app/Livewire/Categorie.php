@@ -87,6 +87,7 @@ class Categorie extends AppComponent
             else
                 $this->selectAll = false;
         }
+        // dd($this->carac);
         $this->option_modal = true;
     }
 
@@ -146,6 +147,10 @@ class Categorie extends AppComponent
         foreach (Caracteristique::all() as $car) {
             $this->carac[$car->id] = [];
         }
+        foreach (Caracteristique::all() as $car) {
+            self::changeOption($car);
+        }
+        $this->option_modal = false;
         // $this->carac = $item->options()->pluck('options.id');
         $this->change_carac = true;
     }

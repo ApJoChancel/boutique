@@ -37,10 +37,16 @@
                             <div class="mt-4">
                                 <x-label :value="__('Caractéristiques')" />
                                 @foreach ($caracs as $item)
-                                    <x-label wire:click='changeOption({{ $item->id }})' value="{{ $item->libelle }}" class="inline mr-3" />
+                                    @php
+                                        $couleur = empty($carac[$item->id]) ? 'red' : 'green';
+                                    @endphp
+                                    <x-label wire:click='changeOption({{ $item->id }})' class="inline mr-3" style="color: {{ $couleur }}">
+                                        {{ $item->libelle }}
+                                    </x-label>
                                 @endforeach
                                 @error('carac') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
                             </div>
+                            
                         @endif
             
                         <div class="flex items-center justify-end mt-4">
