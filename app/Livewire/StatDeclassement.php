@@ -25,6 +25,12 @@ class StatDeclassement extends AppComponent
         '4 semaines',
         'Plus',
     ];
+
+    public function mount()
+    {
+        //Boutiques valides
+        $this->boutiques_valides = $this->boutiqueValide();
+    }
     
     #[Layout('livewire.layouts.base')]
     #[Title('Boutique | Statistiques - Déclassement')]
@@ -44,6 +50,7 @@ class StatDeclassement extends AppComponent
         )
         ->leftJoin('paiements', 'ventes.id', 'paiements.vente_id')
         ->leftJoin('clients', 'ventes.client_id', 'clients.id')
+        ->whereIn('ventes.boutique_id', $this->boutiques_valides)
         ->groupBy('ventes.montant', 'ventes.date', 'ventes.type', 'clients.nom', 'clients.prenom', 'clients.telephone')
         ->having('reste', '>', 0)
         ->get();
