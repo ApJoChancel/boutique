@@ -27,11 +27,15 @@ class Vente extends AppComponent
 
     public function mount()
     {
+        //Boutiques valides
+        $this->boutiques_valides = $this->boutiqueValide();
+
         $ventes = DB::table('ventes')
         ->select(
             DB::raw('MIN(ventes.date) AS date_from'),
             DB::raw('MAX(ventes.date) AS date_to'),
         )
+        ->whereIn('ventes.boutique_id', $this->boutiques_valides)
         ->first();
 
         $this->date_from = $ventes->date_from;
@@ -66,6 +70,7 @@ class Vente extends AppComponent
         ->leftJoin('paiements', 'ventes.id', 'paiements.vente_id')
         ->leftJoin('clients', 'clients.id', 'ventes.client_id')
         ->whereBetween('paiements.date', [$this->date_from, $this->date_to])
+        ->whereIn('ventes.boutique_id', $this->boutiques_valides)
         ->groupBy('ventes.id', 'clients.nom', 'clients.prenom', 'ventes.date', 'ventes.montant')
         ->having('reste', 0)
         ->get();
