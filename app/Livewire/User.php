@@ -135,6 +135,7 @@ class User extends AppComponent
                     $item->type_id = $this->type_id;
                     $item->role_id = $this->role_id;
                     $item->boutique_id = $this->boutique_id;
+                    $item->zone_id = Boutique::findOrFail($this->boutique_id)->zone->id;
                     break;
             }
             $item->save();
