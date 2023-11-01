@@ -22,6 +22,7 @@ class AppComponent extends Component
     public $paie_modal = false;
 
     //Pour les rôles
+    public $boutiques_valides;
     public $is_admin;
     public $is_com;
     public $is_admin_or_suppleant;
