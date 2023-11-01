@@ -5,9 +5,8 @@ namespace App\Livewire;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
-use Livewire\Component;
 
-class StatCaisse extends Component
+class StatCaisse extends AppComponent
 {
     public $year = null;
 

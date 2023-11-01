@@ -24,7 +24,7 @@ class Compte extends AppComponent
     //     dd($item);
     //     $item->noms = $this->noms;
     //     // $item->save();
-    //     session()->flash('status', 'Added successfully');
+    //     session()->flash('status', self::TEXT_SAVED);
     // }
 
     public function changePassword()
@@ -38,7 +38,7 @@ class Compte extends AppComponent
             $item->password = Hash::make($this->nouveau);
             $item->save();
             $this->resetValues();
-            session()->flash('status', 'Added successfully');
+            session()->flash('status', self::TEXT_SAVED);
         }
     }
 

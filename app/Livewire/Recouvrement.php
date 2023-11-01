@@ -62,7 +62,7 @@ class Recouvrement extends AppComponent
             $paie->date = now();
             $paie->vente_id = $item->id;
             $paie->save();
-            $this->notificationToast('Saved successfully');
+            $this->notificationToast(self::TEXT_SAVED);
             $this->resetValues();
         } else{
             $this->notificationToast("Attention le reste à payer est de {$result->reste}");

@@ -8,9 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
-use Livewire\Component;
 
-class Log extends Component
+class Log extends AppComponent
 {
     private static array $headers = [
         'Login',

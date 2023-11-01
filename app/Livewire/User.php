@@ -139,7 +139,7 @@ class User extends AppComponent
             }
             $item->save();
             $this->resetValues();
-            $this->notificationToast('Added successfully');
+            $this->notificationToast(self::TEXT_SAVED);
         } else{
             $this->addError('nom', 'Un utilisateur existe avec ce nom et ce prénom');
         }
@@ -164,7 +164,7 @@ class User extends AppComponent
     public function deleteConfirmed(mixed $id)
     {
         parent::deleteConfirmed(ModelsUser::findOrFail($id));
-        $this->notificationToast('Deleted successfully');
+        $this->notificationToast(self::TEXT_DELETE);
     }
 
     public function resetValues()
@@ -184,7 +184,7 @@ class User extends AppComponent
         $item->password = Hash::make(self::DEFAULT_PASSWORD);
         $item->save();
         $this->resetValues();
-        $this->notificationToast('Changed successfully');
+        $this->notificationToast(self::TEXT_MODIFY);
     }
 
     public function changeInfo(ModelsUser $item)
@@ -206,7 +206,7 @@ class User extends AppComponent
         $item->save();
         $this->change_modal = false;
         $this->resetValues();
-        $this->notificationToast('Changed successfully');
+        $this->notificationToast(self::TEXT_MODIFY);
     }
 
     #[Layout('livewire.layouts.base')]

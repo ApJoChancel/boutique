@@ -19,7 +19,7 @@ class Role extends AppComponent
         $item->libelle = $this->libelle;
         $item->save();
         $this->resetValues();
-        session()->flash('status', 'Added successfully');
+        session()->flash('status', self::TEXT_SAVED);
     }
 
     public function editItem(ModelsRole $role)
@@ -37,7 +37,7 @@ class Role extends AppComponent
     public function deleteConfirmed(mixed $id)
     {
         parent::deleteConfirmed(ModelsRole::findOrFail($id));
-        session()->flash('status', 'Deleted successfully');
+        session()->flash('status', self::TEXT_DELETE);
     }
 
     public function resetValues()

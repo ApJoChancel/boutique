@@ -48,7 +48,7 @@ class Categorie extends AppComponent
         if($this->carac)
             $item->options()->sync(array_merge(...$this->carac));
         $this->resetValues();
-        $this->notificationToast('Saved successfully');
+        $this->notificationToast(self::TEXT_SAVED);
     }
 
     public function fermer()
@@ -126,7 +126,7 @@ class Categorie extends AppComponent
     {
         $item = ModelsCategorie::findOrFail($id);
         parent::deleteConfirmed($item);
-        $this->notificationToast('Deleted successfully');
+        $this->notificationToast(self::TEXT_DELETE);
     }
 
     public function resetValues()
@@ -161,7 +161,7 @@ class Categorie extends AppComponent
         $item->caracteristiques()->sync($this->carac);
         $this->change_modal = false;
         $this->resetValues();
-        $this->notificationToast('Changed successfully');
+        $this->notificationToast(self::TEXT_MODIFY);
     }
 
     #[Layout('livewire.layouts.base')]

@@ -6,7 +6,6 @@ use App\Models\Objectif as ModelsObjectif;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
 use Livewire\Attributes\Title;
-use Livewire\Component;
 
 class Objectif extends AppComponent
 {
@@ -19,7 +18,7 @@ class Objectif extends AppComponent
         $item = ModelsObjectif::findOrFail(1);
         $item->montant = $this->montant;
         $item->save();
-        session()->flash('status', 'Added successfully');
+        session()->flash('status', self::TEXT_SAVED);
     }
 
     public function mount()

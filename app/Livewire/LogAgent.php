@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use App\Models\Parametre;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;

@@ -58,7 +58,7 @@ class Boutique extends AppComponent
             }
         DB::commit();
         $this->resetValues();
-        $this->notificationToast('Saved successfully');
+        $this->notificationToast(self::TEXT_SAVED);
     }
 
     public function editItem(ModelsBoutique $item)
@@ -79,7 +79,7 @@ class Boutique extends AppComponent
     public function deleteConfirmed(mixed $id)
     {
         parent::deleteConfirmed(ModelsBoutique::findOrFail($id));
-        $this->notificationToast('Deleted successfully');
+        $this->notificationToast(self::TEXT_DELETE);
     }
 
     public function resetValues()
@@ -111,7 +111,7 @@ class Boutique extends AppComponent
         $item->save();
         $this->change_modal = false;
         $this->resetValues();
-        $this->notificationToast('Changed successfully');
+        $this->notificationToast(self::TEXT_MODIFY);
     }
 
     public function changeManager(ModelsBoutique $item)
@@ -133,7 +133,7 @@ class Boutique extends AppComponent
         DB::commit();
         $this->change_modal = false;
         $this->resetValues();
-        $this->notificationToast('Changed successfully');
+        $this->notificationToast(self::TEXT_MODIFY);
     }
 
     public function changeZone(ModelsBoutique $item)
@@ -156,7 +156,7 @@ class Boutique extends AppComponent
         DB::commit();
         $this->change_modal = false;
         $this->resetValues();
-        $this->notificationToast('Changed successfully');
+        $this->notificationToast(self::TEXT_MODIFY);
     }
 
     #[Layout('livewire.layouts.base')]

@@ -6,9 +6,8 @@ use App\Models\Question;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
-use Livewire\Component;
 
-class StatConclue extends Component
+class StatConclue extends AppComponent
 {
     #[Layout('livewire.layouts.base')]
     #[Title('Boutique | Statistiques - Visites conclues')]

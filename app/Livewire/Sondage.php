@@ -81,7 +81,7 @@ class Sondage extends AppComponent
             }
         DB::commit();
         $this->resetValues();
-        session()->flash('status', 'Added successfully');
+        session()->flash('status', self::TEXT_SAVED);
     }
 
     public function resetValues()

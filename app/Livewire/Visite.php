@@ -338,7 +338,7 @@ class Visite extends AppComponent
                 'reduction' => null
             ];
             $this->count_panier = self::count_recursive($this->artciles_added, 1);
-            session()->flash('status', 'Added successfully');
+            session()->flash('status', self::TEXT_SAVED);
             $this->selected_categorie_id = 0;
             $this->selected_categorie = null;
             $this->options = [];
@@ -353,7 +353,7 @@ class Visite extends AppComponent
     {
         unset($this->artciles_added[$id]);
         $this->remplirPanier();
-        session()->flash('status', 'Deleted successfully');
+        session()->flash('status', self::TEXT_DELETE);
     }
 
     public function initEtape4()

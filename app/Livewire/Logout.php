@@ -3,9 +3,8 @@
 namespace App\Livewire;
 
 use Illuminate\Support\Facades\Auth;
-use Livewire\Component;
 
-class Logout extends Component
+class Logout extends AppComponent
 {
     public function mount()
     {

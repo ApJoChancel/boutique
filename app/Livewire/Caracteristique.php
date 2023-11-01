@@ -49,7 +49,7 @@ class Caracteristique extends AppComponent
             }
         DB::commit();
         $this->resetValues();
-        $this->notificationToast('Saved successfully');
+        $this->notificationToast(self::TEXT_SAVED);
     }
 
     public function editItem(ModelsCaracteristique $item)
@@ -73,7 +73,7 @@ class Caracteristique extends AppComponent
     public function deleteConfirmed(mixed $id)
     {
         parent::deleteConfirmed(ModelsCaracteristique::findOrFail($id));
-        $this->notificationToast('Deleted successfully');
+        $this->notificationToast(self::TEXT_DELETE);
     }
 
     public function resetValues()
@@ -106,7 +106,7 @@ class Caracteristique extends AppComponent
         DB::commit();
         $this->change_modal = false;
         $this->resetValues();
-        $this->notificationToast('Changed successfully');
+        $this->notificationToast(self::TEXT_MODIFY);
     }
 
     private function tabOptionsToIds(string $tab, ModelsCaracteristique $item)

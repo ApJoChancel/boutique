@@ -7,6 +7,9 @@ use Livewire\Component;
 class AppComponent extends Component
 {
     const TEXT_SUBMIT = 'Enregistrer';
+    const TEXT_DELETE = 'Suppression réussie';
+    const TEXT_SAVED = 'Enregistrement réussi';
+    const TEXT_MODIFY = 'Modification réussie';
     public $edit_id = null;
     public $delete_id = null;
     public $textSubmit = self::TEXT_SUBMIT;

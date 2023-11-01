@@ -26,7 +26,7 @@ class Zone extends AppComponent
         $item->libelle = $this->libelle;
         $item->save();
         $this->resetValues();
-        $this->notificationToast('Added successfully');
+        $this->notificationToast(self::TEXT_SAVED);
     }
 
     public function editItem(ModelsZone $item)
@@ -44,7 +44,7 @@ class Zone extends AppComponent
     public function deleteConfirmed(mixed $id)
     {
         parent::deleteConfirmed(ModelsZone::findOrFail($id));
-        $this->notificationToast('Deleted successfully');
+        $this->notificationToast(self::TEXT_DELETE);
 
     }
 
