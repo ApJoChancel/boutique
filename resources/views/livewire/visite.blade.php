@@ -405,25 +405,47 @@
                                                         <label for="qte" class="block text-sm font-medium leading-6 text-gray-900">
                                                             Quantité
                                                         </label>
-                                                        <input wire:model="panier.{{ $i }}.qte" id="qte" type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                                        <input wire:blur='calculAchat' wire:model="panier.{{ $i }}.qte" id="qte" type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
                                                         @error('qte') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                                                     </div>
                                                     <div>
                                                         <label for="prix" class="block text-sm font-medium leading-6 text-gray-900">
                                                             Prix
                                                         </label>
-                                                        <input wire:model="panier.{{ $i }}.prix" id="prix" type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                                        <input wire:blur='calculAchat' wire:model="panier.{{ $i }}.prix" id="prix" type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
                                                         @error('prix') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                                                     </div>
                                                     <div>
                                                         <label for="reduction" class="block text-sm font-medium leading-6 text-gray-900">
                                                             Réduction
                                                         </label>
-                                                        <input wire:model="panier.{{ $i }}.reduction" id="reduction" type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                                        <input wire:blur='calculAchat' wire:model="panier.{{ $i }}.reduction" id="reduction" type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
                                                         @error('reduction') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                                                     </div>
                                                 </div>
                                             @endfor
+                                        </div>
+                                        <div class="mt-8 bg-white p-4 shadow rounded-lg">
+                                            <div class="-mx-3 md:flex mb-2">
+                                                <div>
+                                                    <label for="achat" class="block text-sm font-medium leading-6 text-gray-900">
+                                                        Total Achat
+                                                    </label>
+                                                    <input id="achat" value="{{ $total_achat }}" disabled type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                                </div>
+                                                <div>
+                                                    <label for="reduc" class="block text-sm font-medium leading-6 text-gray-900">
+                                                        Total Réduction
+                                                    </label>
+                                                    <input id="reduc" value="{{ $total_reduc }}" disabled type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                                </div>
+                                                <div>
+                                                    <label for="recu" class="block text-sm font-medium leading-6 text-gray-900">
+                                                        Montant reçu
+                                                    </label>
+                                                    <input id="recu" wire:model='total_recu' type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="mt-8 bg-white p-4 shadow rounded-lg">
                                             <button wire:click='venteTerminee' type="button" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">

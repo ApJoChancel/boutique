@@ -62,6 +62,9 @@ class Visite extends AppComponent
     public $count_panier;
 
     public $etape4; //Facture
+    public $total_achat;
+    public $total_reduc;
+    public $total_recu;
 
     public $panier_modal; //Panier
     public $panier;
@@ -108,6 +111,9 @@ class Visite extends AppComponent
         $this->boutique_id = null;
 
         $this->etape4 = false;
+        $this->total_achat = 0;
+        $this->total_reduc = 0;
+        $this->total_recu = 0;
 
         $this->clients = Client::all();
         $this->client_id = null;
@@ -327,9 +333,9 @@ class Visite extends AppComponent
                 'categorie' => $this->selected_categorie->libelle,
                 'option_ids' => implode(',', $ids),
                 'carac_texte' => $car,
-                'qte' => 1,
-                'prix' => 1,
-                'reduction' => 0
+                'qte' => null,
+                'prix' => null,
+                'reduction' => null
             ];
             $this->count_panier = self::count_recursive($this->artciles_added, 1);
             session()->flash('status', 'Added successfully');
@@ -385,10 +391,20 @@ class Visite extends AppComponent
 
     public function venteTerminee()
     {
-        // dd($this->panier);
+        // dd($this->total_recu);
 
         $this->resetValidation();
         $this->boutique_modal = false;
+        //On s'assure que les prix et qte sont correctes
+        if($this->est_concluante){
+            foreach ($this->panier as $item) {
+                if (($item['prix'] < 1) || ($item['qte'] < 1)){
+                    $this->addError('prix', 'Doit être un nombre non nul');
+                    $this->addError('qte', 'Doit être un nombre non nul');
+                    return;
+                }
+            }
+        }
 
         //Utilisateur
         $user = Auth::user();
@@ -430,7 +446,6 @@ class Visite extends AppComponent
             }
 
             //Vente
-            $mtt = $reduc = 0;
             $vente = new Vente();
             if(!$this->est_concluante){
                 if(empty($this->motif)){
@@ -450,13 +465,8 @@ class Visite extends AppComponent
                 $vente->type = ($this->est_vente) ? 'vente' : 'location';
                 $vente->save();
             } else{
-                //Le montant des achats
-                foreach ($this->panier as $item) {
-                    $mtt += ($item['prix'] * $item['qte']);
-                    $reduc += $item['reduction'];
-                }
                 $vente = new Vente();
-                $vente->montant = $mtt + $reduc;
+                $vente->montant = $this->total_achat;
                 $vente->client_id = $cli->id;
                 $vente->user_id = $user->id;
                 $vente->boutique_id = $user->boutique->id ?? $this->boutique_id;
@@ -479,8 +489,8 @@ class Visite extends AppComponent
 
                 //Paiement
                 $paie = new Paiement();
-                $paie->montant = $mtt;
-                $paie->reduction = $reduc;
+                $paie->montant = $this->total_recu;
+                $paie->reduction = $this->total_reduc;
                 $paie->vente_id = $vente->id;
                 $paie->date = $vente->date;
                 $paie->save();
@@ -489,6 +499,17 @@ class Visite extends AppComponent
         $this->resetValues();
         $this->initEtape1();
         session()->flash('status', 'Vente successfully');
+    }
+
+    public function calculAchat()
+    {
+        $this->total_achat = 0;
+        $this->total_reduc = 0;
+        foreach ($this->panier as $item) {
+            $this->total_achat += (is_numeric($item['prix']) && is_numeric($item['qte'])) ?
+                ($item['prix'] * $item['qte']) : 0;
+            $this->total_reduc += $item['reduction'];
+        }
     }
 
     public function resetValues()
@@ -531,6 +552,9 @@ class Visite extends AppComponent
         $this->count_panier = 0;
 
         $this->etape4 = null; //Facture
+        $this->total_achat = 0;
+        $this->total_reduc = 0;
+        $this->total_recu = 0;
     }
 
     public function voirPanier()
