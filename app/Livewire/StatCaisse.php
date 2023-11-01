@@ -2,17 +2,20 @@
 
 namespace App\Livewire;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 
 class StatCaisse extends AppComponent
 {
-    public $year = null;
+    public $year;
 
     public function mount()
     {
-        $this->year = '2023';
+        $this->year = Carbon::now()->year;
+        //Boutiques valides
+        $this->boutiques_valides = $this->boutiqueValide();
     }
 
     #[Layout('livewire.layouts.base')]
@@ -28,6 +31,7 @@ class StatCaisse extends AppComponent
         )
         ->leftJoin('paiements', 'ventes.id', 'paiements.vente_id')
         ->whereYear('paiements.date', $this->year)
+        ->whereIn('ventes.boutique_id', $this->boutiques_valides)
         ->groupBy('mois', 'ventes.montant')
         ->orderBy('mois')
         ->get();
