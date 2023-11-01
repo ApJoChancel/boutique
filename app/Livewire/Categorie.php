@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Caracteristique;
 use App\Models\Categorie as ModelsCategorie;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
 use Livewire\Attributes\Title;
@@ -29,6 +30,9 @@ class Categorie extends AppComponent
 
     public function mount()
     {
+        $this->is_com_or_supper = in_array(Auth::user()->type_id, [3, 4]) ? true : false;
+        abort_if($this->is_com_or_supper, 403, 'Autorisation refusée');
+
         $this->selectAll = false;
         $this->libelle = null;
         foreach (Caracteristique::all() as $item) {

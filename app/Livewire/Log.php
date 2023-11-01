@@ -24,6 +24,9 @@ class Log extends AppComponent
 
     public function mount()
     {
+        $this->is_com = (Auth::user()->type_id === 4)? true : false;
+        abort_if($this->is_com, 403, 'Autorisation refusée');
+
         $this->date_search = now()->format('Y-m-d');
         $this->users_valdes = in_array(Auth::user()->type_id, [1, 2]) ?
             User::all()->pluck('id')->toArray() :

@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Question;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -11,6 +12,9 @@ class StatConclue extends AppComponent
 {
     public function mount()
     {
+        $this->is_com = (Auth::user()->type_id === 4)? true : false;
+        abort_if($this->is_com, 403, 'Autorisation refusée');
+
         //Boutiques valides
         $this->boutiques_valides = $this->boutiqueValide();
     }

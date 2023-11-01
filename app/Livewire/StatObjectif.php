@@ -13,9 +13,9 @@ class StatObjectif extends AppComponent
 {
     public function mount()
     {
-        $this->is_admin = (Auth::user()->type_id === 1) ? true : false;
-        $this->is_com = (Auth::user()->type_id === 4 )? true : false;
-        $this->is_admin_or_suppleant = in_array(Auth::user()->type_id, [1, 2]) ? true : false;
+        // $this->is_admin = (Auth::user()->type_id === 1) ? true : false;
+        $this->is_com = (Auth::user()->type_id === 4)? true : false;
+        // $this->is_admin_or_suppleant = in_array(Auth::user()->type_id, [1, 2]) ? true : false;
         //Boutiques valides
         $this->boutiques_valides = $this->boutiqueValide();
     }

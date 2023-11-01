@@ -12,60 +12,64 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <div class="hidden sm:flex sm:items-center sm:ml-6">
-                        <x-dropdown align="right" width="48">
-                            <x-slot name="trigger">
-                                <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                                    <div>🏢 Administration</div>
-        
-                                    <div class="ml-1">
-                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                </button>
-                            </x-slot>
-        
-                            <x-slot name="content">
-                                <x-nav-link :href="route('zone')" :active="request()->routeIs('zone')">
-                                    {{ __('🗺️ Zones') }}
-                                </x-nav-link>
-                                <x-nav-link :href="route('user')" :active="request()->routeIs('user')">
-                                    {{ __('👥 Utilisateurs') }}
-                                </x-nav-link>
-                                <x-nav-link :href="route('boutique')" :active="request()->routeIs('boutique')">
-                                    {{ __('🏪 Boutiques') }}
-                                </x-nav-link>
-                            </x-slot>
-                        </x-dropdown>
-                    </div>
-                    <div class="hidden sm:flex sm:items-center sm:ml-6">
-                        <x-dropdown align="right" width="48">
-                            <x-slot name="trigger">
-                                <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                                    <div>👗 Produits</div>
-        
-                                    <div class="ml-1">
-                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                </button>
-                            </x-slot>
-        
-                            <x-slot name="content">
-                                <x-nav-link :href="route('carac')" :active="request()->routeIs('carac')">
-                                    {{ __('🧩 Caractéristiques') }}
-                                </x-nav-link>
-                                <x-nav-link :href="route('categorie')" :active="request()->routeIs('categorie')">
-                                    {{ __('📚 Catégories') }}
-                                </x-nav-link>
-                                {{-- <x-nav-link :href="route('article')" :active="request()->routeIs('article')">
-                                    {{ __('👢 Articles') }}
-                                </x-nav-link> --}}
-                            </x-slot>
-                        </x-dropdown>
-                    </div>
+                    @if (in_array(Auth::user()->type_id, [1, 2]))
+                        <div class="hidden sm:flex sm:items-center sm:ml-6">
+                            <x-dropdown align="right" width="48">
+                                <x-slot name="trigger">
+                                    <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                        <div>🏢 Administration</div>
+            
+                                        <div class="ml-1">
+                                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    </button>
+                                </x-slot>
+            
+                                <x-slot name="content">
+                                    <x-nav-link :href="route('zone')" :active="request()->routeIs('zone')">
+                                        {{ __('🗺️ Zones') }}
+                                    </x-nav-link>
+                                    <x-nav-link :href="route('user')" :active="request()->routeIs('user')">
+                                        {{ __('👥 Utilisateurs') }}
+                                    </x-nav-link>
+                                    <x-nav-link :href="route('boutique')" :active="request()->routeIs('boutique')">
+                                        {{ __('🏪 Boutiques') }}
+                                    </x-nav-link>
+                                </x-slot>
+                            </x-dropdown>
+                        </div>
+                    @endif
+                    @if (in_array(Auth::user()->type_id, [1, 2]))
+                        <div class="hidden sm:flex sm:items-center sm:ml-6">
+                            <x-dropdown align="right" width="48">
+                                <x-slot name="trigger">
+                                    <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                        <div>👗 Produits</div>
+            
+                                        <div class="ml-1">
+                                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    </button>
+                                </x-slot>
+            
+                                <x-slot name="content">
+                                    <x-nav-link :href="route('carac')" :active="request()->routeIs('carac')">
+                                        {{ __('🧩 Caractéristiques') }}
+                                    </x-nav-link>
+                                    <x-nav-link :href="route('categorie')" :active="request()->routeIs('categorie')">
+                                        {{ __('📚 Catégories') }}
+                                    </x-nav-link>
+                                    {{-- <x-nav-link :href="route('article')" :active="request()->routeIs('article')">
+                                        {{ __('👢 Articles') }}
+                                    </x-nav-link> --}}
+                                </x-slot>
+                            </x-dropdown>
+                        </div>
+                    @endif
                     <div class="hidden sm:flex sm:items-center sm:ml-6">
                         <x-dropdown align="right" width="48">
                             <x-slot name="trigger">
@@ -120,59 +124,65 @@
                             </x-slot>
                         </x-dropdown>
                     </div>
-                    <div class="hidden sm:flex sm:items-center sm:ml-6">
-                        <x-dropdown align="right" width="48">
-                            <x-slot name="trigger">
-                                <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                                    <div>📖 Données visites</div>
-        
-                                    <div class="ml-1">
-                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                </button>
-                            </x-slot>
-        
-                            <x-slot name="content">
-                                <x-nav-link :href="route('conclue')" :active="request()->routeIs('conclue')">
-                                    {{ __('🤝 Conclue') }}
-                                </x-nav-link>
-                                <x-nav-link :href="route('nonconclue')" :active="request()->routeIs('nonconclue')">
-                                    {{ __('🙌 Non conclue') }}
-                                </x-nav-link>
-                            </x-slot>
-                        </x-dropdown>
-                    </div>
-                    <div class="hidden sm:flex sm:items-center sm:ml-6">
-                        <x-dropdown align="right" width="48">
-                            <x-slot name="trigger">
-                                <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                                    <div>⏳ Pointeuse</div>
-        
-                                    <div class="ml-1">
-                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                </button>
-                            </x-slot>
-        
-                            <x-slot name="content">
-                                <x-nav-link :href="route('log')" :active="request()->routeIs('log')">
-                                    {{ __('⏳ Pour tous') }}
-                                </x-nav-link>
-                                <x-nav-link :href="route('logagent')" :active="request()->routeIs('logagent')">
-                                    {{ __('📝 Par agent') }}
-                                </x-nav-link>
-                            </x-slot>
-                        </x-dropdown>
-                    </div>
-                    <div class="hidden sm:flex sm:items-center sm:ml-6">
-                        <x-nav-link :href="route('parametre')" :active="request()->routeIs('parametre')">
-                            {{ __('⚙️ Paramètres') }}
-                        </x-nav-link>
-                    </div>
+                    @if (Auth::user()->type_id !== 4)
+                        <div class="hidden sm:flex sm:items-center sm:ml-6">
+                            <x-dropdown align="right" width="48">
+                                <x-slot name="trigger">
+                                    <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                        <div>📖 Données visites</div>
+            
+                                        <div class="ml-1">
+                                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    </button>
+                                </x-slot>
+            
+                                <x-slot name="content">
+                                    <x-nav-link :href="route('conclue')" :active="request()->routeIs('conclue')">
+                                        {{ __('🤝 Conclue') }}
+                                    </x-nav-link>
+                                    <x-nav-link :href="route('nonconclue')" :active="request()->routeIs('nonconclue')">
+                                        {{ __('🙌 Non conclue') }}
+                                    </x-nav-link>
+                                </x-slot>
+                            </x-dropdown>
+                        </div>
+                    @endif
+                    @if (Auth::user()->type_id !== 4)
+                        <div class="hidden sm:flex sm:items-center sm:ml-6">
+                            <x-dropdown align="right" width="48">
+                                <x-slot name="trigger">
+                                    <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                        <div>⏳ Pointeuse</div>
+            
+                                        <div class="ml-1">
+                                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    </button>
+                                </x-slot>
+            
+                                <x-slot name="content">
+                                    <x-nav-link :href="route('log')" :active="request()->routeIs('log')">
+                                        {{ __('⏳ Pour tous') }}
+                                    </x-nav-link>
+                                    <x-nav-link :href="route('logagent')" :active="request()->routeIs('logagent')">
+                                        {{ __('📝 Par agent') }}
+                                    </x-nav-link>
+                                </x-slot>
+                            </x-dropdown>
+                        </div>
+                    @endif
+                    @if (in_array(Auth::user()->type_id, [1, 2]))
+                        <div class="hidden sm:flex sm:items-center sm:ml-6">
+                            <x-nav-link :href="route('parametre')" :active="request()->routeIs('parametre')">
+                                {{ __('⚙️ Paramètres') }}
+                            </x-nav-link>
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -224,60 +234,65 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <div class="">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div>🏢 Administration</div>
+            @if (in_array(Auth::user()->type_id, [1, 2]))
+                <div class="">
+                    <x-dropdown align="right" width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                <div>🏢 Administration</div>
 
-                            <div class="ml-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
+                                <div class="ml-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
 
-                    <x-slot name="content">
-                        <x-responsive-nav-link :href="route('zone')" :active="request()->routeIs('zone')">
-                            {{ __('🗺️ Zones') }}
-                        </x-responsive-nav-link>
-                        <x-responsive-nav-link :href="route('user')" :active="request()->routeIs('user')">
-                            {{ __('👥 Utilisateurs') }}
-                        </x-responsive-nav-link>
-                        <x-responsive-nav-link :href="route('boutique')" :active="request()->routeIs('boutique')">
-                            {{ __('🏪 Boutiques') }}
-                        </x-responsive-nav-link>
-                    </x-slot>
-                </x-dropdown>
-            </div>
-            <div class="">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div>👗 Produits</div>
+                        <x-slot name="content">
+                            <x-responsive-nav-link :href="route('zone')" :active="request()->routeIs('zone')">
+                                {{ __('🗺️ Zones') }}
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link :href="route('user')" :active="request()->routeIs('user')">
+                                {{ __('👥 Utilisateurs') }}
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link :href="route('boutique')" :active="request()->routeIs('boutique')">
+                                {{ __('🏪 Boutiques') }}
+                            </x-responsive-nav-link>
+                        </x-slot>
+                    </x-dropdown>
+                </div>
+            @endif
 
-                            <div class="ml-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
+            @if (in_array(Auth::user()->type_id, [1, 2]))
+                <div class="">
+                    <x-dropdown align="right" width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                <div>👗 Produits</div>
 
-                    <x-slot name="content">
-                        <x-responsive-nav-link :href="route('carac')" :active="request()->routeIs('carac')">
-                            {{ __('🧩 Caractéristiques') }}
-                        </x-responsive-nav-link>
-                        <x-responsive-nav-link :href="route('categorie')" :active="request()->routeIs('categorie')">
-                            {{ __('📚 Catégories') }}
-                        </x-responsive-nav-link>
-                        {{-- <x-responsive-nav-link :href="route('article')" :active="request()->routeIs('article')">
-                            {{ __('👢 Articles') }}
-                        </x-responsive-nav-link> --}}
-                    </x-slot>
-                </x-dropdown>
-            </div>
+                                <div class="ml-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
+
+                        <x-slot name="content">
+                            <x-responsive-nav-link :href="route('carac')" :active="request()->routeIs('carac')">
+                                {{ __('🧩 Caractéristiques') }}
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link :href="route('categorie')" :active="request()->routeIs('categorie')">
+                                {{ __('📚 Catégories') }}
+                            </x-responsive-nav-link>
+                            {{-- <x-responsive-nav-link :href="route('article')" :active="request()->routeIs('article')">
+                                {{ __('👢 Articles') }}
+                            </x-responsive-nav-link> --}}
+                        </x-slot>
+                    </x-dropdown>
+                </div>
+            @endif
             <div class="">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
@@ -332,59 +347,65 @@
                     </x-slot>
                 </x-dropdown>
             </div>
-            <div class="">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div>📖 Données visites</div>
+            @if (Auth::user()->type_id !== 4)
+                <div class="">
+                    <x-dropdown align="right" width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                <div>📖 Données visites</div>
 
-                            <div class="ml-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
+                                <div class="ml-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
 
-                    <x-slot name="content">
-                        <x-responsive-nav-link :href="route('conclue')" :active="request()->routeIs('conclue')">
-                            {{ __('🤝 Conclue') }}
-                        </x-responsive-nav-link>
-                        <x-responsive-nav-link :href="route('nonconclue')" :active="request()->routeIs('nonconclue')">
-                            {{ __('🙌 Non Conclue') }}
-                        </x-responsive-nav-link>
-                    </x-slot>
-                </x-dropdown>
-            </div>
-            <div class="">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div>⏳ Pointeuse</div>
+                        <x-slot name="content">
+                            <x-responsive-nav-link :href="route('conclue')" :active="request()->routeIs('conclue')">
+                                {{ __('🤝 Conclue') }}
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link :href="route('nonconclue')" :active="request()->routeIs('nonconclue')">
+                                {{ __('🙌 Non Conclue') }}
+                            </x-responsive-nav-link>
+                        </x-slot>
+                    </x-dropdown>
+                </div>
+            @endif
+            @if (Auth::user()->type_id !== 4)
+                <div class="">
+                    <x-dropdown align="right" width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                <div>⏳ Pointeuse</div>
 
-                            <div class="ml-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
+                                <div class="ml-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
 
-                    <x-slot name="content">
-                        <x-responsive-nav-link :href="route('log')" :active="request()->routeIs('log')">
-                            {{ __('⏳ Pour tous') }}
-                        </x-responsive-nav-link>
-                        <x-responsive-nav-link :href="route('logagent')" :active="request()->routeIs('logagent')">
-                            {{ __('📝 Par agent') }}
-                        </x-responsive-nav-link>
-                    </x-slot>
-                </x-dropdown>
-            </div>
-            <div class="">
-                <x-responsive-nav-link :href="route('parametre')" :active="request()->routeIs('parametre')">
-                    {{ __('⚙️ Paramètres') }}
-                </x-responsive-nav-link>
-            </div>
+                        <x-slot name="content">
+                            <x-responsive-nav-link :href="route('log')" :active="request()->routeIs('log')">
+                                {{ __('⏳ Pour tous') }}
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link :href="route('logagent')" :active="request()->routeIs('logagent')">
+                                {{ __('📝 Par agent') }}
+                            </x-responsive-nav-link>
+                        </x-slot>
+                    </x-dropdown>
+                </div>
+            @endif
+            @if (in_array(Auth::user()->type_id, [1, 2]))
+                <div class="">
+                    <x-responsive-nav-link :href="route('parametre')" :active="request()->routeIs('parametre')">
+                        {{ __('⚙️ Paramètres') }}
+                    </x-responsive-nav-link>
+                </div>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

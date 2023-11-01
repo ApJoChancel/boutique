@@ -26,6 +26,7 @@ class AppComponent extends Component
     public $is_admin;
     public $is_com;
     public $is_admin_or_suppleant;
+    public $is_com_or_supper;
 
     public function boutiqueValide()
     {

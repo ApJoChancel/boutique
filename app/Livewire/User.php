@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\Type;
 use App\Models\User as ModelsUser;
 use App\Models\Zone;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
@@ -49,6 +50,9 @@ class User extends AppComponent
 
     public function mount()
     {
+        $this->is_com_or_supper = in_array(Auth::user()->type_id, [3, 4]) ? true : false;
+        abort_if($this->is_com_or_supper, 403, 'Autorisation refusée');
+        
         $this->boutiques = Boutique::all();
 
         $this->type_id = 4; //Commercial

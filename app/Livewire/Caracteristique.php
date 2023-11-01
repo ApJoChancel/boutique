@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Caracteristique as ModelsCaracteristique;
 use App\Models\Option;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
@@ -25,6 +26,12 @@ class Caracteristique extends AppComponent
     public $options;
     #[Rule('required')]
     public $type;
+
+    public function mount()
+    {
+        $this->is_com_or_supper = in_array(Auth::user()->type_id, [3, 4]) ? true : false;
+        abort_if($this->is_com_or_supper, 403, 'Autorisation refusée');
+    }
 
     public function save()
     {

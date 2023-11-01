@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Parametre as ModelsParametre;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
 use Livewire\Attributes\Title;
@@ -18,6 +19,9 @@ class Parametre extends AppComponent
 
     public function mount()
     {
+        $this->is_com_or_supper = in_array(Auth::user()->type_id, [3, 4]) ? true : false;
+        abort_if($this->is_com_or_supper, 403, 'Autorisation refusée');
+        
         $item = ModelsParametre::findOrFail(1);
         $this->delais_vente = $item->delais_vente;
         $this->delais_location = $item->delais_location;

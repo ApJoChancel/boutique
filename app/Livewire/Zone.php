@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Zone as ModelsZone;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
 use Livewire\Attributes\Title;
@@ -18,6 +19,12 @@ class Zone extends AppComponent
 
     #[Rule('required|unique:zones')]
     public $libelle = null;
+
+    public function mount()
+    {
+        $this->is_com_or_supper = in_array(Auth::user()->type_id, [3, 4]) ? true : false;
+        abort_if($this->is_com_or_supper, 403, 'Autorisation refusée');
+    }
 
     public function save()
     {
