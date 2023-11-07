@@ -13,6 +13,7 @@ class Recouvrement extends AppComponent
 {
     private static array $headers = [
         'Date de vente',
+        'Boutique',
         'Client',
         'Montant vente',
         'Réduction accordée',
@@ -92,14 +93,23 @@ class Recouvrement extends AppComponent
             'clients.telephone AS telephone',
             'ventes.date AS date_vente',
             'ventes.montant AS montant_vente',
+            'boutiques.designation AS boutique',
             DB::raw('SUM(paiements.montant) AS montant_recu'),
             DB::raw('SUM(paiements.reduction) AS reduction'),
             DB::raw('(ventes.montant - SUM(paiements.montant + paiements.reduction)) AS reste')
         )
         ->leftJoin('paiements', 'ventes.id', 'paiements.vente_id')
         ->leftJoin('clients', 'clients.id', 'ventes.client_id')
+        ->leftJoin('boutiques', 'boutiques.id', 'ventes.boutique_id')
         ->whereIn('ventes.boutique_id', $this->boutiques_valides)
-        ->groupBy('ventes.id', 'clients.nom', 'clients.prenom', 'clients.telephone', 'ventes.date', 'ventes.montant')
+        ->groupBy('ventes.id',
+            'clients.nom',
+            'clients.prenom',
+            'clients.telephone',
+            'ventes.date',
+            'ventes.montant',
+            'boutiques.designation'
+        )
         ->having('reste', '>', 0)
         ->get();
         $total = $this->ventes->sum('reste');

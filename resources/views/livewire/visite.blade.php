@@ -411,7 +411,7 @@
                                                         <label for="qte" class="block text-sm font-medium leading-6 text-gray-900">
                                                             Quantité
                                                         </label>
-                                                        <input wire:blur='calculAchat' wire:model="panier.{{ $i }}.qte" id="qte" type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                                        <input wire:blur='calculAchat' wire:model.live="panier.{{ $i }}.qte" id="qte" type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
                                                         @error('qte') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                                                     </div>
                                                     <div>
@@ -449,7 +449,8 @@
                                                     <label for="recu" class="block text-sm font-medium leading-6 text-gray-900">
                                                         Montant reçu
                                                     </label>
-                                                    <input id="recu" wire:model='total_recu' type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                                    <input id="recu" wire:model='total_recu' type="text" placeholder="Tapez le montant reçu" style="border: 2px solid green" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                                    @error('reduc') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                                                 </div>
                                             </div>
                                         </div>

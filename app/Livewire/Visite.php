@@ -113,7 +113,7 @@ class Visite extends AppComponent
         $this->etape4 = false;
         $this->total_achat = 0;
         $this->total_reduc = 0;
-        $this->total_recu = 0;
+        $this->total_recu = null;
 
         $this->clients = Client::all();
         $this->client_id = null;
@@ -405,6 +405,11 @@ class Visite extends AppComponent
                 }
             }
         }
+        //On s'assure que le montant de achats est >= au montant reçu
+        if($this->total_achat < ($this->total_recu + $this->total_reduc)){
+            $this->addError('reduc', 'Vérifiez les montants !!!');
+            return;
+        }
 
         //Utilisateur
         $user = Auth::user();
@@ -498,7 +503,7 @@ class Visite extends AppComponent
         DB::commit();
         $this->resetValues();
         $this->initEtape1();
-        session()->flash('status', 'Vente successfully');
+        session()->flash('status', 'Vente réussie');
     }
 
     public function calculAchat()

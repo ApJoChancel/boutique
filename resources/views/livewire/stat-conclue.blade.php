@@ -24,7 +24,7 @@
                             <div style="width: 50%;margin: 20px">
                                 <div>
                                     <canvas id="{{ $key }}"></canvas>
-                                    @if (in_array($data['titre'], ["Profil du visiteur", "Lieu de résidence"]))
+                                    @if (in_array($data['titre'], ["Profil du visiteur", "Lieu de résidence", "Tranche d'âge"]))
                                         <script>
                                             barGraphique('{{ $key }}', <?= json_encode($data['label']) ?>, <?= json_encode($data['totaux']) ?>);
                                         </script>

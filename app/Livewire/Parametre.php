@@ -37,7 +37,7 @@ class Parametre extends AppComponent
         $item->delais_location = $this->delais_location;
         $item->heure = $this->heure;
         $item->save();
-        session()->flash('status', 'Change successfully');
+        session()->flash('status', 'Modification réussie');
     }
 
     #[Layout('livewire.layouts.base')]

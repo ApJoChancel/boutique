@@ -51,6 +51,7 @@
                                     wire:click='infoItem({{ $item->vente_id }})'
                                 >
                                     <x-table.td>{{ $item->date_vente }}</x-table.td>
+                                    <x-table.td>{{ $item->boutique }}</x-table.td>
                                     <x-table.td>{{ "{$item->nom} {$item->prenom}" }}</x-table.td>
                                     <x-table.td>{{ formatNombre($item->montant_vente) }}</x-table.td>
                                     <x-table.td>{{ formatNombre($item->reduction) ?? 0 }}</x-table.td>
@@ -82,6 +83,9 @@
                             <div>
                                 <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
                                     Vente N° 00{{ $vente->id }}
+                                </label>
+                                <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
+                                    Client : {{ "{$vente->client->nom} {$vente->client->prenom}" }}
                                 </label>
                                 <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
                                     Articles
@@ -160,13 +164,6 @@
                                 </label>
                                 <input wire:model.live="montant" id="montant" type="text" placeholder="Ex : 500000" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
                                 @error('montant') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
-                            </div>
-                            <div class="md:w-1/2 px-3 mb-6 md:mb-0">
-                                <label for="reduction" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
-                                    Réduction
-                                </label>
-                                <input wire:model.live="reduction" id="reduction" type="text" placeholder="Ex : 500000" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
-                                @error('reduction') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                             </div>
                             <div>
                                 <button type="submit" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
