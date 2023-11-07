@@ -146,6 +146,9 @@
                                     <x-nav-link :href="route('nonconclue')" :active="request()->routeIs('nonconclue')">
                                         {{ __('🙌 Non conclue') }}
                                     </x-nav-link>
+                                    <x-nav-link :href="route('event')" :active="request()->routeIs('event')">
+                                        {{ __('🗓️ Evènement') }}
+                                    </x-nav-link>
                                 </x-slot>
                             </x-dropdown>
                         </div>
@@ -349,6 +352,9 @@
                             </x-responsive-nav-link>
                             <x-responsive-nav-link :href="route('nonconclue')" :active="request()->routeIs('nonconclue')">
                                 {{ __('🙌 Non Conclue') }}
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link :href="route('event')" :active="request()->routeIs('event')">
+                                {{ __('🗓️ Evènement') }}
                             </x-responsive-nav-link>
                         </x-slot>
                     </x-dropdown>

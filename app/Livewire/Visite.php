@@ -10,6 +10,7 @@ use App\Livewire\AppComponent;
 use App\Models\Boutique;
 use App\Models\Caracteristique;
 use App\Models\Categorie;
+use App\Models\Evenement;
 use App\Models\Option;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
@@ -65,6 +66,8 @@ class Visite extends AppComponent
     public $total_achat;
     public $total_reduc;
     public $total_recu;
+    public $desc;
+    public $date_event;
 
     public $panier_modal; //Panier
     public $panier;
@@ -114,6 +117,8 @@ class Visite extends AppComponent
         $this->total_achat = 0;
         $this->total_reduc = 0;
         $this->total_recu = null;
+        $this->desc = null;
+        $this->date_event = null;
 
         $this->clients = Client::all();
         $this->client_id = null;
@@ -499,6 +504,16 @@ class Visite extends AppComponent
                 $paie->vente_id = $vente->id;
                 $paie->date = $vente->date;
                 $paie->save();
+
+                //Evènement
+                if(!empty($this->desc) && !empty($this->date_event)){
+                    $event = new Evenement();
+                    $event->libelle = $this->desc;
+                    $event->date_event = $this->date_event;
+                    $event->vu = false;
+                    $event->vente_id = $vente->id;
+                    $event->save();
+                }
             }
         DB::commit();
         $this->resetValues();
@@ -560,6 +575,8 @@ class Visite extends AppComponent
         $this->total_achat = 0;
         $this->total_reduc = 0;
         $this->total_recu = 0;
+        $this->desc = null;
+        $this->date_event = null;
     }
 
     public function voirPanier()

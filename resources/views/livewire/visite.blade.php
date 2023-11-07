@@ -455,6 +455,29 @@
                                             </div>
                                         </div>
                                         <div class="mt-8 bg-white p-4 shadow rounded-lg">
+                                            <div>
+                                                <div class="flex justify-between text-base font-medium text-gray-900">
+                                                    <h3>
+                                                        Le client a un évènement ?
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="-mx-3 md:flex mb-2">
+                                                <div>
+                                                    <label for="desc" class="text-sm font-medium leading-6 text-gray-900">
+                                                        Description
+                                                    </label>
+                                                    <x-textarea wire:model="desc" id="desc" rows="5" placeholder="Description de l'évènement" class="mt-1 w-full" />
+                                                </div>
+                                                <div>
+                                                    <label for="date_event" class="text-sm font-medium leading-6 text-gray-900">
+                                                        Date de l'évènement
+                                                    </label>
+                                                    <input id="date_event" wire:model='date_event' type="date" class="appearance-none w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-8 bg-white p-4 shadow rounded-lg">
                                             <button wire:click='venteTerminee' type="button" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                                                 Terminer la vente
                                             </button>
