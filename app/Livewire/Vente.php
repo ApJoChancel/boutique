@@ -11,6 +11,7 @@ class Vente extends AppComponent
 {
     private static array $headers = [
         'Date de vente',
+        'Type',
         'Client',
         'Montant vente',
         'Réduction accordée',
@@ -62,6 +63,7 @@ class Vente extends AppComponent
             'clients.nom AS nom',
             'clients.prenom AS prenom',
             'ventes.date AS date_vente',
+            'ventes.type AS type',
             'ventes.montant AS montant_vente',
             DB::raw('SUM(paiements.montant) AS montant_recu'),
             DB::raw('SUM(paiements.reduction) AS reduction'),
@@ -71,7 +73,14 @@ class Vente extends AppComponent
         ->leftJoin('clients', 'clients.id', 'ventes.client_id')
         ->whereBetween('paiements.date', [$this->date_from, $this->date_to])
         ->whereIn('ventes.boutique_id', $this->boutiques_valides)
-        ->groupBy('ventes.id', 'clients.nom', 'clients.prenom', 'ventes.date', 'ventes.montant')
+        // ->where('ventes.type', 'vente')
+        ->groupBy('ventes.id',
+            'clients.nom',
+            'clients.prenom',
+            'ventes.date',
+            'ventes.montant',
+            'ventes.type'
+        )
         ->having('reste', 0)
         ->get();
         $total = $this->ventes->sum('montant_recu');

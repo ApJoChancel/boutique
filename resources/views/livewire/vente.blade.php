@@ -62,6 +62,7 @@
                                     wire:click='infoItem({{ $item->vente_id }})'
                                 >
                                     <x-table.td>{{ $item->date_vente }}</x-table.td>
+                                    <x-table.td>{{ $item->type }}</x-table.td>
                                     <x-table.td>{{ "{$item->nom} {$item->prenom}" }}</x-table.td>
                                     <x-table.td>{{ formatNombre($item->montant_vente) }}</x-table.td>
                                     <x-table.td>{{ formatNombre($item->reduction) ?? 0 }}</x-table.td>
@@ -93,6 +94,9 @@
                                     Vente N° 00{{ $vente->id }}
                                 </label>
                                 <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
+                                    Client : {{ "{$vente->client->nom} {$vente->client->prenom}" }}
+                                </label>
+                                <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
                                     Articles
                                 </label>
                             </div>
@@ -102,10 +106,10 @@
                                         @foreach ($vente->ligneVentes as $item)
                                             <tr class="hover:bg-grey-lighter">
                                                 <td class="py-2 px-4 border-b border-grey-light">
-                                                    {{ $item->article->libelle }}
+                                                    {{ $item->categorie->libelle }}
                                                 </td>
                                                 <td class="py-2 px-4 border-b border-grey-light">
-                                                    {{ $item->caracteristiques }}
+                                                    {{ $item->carac_texte }}
                                                 </td>
                                             </tr>
                                         @endforeach

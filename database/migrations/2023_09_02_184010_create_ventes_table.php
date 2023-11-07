@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('montant')->default(0);
             $table->date('date');
-            $table->string('type')->nullable(); //Vente | Location
+            $table->string('type'); //Vente | Location
             $table->string('motif')->nullable();
             $table->string('comment')->nullable();
             $table->foreignIdFor(Client::class)->constrained();
