@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedSmallInteger('delais_vente')->default(30);
             $table->unsignedSmallInteger('delais_location')->default(45);
-            $table->date('heure')->default('2024-01-01 08:00:00');
+            $table->time('heure')->default('2024-01-01 08:00:00');
+            $table->time('delais_retard')->default('2024-01-01 00:10:00');
             $table->timestamps();
         });
     }

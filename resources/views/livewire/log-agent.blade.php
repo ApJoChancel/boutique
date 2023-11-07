@@ -75,8 +75,11 @@
                             @foreach ($items as $item)
                                 @php
                                     $pointeuse = new DateTime($parametre->heure);
+                                    $delais = new DateTime($parametre->delais_retard);
                                     $user = new DateTime($item->connexion);
-                                    $retard = $pointeuse->format('H:i:s') < $user->format('H:i:s');
+                                    $aut = $user->diff($delais);
+                                    $inter = new DateTime($aut->format('%h:%i'));
+                                    $retard = $pointeuse->format('H:i') < $inter->format('H:i');
                                 @endphp
                                 <tr class="border-2" @if ($retard) style="color: red;" @endif>
                                     <x-table.td>{{ $item->login }}</x-table.td>

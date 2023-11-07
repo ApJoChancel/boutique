@@ -16,6 +16,7 @@ class Parametre extends AppComponent
     public $delais_location;
 
     public $heure;
+    public $delais_retard;
 
     public function mount()
     {
@@ -26,6 +27,7 @@ class Parametre extends AppComponent
         $this->delais_vente = $item->delais_vente;
         $this->delais_location = $item->delais_location;
         $this->heure = date('H:i:s', strtotime($item->heure));
+        $this->delais_retard = date('H:i:s', strtotime($item->delais_retard));
         $this->textSubmit = 'Modifier';
     }
 
@@ -36,6 +38,7 @@ class Parametre extends AppComponent
         $item->delais_vente = $this->delais_vente;
         $item->delais_location = $this->delais_location;
         $item->heure = $this->heure;
+        $item->delais_retard = $this->delais_retard;
         $item->save();
         session()->flash('status', 'Modification réussie');
     }
