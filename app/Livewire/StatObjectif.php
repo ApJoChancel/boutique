@@ -17,7 +17,8 @@ class StatObjectif extends AppComponent
         $this->is_com = (Auth::user()->type_id === 4)? true : false;
         // $this->is_admin_or_suppleant = in_array(Auth::user()->type_id, [1, 2]) ? true : false;
         //Boutiques valides
-        $this->boutiques_valides = $this->boutiqueValide();
+        // $this->boutiques_valides = $this->boutiqueValide();
+        $this->boutiques_valides = Boutique::all()->pluck('id')->toArray();
     }
 
     #[Layout('livewire.layouts.base')]
