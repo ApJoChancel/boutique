@@ -12,12 +12,16 @@ use Livewire\Attributes\Url;
 class LogAgent extends AppComponent
 {
     private static array $headers = [
+        'Login',
+        'Utilisateur',
         'Jour',
         'Heure',
     ];
 
     #[Url]
-    public $date_search;
+    public $date_from;
+    #[Url]
+    public $date_to;
     #[Url]
     public $user_id;
     public $users;
@@ -27,11 +31,11 @@ class LogAgent extends AppComponent
         $this->is_com = (Auth::user()->type_id === 4)? true : false;
         abort_if($this->is_com, 403, 'Autorisation refusée');
         
-        $this->date_search = now()->format('Y-m');
+        $this->date_from = now()->format('Y-m-d');
+        $this->date_to = now()->format('Y-m-d');
         $this->users = in_array(Auth::user()->type_id, [1, 2]) ?
             User::all() :
             User::where('zone_id', Auth::user()->zone_id)->get();
-        $this->textSubmit = 'Rapport';
         // dd($this->date_search);
     }
 
@@ -40,16 +44,22 @@ class LogAgent extends AppComponent
     public function render()
     {
         // dd($this->date_search);
+        if($this->user_id != 0)
+            $lesUsers = [$this->user_id];
+        else
+            $lesUsers = $this->users->pluck('id')->toArray();
         $items = User::leftJoin('logs', 'users.id', 'logs.user_id')
         ->selectRaw("
+            users.login,
+            CONCAT(users.nom, ' ', users.prenom) as utilisateur,
             MIN(logs.date) as connexion,
-            DAY(logs.date) as day
+            DATE_FORMAT(logs.date, '%Y-%m-%d') as day
         ")
         ->where('logs.libelle', 'connexion')
-        ->whereYear('logs.date', explode('-', $this->date_search)[0])
-        ->whereMonth('logs.date', explode('-', $this->date_search)[1])
-        ->where('users.id', $this->user_id)
-        ->groupBy('day')
+        ->whereDate('logs.date', '>=', $this->date_from)
+        ->whereDate('logs.date', '<=', $this->date_to)
+        ->whereIn('users.id', $lesUsers)
+        ->groupBy('day', 'login')
         ->get();
 
         $parametre = Parametre::findOrFail(1);

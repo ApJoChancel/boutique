@@ -21,21 +21,36 @@
                 </div>
 
                 <div class="p-6 bg-white border-b border-gray-200">
-                        <div>
-                            <x-label for="date_search" :value="__('Date')" />
-                            <x-input wire:model.live="date_search" id="date_search" type="month" />
-                        </div>
-                        <div class="mt-4">
-                            <x-label for="user_id" :value="__('Utilisateur')" />
-                            <x-forms.select wire:model.lazy="user_id" id="user_id" class="block mt-1 w-full">
-                                <option>Choisir un utilisateur...</option>
-                                @foreach ($users as $user)
-                                    <option value="{{ $user->id }}" wire:key="{{ $user->id }}">
-                                        {{ "{$user->nom} {$user->prenom}" }}
-                                    </option>
-                                @endforeach
-                            </x-forms.select>
-                        </div>
+                    <div>
+                        <x-label for="date_from" :value="__('Date debut')" />
+                        <x-input wire:model.live="date_from" id="date_from" type="date" />
+                    </div>
+                    <div>
+                        <x-label for="date_to" :value="__('Date fin')" />
+                        <x-input wire:model.live="date_to" id="date_to" type="date" />
+                    </div>
+                    {{-- <div class="mt-4">
+                        <x-label for="boutique_id" :value="__('Boutique')" />
+                        <x-forms.select wire:model.lazy="boutique_id" id="boutique_id" class="block mt-1 w-full">
+                            <option value="0">Toutes les boutiques</option>
+                            @foreach ($boutiques as $boutique)
+                                <option value="{{ $boutique->id }}" wire:key="{{ $boutique->id }}">
+                                    {{ $boutique->designation }}
+                                </option>
+                            @endforeach
+                        </x-forms.select>
+                    </div> --}}
+                    <div class="mt-4">
+                        <x-label for="user_id" :value="__('Utilisateur')" />
+                        <x-forms.select wire:model.lazy="user_id" id="user_id" class="block mt-1 w-full">
+                            <option value="0">Tous</option>
+                            @foreach ($users as $user)
+                                <option value="{{ $user->id }}" wire:key="{{ $user->id }}">
+                                    {{ "{$user->nom} {$user->prenom}" }}
+                                </option>
+                            @endforeach
+                        </x-forms.select>
+                    </div>
                 </div>
             </div>
         </div>
@@ -64,6 +79,8 @@
                                     $retard = $pointeuse->format('H:i:s') < $user->format('H:i:s');
                                 @endphp
                                 <tr class="border-2" @if ($retard) style="color: red;" @endif>
+                                    <x-table.td>{{ $item->login }}</x-table.td>
+                                    <x-table.td>{{ $item->utilisateur }}</x-table.td>
                                     <x-table.td>{{ $item->day }}</x-table.td>
                                     <x-table.td>{{ date('H:i:s', strtotime($item->connexion)) }}</x-table.td>
                                 </tr>
