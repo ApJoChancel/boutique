@@ -59,7 +59,7 @@ class LogAgent extends AppComponent
         ->whereDate('logs.date', '>=', $this->date_from)
         ->whereDate('logs.date', '<=', $this->date_to)
         ->whereIn('users.id', $lesUsers)
-        ->groupBy('day', 'login')
+        ->groupBy('day', 'login', 'users.nom', 'users.prenom')
         ->get();
 
         $parametre = Parametre::findOrFail(1);
