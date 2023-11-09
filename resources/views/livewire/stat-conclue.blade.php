@@ -8,8 +8,7 @@
                     </h2>
                     <h2 style="text-align: right" class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
                         Visites : {{ formatNombre($total) }} -
-                        Conclues : {{ formatNombre($total_conclue) }} -
-                        Non Conclues {{ formatNombre($total - $total_conclue) }}
+                        Conclues : {{ formatNombre($total_conclue) }}
                     </h2>
                 </div>
             </div>
