@@ -34,6 +34,11 @@
                                     @error('delais_location') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
+                                    <x-label for="delais_article" :value="__('Délais de retour d\'un article (en jours)')" />
+                                    <x-input wire:model="delais_article" id="delais_article" type="text" class="block mt-1 w-full" />
+                                    @error('delais_article') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
+                                </div>
+                                <div>
                                     <x-label for="heure" :value="__('Heure début travail')" />
                                     <x-input wire:model="heure" id="heure" type="time" class="block mt-1 w-full" />
                                     @error('heure') <p class="font-medium text-red-600">{{ $message }}</p> @enderror

@@ -5,6 +5,7 @@ use App\Livewire\Auth;
 use App\Livewire\Boutique;
 use App\Livewire\Caracteristique;
 use App\Livewire\Categorie;
+use App\Livewire\Caution;
 use App\Livewire\Compte;
 use App\Livewire\Declassement;
 use App\Livewire\Evenement;
@@ -67,4 +68,5 @@ Route::middleware('auth')->group(function() {
     Route::get('nonconclue', StatNonConclue::class)->name('nonconclue');
     Route::get('logagent', LogAgent::class)->name('logagent');
     Route::get('event', Evenement::class)->name('event');
+    Route::get('caution', Caution::class)->name('caution');
 });

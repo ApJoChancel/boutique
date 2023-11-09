@@ -160,6 +160,11 @@
                             </x-nav-link>
                         </div>
                     @endif
+                    <div class="hidden sm:flex sm:items-center sm:ml-6">
+                        <x-nav-link :href="route('caution')" :active="request()->routeIs('caution')">
+                            {{ __('🔒 Cautions') }}
+                        </x-nav-link>
+                    </div>
                     @if (in_array(Auth::user()->type_id, [1, 2]))
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
                             <x-nav-link :href="route('parametre')" :active="request()->routeIs('parametre')">
@@ -367,6 +372,11 @@
                     </x-responsive-nav-link>
                 </div>
             @endif
+            <div class="">
+                <x-responsive-nav-link :href="route('caution')" :active="request()->routeIs('caution')">
+                    {{ __('🔒 Cautions') }}
+                </x-responsive-nav-link>
+            </div>
             @if (in_array(Auth::user()->type_id, [1, 2]))
                 <div class="">
                     <x-responsive-nav-link :href="route('parametre')" :active="request()->routeIs('parametre')">

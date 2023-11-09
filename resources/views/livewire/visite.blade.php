@@ -450,8 +450,17 @@
                                                         Montant reçu
                                                     </label>
                                                     <input id="recu" wire:model='total_recu' type="text" placeholder="Tapez le montant reçu" style="border: 2px solid green" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
-                                                    @error('reduc') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                                                    @error('recu') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
                                                 </div>
+                                                @if (!$est_vente)
+                                                    <div>
+                                                        <label for="caution" class="block text-sm font-medium leading-6 text-gray-900">
+                                                            Montant caution
+                                                        </label>
+                                                        <input id="caution" wire:model='caution' type="text" placeholder="Montant de la caution" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                                        @error('caution') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="mt-8 bg-white p-4 shadow rounded-lg">

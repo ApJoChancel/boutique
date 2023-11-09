@@ -64,7 +64,7 @@ return [
     'image' => 'The :attribute must be an image.',
     'in' => 'la valeur :attribute est invalide.',
     'in_array' => 'The :attribute field does not exist in :other.',
-    'integer' => ':attribute doit être un nombre entier.',
+    'integer' => 'doit être un nombre entier.',
     'ip' => 'The :attribute must be a valid IP address.',
     'ipv4' => 'The :attribute must be a valid IPv4 address.',
     'ipv6' => 'The :attribute must be a valid IPv6 address.',

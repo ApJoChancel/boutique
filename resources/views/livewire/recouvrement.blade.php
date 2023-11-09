@@ -85,6 +85,9 @@
                                     Vente N° 00{{ $vente->id }}
                                 </label>
                                 <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
+                                    Montant des achats : {{ formatNombre($vente->montant) }}
+                                </label>
+                                <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
                                     Client : {{ "{$vente->client->nom} {$vente->client->prenom}" }}
                                 </label>
                                 <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
@@ -121,10 +124,10 @@
                                                     {{ $item->date }}
                                                 </td>
                                                 <td class="py-2 px-4 border-b border-grey-light">
-                                                    {{ $item->montant }}
+                                                    {{ formatNombre($item->montant) }}
                                                 </td>
                                                 <td class="py-2 px-4 border-b border-grey-light">
-                                                    {{ $item->reduction }}
+                                                    {{ formatNombre($item->reduction) }}
                                                 </td>                                        </tr>
                                         @endforeach
                                     </tbody>

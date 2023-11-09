@@ -10,13 +10,17 @@ use App\Livewire\AppComponent;
 use App\Models\Boutique;
 use App\Models\Caracteristique;
 use App\Models\Categorie;
+use App\Models\Caution;
 use App\Models\Evenement;
 use App\Models\Option;
+use App\Models\Parametre;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\DB;
 use App\Models\Vente;
 use App\Models\Visite as ModelsVisite;
+use DateInterval;
+use DateTime;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Rule;
 use stdClass;
@@ -68,6 +72,7 @@ class Visite extends AppComponent
     public $total_recu;
     public $desc;
     public $date_event;
+    public $caution;
 
     public $panier_modal; //Panier
     public $panier;
@@ -119,6 +124,7 @@ class Visite extends AppComponent
         $this->total_recu = null;
         $this->desc = null;
         $this->date_event = null;
+        $this->caution = null;
 
         $this->clients = Client::all();
         $this->client_id = null;
@@ -409,11 +415,19 @@ class Visite extends AppComponent
                     return;
                 }
             }
-        }
-        //On s'assure que le montant de achats est >= au montant reçu
-        if($this->total_achat < ($this->total_recu + $this->total_reduc)){
-            $this->addError('reduc', 'Vérifiez les montants !!!');
-            return;
+
+            //On s'assure que le montant de achats est >= au montant reçu
+            if($this->total_achat < ($this->total_recu + $this->total_reduc)){
+                $this->addError('recu', 'Vérifiez les montants !!!');
+                return;
+            }
+            //Pour les locations, on s'assure d'avoir la caution
+            if(!$this->est_vente){
+                if($this->caution < 1){
+                    $this->addError('caution', 'Doit être un nombre non nul');
+                    return;
+                }
+            }
         }
 
         //Utilisateur
@@ -514,11 +528,22 @@ class Visite extends AppComponent
                     $event->vente_id = $vente->id;
                     $event->save();
                 }
+                //Caution pour les locations
+                if(!$this->est_vente){
+                    $param = Parametre::findOrFail(1);
+                    $date_limite = new DateTime();
+                    $date_limite->add(new DateInterval("P{$param->delais_article}D"));
+                    $caution = new Caution();
+                    $caution->caution = $this->caution;
+                    $caution->date_limite = $date_limite;
+                    $caution->vente_id = $vente->id;
+                    $caution->save();
+                }
             }
         DB::commit();
         $this->resetValues();
         $this->initEtape1();
-        session()->flash('status', 'Vente réussie');
+        session()->flash('status', 'Enregistrement réussi');
     }
 
     public function calculAchat()
@@ -577,6 +602,7 @@ class Visite extends AppComponent
         $this->total_recu = 0;
         $this->desc = null;
         $this->date_event = null;
+        $this->caution = null;
     }
 
     public function voirPanier()
