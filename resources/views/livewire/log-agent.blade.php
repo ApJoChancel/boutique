@@ -84,7 +84,7 @@
                                 <tr class="border-2" @if ($retard) style="color: red;" @endif>
                                     <x-table.td>{{ $item->login }}</x-table.td>
                                     <x-table.td>{{ $item->utilisateur }}</x-table.td>
-                                    <x-table.td>{{ $item->day }}</x-table.td>
+                                    <x-table.td>{{ formatDateLong($item->day) }}</x-table.td>
                                     <x-table.td>{{ date('H:i:s', strtotime($item->connexion)) }}</x-table.td>
                                 </tr>
                             @endforeach

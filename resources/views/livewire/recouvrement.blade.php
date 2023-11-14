@@ -50,7 +50,7 @@
                                 <tr class="border-2"
                                     wire:click='infoItem({{ $item->vente_id }})'
                                 >
-                                    <x-table.td>{{ $item->date_vente }}</x-table.td>
+                                    <x-table.td>{{ formatDateLong($item->date_vente) }}</x-table.td>
                                     <x-table.td>{{ $item->boutique }}</x-table.td>
                                     <x-table.td>{{ "{$item->nom} {$item->prenom}" }}</x-table.td>
                                     <x-table.td>{{ formatNombre($item->montant_vente) }}</x-table.td>
@@ -117,11 +117,18 @@
                             </div>
                             <div>
                                 <table class="w-full table-auto text-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Montant reçu</th>
+                                            <th>Réduction</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                         @foreach ($vente->paiements as $item)
                                             <tr class="hover:bg-grey-lighter">
                                                 <td class="py-2 px-4 border-b border-grey-light">
-                                                    {{ $item->date }}
+                                                    {{ formatDateLong($item->date) }}
                                                 </td>
                                                 <td class="py-2 px-4 border-b border-grey-light">
                                                     {{ formatNombre($item->montant) }}

@@ -43,10 +43,10 @@
                                 <tr class="border-2"
                                     wire:click='infoItem({{ $item->id }})'
                                 >
-                                    <x-table.td>{{ $item->vente->date }}</x-table.td>
+                                    <x-table.td>{{ formatDateLong($item->vente->date) }}</x-table.td>
                                     <x-table.td>{{ "{$item->vente->client->nom} {$item->vente->client->prenom}" }}</x-table.td>
                                     <x-table.td>{{ formatNombre($item->caution) }}</x-table.td>
-                                    <x-table.td>{{ $item->date_limite }}</x-table.td>
+                                    <x-table.td>{{ formatDateLong($item->date_limite) }}</x-table.td>
                                     <x-table.td>
                                         @if (!$item->date_retour)
                                             En attente du retour
@@ -132,7 +132,7 @@
                                         @foreach ($caution->vente->paiements as $item)
                                             <tr class="hover:bg-grey-lighter">
                                                 <td class="py-2 px-4 border-b border-grey-light">
-                                                    {{ $item->date }}
+                                                    {{ formatDateLong($item->date) }}
                                                 </td>
                                                 <td class="py-2 px-4 border-b border-grey-light">
                                                     {{ formatNombre($item->montant) }}
@@ -164,10 +164,10 @@
                                         <tbody>
                                             <tr class="hover:bg-grey-lighter">
                                                 <td class="py-2 px-4 border-b border-grey-light">
-                                                    {{ $caution->date_limite }}
+                                                    {{ formatDateCourte($caution->date_limite) }}
                                                 </td>
                                                 <td class="py-2 px-4 border-b border-grey-light">
-                                                    {{ $caution->date_retour }}
+                                                    {{ formatDateCourte($caution->date_retour) }}
                                                 </td>
                                                 <td class="py-2 px-4 border-b border-grey-light">
                                                     {{ $caution->niveau_degradation ?? 0 }}%
@@ -231,7 +231,7 @@
                                         <tbody>
                                             <tr class="hover:bg-grey-lighter">
                                                 <td class="py-2 px-4 border-b border-grey-light">
-                                                    {{ $caution->date_remboursee }}
+                                                    {{ formatDateLong($caution->date_remboursee) }}
                                                 </td>
                                             </tr>
                                         </tbody>

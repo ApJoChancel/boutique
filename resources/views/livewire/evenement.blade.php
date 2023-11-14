@@ -29,7 +29,7 @@
                         <x-table.table :headers="$headers">
                             @foreach ($events as $item)
                                 <tr class="border-2">
-                                    <x-table.td>{{ $item->date_event }}</x-table.td>
+                                    <x-table.td>{{ formatDateLong($item->date_event) }}</x-table.td>
                                     <x-table.td>{{ $item->libelle }}</x-table.td>
                                     <x-table.td>{{ "{$item->vente->client->nom} {$item->vente->client->prenom}" }}</x-table.td>
                                     <x-table.td>{{ $item->vente->client->telephone }}</x-table.td>
