@@ -19,6 +19,8 @@ return new class extends Migration
             $table->date('date_retour')->nullable();
             $table->unsignedTinyInteger('niveau_degradation')->nullable();
             $table->boolean('est_finalisee')->default(false);
+            $table->boolean('est_remboursee')->default(false);
+            $table->date('date_remboursee')->nullable();
             $table->unsignedInteger('penalite_date')->nullable();
             $table->unsignedInteger('penalite_degradation')->nullable();
             $table->foreignIdFor(Vente::class)->constrained();

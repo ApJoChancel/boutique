@@ -54,7 +54,11 @@
                                             @if (!$item->est_finalisee)
                                                 En attente de validation
                                             @else
-                                                Caution levée
+                                                @if (!$item->est_remboursee)
+                                                    Caution levée
+                                                @else
+                                                    Caution remboursée
+                                                @endif
                                             @endif
                                         @endif
                                     </x-table.td>
@@ -117,6 +121,13 @@
                             </div>
                             <div>
                                 <table class="w-full table-auto text-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Montant reçu</th>
+                                            <th>Réduction</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                         @foreach ($caution->vente->paiements as $item)
                                             <tr class="hover:bg-grey-lighter">
@@ -204,6 +215,29 @@
                                     </table>
                                 </div>
                             @endif
+                            @if ($caution->est_remboursee)
+                                <div>
+                                    <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
+                                        Remboursement
+                                    </label>
+                                </div>
+                                <div>
+                                    <table class="w-full table-auto text-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="hover:bg-grey-lighter">
+                                                <td class="py-2 px-4 border-b border-grey-light">
+                                                    {{ $caution->date_remboursee }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
                             <div>
                                 @if (!$caution->date_retour)
                                     @if ($is_com)
@@ -212,10 +246,20 @@
                                         </button>
                                     @endif
                                 @else
-                                    @if ($is_admin_or_suppleant && !$caution->est_finalisee)
-                                        <button wire:click="demandeLeverCautionItem({{ $caution->id }})" type="button" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                                            Valider la demande
-                                        </button>
+                                    @if (!$caution->est_finalisee)
+                                        @if ($is_admin_or_suppleant)
+                                            <button wire:click="demandeLeverCautionItem({{ $caution->id }})" type="button" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                                Valider la demande
+                                            </button>
+                                        @endif
+                                    @else
+                                        @if (!$caution->est_remboursee)
+                                            @if ($is_com)
+                                                <button wire:click="confirmRembour({{ $caution->id }})" type="button" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                                    Confirmer le remboursement
+                                                </button>
+                                            @endif
+                                        @endif
                                     @endif
                                 @endif
 
@@ -274,21 +318,28 @@
                             </form>
                         @else
                             <form wire:submit="validationLeverCautionItemData({{ $caution->id }})">
-                                <div class="md:w-1/2 px-3 mb-6 md:mb-0">
-                                    <label for="penalite_delais" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
-                                        Pénalité délais
-                                    </label>
-                                    <input wire:model.live="penalite_delais" id="penalite_delais" type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
-                                    @error('penalite_delais') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
-                                </div>
+                                @if (strtotime($caution->date_retour) > strtotime($caution->date_limite))
+                                    <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+                                        <label for="penalite_delais" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
+                                            Pénalité délais
+                                        </label>
+                                        <input wire:model.live="penalite_delais" id="penalite_delais" type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                        @error('penalite_delais') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                                    </div>
+                                @endif
 
-                                <div class="md:w-1/2 px-3 mb-6 md:mb-0">
-                                    <label for="penalite_etat" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
-                                        Pénalité état
-                                    </label>
-                                    <input wire:model.live="penalite_etat" id="penalite_etat" type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
-                                    @error('penalite_etat') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
-                                </div>
+                                @if ($caution->niveau_degradation > 0)
+                                    <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+                                        <label for="penalite_etat" class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
+                                            Pénalité état
+                                        </label>
+                                        <input wire:model.live="penalite_etat" id="penalite_etat" type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                        @error('penalite_etat') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                                    </div>
+                                @endif
+                                @if ((strtotime($caution->date_retour) > strtotime($caution->date_limite)) && ($caution->niveau_degradation > 0))
+                                    <p>Aucune pénalité</p>
+                                @endif
                                 
                                 <div>
                                     <button type="submit" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">

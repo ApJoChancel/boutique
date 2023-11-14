@@ -21,9 +21,7 @@ class Caution extends AppComponent
     public $caution;
     public $delais;
     public $etat;
-    #[Rule('required|integer')]
     public $penalite_delais;
-    #[Rule('required|integer')]
     public $penalite_etat;
 
     public function mount()
@@ -40,6 +38,9 @@ class Caution extends AppComponent
 
     public function demandeLeverCautionItem(ModelsCaution $item)
     {
+        $this->is_com = (Auth::user()->type_id === 4)? true : false;
+        abort_if($this->is_com, 403, 'Autorisation refusée');
+
         $this->edit_id = $item->id;
         $this->textSubmit = 'Valider';
         $this->info_modal = false;
@@ -48,6 +49,9 @@ class Caution extends AppComponent
 
     public function demandeLeverCautionItemData(ModelsCaution $item)
     {
+        $this->is_com = (Auth::user()->type_id === 4)? true : false;
+        abort_if(!$this->is_com, 403, 'Autorisation refusée');
+
         $item->date_retour = $this->delais;
         $item->niveau_degradation = $this->etat;
         $item->save();
@@ -57,12 +61,40 @@ class Caution extends AppComponent
 
     public function validationLeverCautionItemData(ModelsCaution $item)
     {
-        $this->validate();
-        $item->penalite_date = $this->penalite_delais;
-        $item->penalite_degradation = $this->penalite_etat;
+        $this->is_com = (Auth::user()->type_id === 4)? true : false;
+        abort_if($this->is_com, 403, 'Autorisation refusée');
+
+        if(!empty($this->penalite_delais)){
+            $this->penalite_delais = (int) $this->penalite_delais;
+            if($this->penalite_delais < 1){
+                $this->addError('penalite_delais', 'Doit être un nombre non nul');
+                return;
+            }
+        }
+        if(!empty($this->penalite_etat)){
+            $this->penalite_etat = (int) $this->penalite_etat;
+            if($this->penalite_etat < 1){
+                $this->addError('penalite_etat', 'Doit être un nombre non nul');
+                return;
+            }
+        }
+        $item->penalite_date = $this->penalite_delais ?? 0;
+        $item->penalite_degradation = $this->penalite_etat ?? 0;
         $item->est_finalisee = true;
         $item->save();
         $this->notificationToast("Demande validée");
+        $this->resetValues();
+    }
+
+    public function confirmRembour(ModelsCaution $item)
+    {
+        $this->is_com = (Auth::user()->type_id === 4)? true : false;
+        abort_if(!$this->is_com, 403, 'Autorisation refusée');
+
+        $item->est_remboursee = true;
+        $item->date_remboursee = now();
+        $item->save();
+        $this->notificationToast("Confirmation validée");
         $this->resetValues();
     }
 

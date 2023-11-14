@@ -83,7 +83,7 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                         {{ __('Visites') }}
-                        @if ($etape3 && $est_concluante)
+                        @if ($etape3)
                             <button class="relative" wire:click='voirPanier'>
                                 <i class="fas fa-shopping-cart text-gray-500 text-lg"></i>
                                 <span class="bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center absolute -top-1 -right-1 text-xs">
@@ -291,7 +291,7 @@
                                         </div>
                                     @else
                                         @if (!$est_concluante)
-                                            <div>
+                                            {{-- <div>
                                                 <div class="mt-8 bg-white p-4 shadow rounded-lg">
                                                     <div class="-mx-3 md:flex mb-2">
                                                         <div class="md:w-1/2 px-3 mb-6 md:mb-0">
@@ -326,6 +326,106 @@
                                                             Terminer
                                                         </button>
                                                     </div>
+                                                </div>
+                                            </div> --}}
+
+                                            <div class="min-w-0 flex-1">
+                                                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                                                    {{ ($est_vente) ? 'Vente' : 'Location' }}
+                                                </h2>
+                                            </div>
+                                            <div class="flex items-center justify-center flex-col">
+                                                <div class="mt-8 bg-white p-4 shadow rounded-lg">
+                                                    <div class="md:w-1/2 px-3 mb-2">
+                                                        <label for="categorie" class="block text-sm font-medium leading-6 text-gray-900">
+                                                            Categorie
+                                                        </label>
+                                                        @if (!isset($elements_manquants['present']))
+                                                            <div class="relative">
+                                                                <select wire:change.lazy='hasCarac' wire:model="selected_categorie_id" id="categorie" class="block appearance-none bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded">
+                                                                    <option value="0">Choisir une categorie...</option>
+                                                                    @foreach ($categories as $item)
+                                                                        <option wire:key="{{ $item->id }}" value="{{ $item->id }}">{{ $item->libelle }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                                                                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            <div>
+                                                                <input value="{{ $selected_categorie->libelle }}" disabled type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                                            </div> 
+                                                        @endif
+                                                        @error('panier') <p class="mt-4 text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                                                    </div>
+                                                    @if (!isset($elements_manquants['present']))
+                                                        @if ($this->caracs)
+                                                            <div>
+                                                                <x-label :value="__('Caractéristiques')" />
+                                                                @foreach ($this->caracs as $item)
+                                                                    @php
+                                                                        $couleur = empty($options[$item->id]) ? 'red' : 'green';
+                                                                    @endphp
+                                                                    <x-label wire:click='changeOption({{ $item->id }})' class="inline mr-3" style="color: {{ $couleur }}">
+                                                                        {{ $item->libelle }}
+                                                                    </x-label>
+                                                                @endforeach
+                                                            </div>
+                                                        @endif
+                                                    @else
+                                                        @if ($this->caracs)
+                                                            <div>
+                                                                <x-label :value="__('Caractéristiques')" />
+                                                                @foreach ($this->caracs as $item)
+                                                                    <div>
+                                                                        <label class="block text-sm font-medium leading-6 text-gray-900">
+                                                                            {{ $item->libelle }}
+                                                                        </label>
+                                                                        <input wire:model="elements_manquants.manquant.ids.{{ $item->id }}" type="text" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                                                        @error('carac') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        @endif
+                                                    @endif
+                                                    @if (isset($elements_manquants['present']))
+                                                        <div>
+                                                            <label class="block text-sm font-medium leading-6 text-gray-900">
+                                                                Prix de l'article
+                                                            </label>
+                                                            <input wire:model="elements_manquants.prix" type="text" placeholder="Laissez vide si RAS" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                                            @error('prix') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                                                        </div>
+                                                        <div>
+                                                            <label class="block text-sm font-medium leading-6 text-gray-900">
+                                                                Prix voulu
+                                                            </label>
+                                                            <input wire:model="elements_manquants.prix_voulu" type="text" placeholder="Laissez vide si RAS" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                                            @error('prix') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                                                        </div>
+                                                        <div>
+                                                            <x-input wire:model="elements_manquants.differee" type="checkbox" class="inline" />
+                                                            <label class="inline mr-3">
+                                                                Date différée ?
+                                                            </label>
+                                                            {{-- @error('prix') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror --}}
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div class="mt-8 bg-white p-4 shadow rounded-lg">
+                                                    @if (!isset($elements_manquants['present']))
+                                                        <button wire:click='addCaracPresent' type="button" wire:click='changeOptions({{ $this->edit_id }})' class="py-2 px-4 bg-transparent text-blue-600 font-semibold border border-blue-600 rounded hover:bg-blue-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                                            Valider éléments présents
+                                                        </button>
+                                                    @else
+                                                    <button wire:click='addCaracManquant' type="button" wire:click='changeOptions({{ $this->edit_id }})' class="py-2 px-4 bg-transparent text-blue-600 font-semibold border border-blue-600 rounded hover:bg-blue-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                                        Valider éléments manquants
+                                                    </button>
+                                                    @endif
+                                                    <button wire:click='visiteNonConclue' type="button" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                                                        Valider
+                                                    </button>
                                                 </div>
                                             </div>
                                         @else
@@ -463,29 +563,33 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="mt-8 bg-white p-4 shadow rounded-lg">
-                                            <div>
-                                                <div class="flex justify-between text-base font-medium text-gray-900">
-                                                    <h3>
-                                                        Le client a un évènement ?
-                                                    </h3>
+                                        @if (!$est_vente)
+                                            <div class="mt-8 bg-white p-4 shadow rounded-lg">
+                                                <div>
+                                                    <div class="flex justify-between text-base font-medium text-gray-900">
+                                                        <h3>
+                                                            Le client a un évènement ?
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                                <div class="-mx-3 md:flex mb-2">
+                                                    <div>
+                                                        <label for="desc" class="text-sm font-medium leading-6 text-gray-900">
+                                                            Description
+                                                        </label>
+                                                        <x-textarea wire:model="desc" id="desc" rows="5" placeholder="Description de l'évènement" class="mt-1 w-full" />
+                                                        @error('desc') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                                                    </div>
+                                                    <div>
+                                                        <label for="date_event" class="text-sm font-medium leading-6 text-gray-900">
+                                                            Date de l'évènement
+                                                        </label>
+                                                        <input id="date_event" wire:model='date_event' type="date" class="appearance-none w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
+                                                        @error('date_event') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="-mx-3 md:flex mb-2">
-                                                <div>
-                                                    <label for="desc" class="text-sm font-medium leading-6 text-gray-900">
-                                                        Description
-                                                    </label>
-                                                    <x-textarea wire:model="desc" id="desc" rows="5" placeholder="Description de l'évènement" class="mt-1 w-full" />
-                                                </div>
-                                                <div>
-                                                    <label for="date_event" class="text-sm font-medium leading-6 text-gray-900">
-                                                        Date de l'évènement
-                                                    </label>
-                                                    <input id="date_event" wire:model='date_event' type="date" class="appearance-none w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4">
-                                                </div>
-                                            </div>
-                                        </div>
+                                        @endif
                                         <div class="mt-8 bg-white p-4 shadow rounded-lg">
                                             <button wire:click='venteTerminee' type="button" class="py-2 px-4 bg-transparent text-green-600 font-semibold border border-green-600 rounded hover:bg-green-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                                                 Terminer la vente
@@ -561,12 +665,20 @@
                                 </div>
                             @endforeach
                         </div>
-                        
-                        <div class="mt-4">
-                            <span wire:click='venteTerminee' class="py-2 px-4 bg-transparent text-purple-600 font-semibold border border-purple-600 rounded hover:bg-purple-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"">
-                                Valider
-                            </span>
-                        </div>
+
+                        @if ($est_concluante)
+                            <div class="mt-4">
+                                <span wire:click='venteTerminee' class="py-2 px-4 bg-transparent text-purple-600 font-semibold border border-purple-600 rounded hover:bg-purple-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"">
+                                    Valider
+                                </span>
+                            </div>
+                        @else
+                            <div class="mt-4">
+                                <span wire:click='visiteNonConclue' class="py-2 px-4 bg-transparent text-purple-600 font-semibold border border-purple-600 rounded hover:bg-purple-600 hover:text-white hover:border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"">
+                                    Valider
+                                </span>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
