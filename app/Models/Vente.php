@@ -23,4 +23,14 @@ class Vente extends Model
     {
         return $this->belongsTo(Client::class);
     }
+
+    public function boutique()
+    {
+        return $this->belongsTo(Boutique::class);
+    }
+
+    public function caution()
+    {
+        return $this->hasOne(Caution::class);
+    }
 }

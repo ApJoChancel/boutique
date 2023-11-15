@@ -37,7 +37,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="overflow-x-auto">
+                    {{-- <div class="overflow-x-auto">
                         <x-table.table :headers="$headers">
                             @foreach ($cautions as $item)
                                 <tr class="border-2"
@@ -63,6 +63,63 @@
                                         @endif
                                     </x-table.td>
                                 </tr>
+                            @endforeach
+                        </x-table.table>
+                    </div> --}}
+                    <div class="overflow-x-auto">
+                        <x-table.table :headers="$headers">
+                            @foreach ($clients as $client)
+                                @php
+                                    $rows = 0;
+                                    foreach ($client->ventes as $vente) {
+                                        if(
+                                            ($vente->caution) &&
+                                            (in_array($vente->boutique_id, $boutiques_valides))
+                                        )
+                                            $rows += 1;
+                                    }
+                                    $i = 0;
+                                @endphp
+                                @foreach ($client->ventes as $vente)
+                                    @if (
+                                        ($vente->caution) &&
+                                        (in_array($vente->boutique_id, $boutiques_valides))
+                                    )
+                                        @php
+                                            $i++;
+                                        @endphp
+                                        <tr class="border-2"
+                                            wire:click='infoItem({{ $vente->caution->id }})'
+                                        >
+                                            @if ($i === 1)
+                                                <x-table.td
+                                                    rowspan="{{ $rows }}"
+                                                >
+                                                    {{ "{$client->nom} {$client->prenom}" }}
+                                                </x-table.td>
+                                            @endif
+                                            <x-table.td>{{ formatDateLong($vente->date) }}</x-table.td>
+                                            <x-table.td>{{ $vente->boutique->designation }}</x-table.td>
+                                            <x-table.td>{{ formatNombre($vente->caution->caution) }}</x-table.td>
+                                            <x-table.td>{{ formatDateLong($vente->caution->date_limite) }}</x-table.td>
+                                            <x-table.td>
+                                                @if (!$vente->caution->date_retour)
+                                                    En attente du retour
+                                                @else
+                                                    @if (!$vente->caution->est_finalisee)
+                                                        En attente de validation
+                                                    @else
+                                                        @if (!$vente->caution->est_remboursee)
+                                                            Caution levée
+                                                        @else
+                                                            Caution remboursée
+                                                        @endif
+                                                    @endif
+                                                @endif
+                                            </x-table.td>
+                                        </tr>
+                                    @endif
+                                @endforeach
                             @endforeach
                         </x-table.table>
                     </div>

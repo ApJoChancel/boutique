@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Caution as ModelsCaution;
+use App\Models\Client;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
@@ -11,8 +12,9 @@ use Livewire\Attributes\Title;
 class Caution extends AppComponent
 {
     private static array $headers = [
-        'Date de vente',
         'Client',
+        'Date de vente',
+        'Boutique',
         'Caution',
         'Date limite',
         'Statut',
@@ -24,10 +26,15 @@ class Caution extends AppComponent
     public $penalite_delais;
     public $penalite_etat;
 
+    public $clients;
+
     public function mount()
     {
         $this->is_com = (Auth::user()->type_id === 4)? true : false;
         $this->is_admin_or_suppleant = in_array(Auth::user()->type_id, [1, 2]) ? true : false;
+
+        //Boutiques valides
+        $this->boutiques_valides = $this->boutiqueValide();
     }
 
     public function infoItem(ModelsCaution $item)
@@ -112,8 +119,10 @@ class Caution extends AppComponent
     #[Title('Boutique | Caution')]
     public function render()
     {
+        $this->clients = Client::all();
+
         return view('livewire.caution',[
-            'cautions' => ModelsCaution::all(),
+            // 'cautions' => ModelsCaution::all(),
             'headers' => self::$headers,
         ]);
     }
