@@ -20,11 +20,83 @@
                             {{ $slot }}
                         </div>
                     </div>
+                    <div id="maposition"></div>
                 </div>
                 <div class="hidden md:block md:w-1/2 rounded-r-lg" style="background: url('https://images.unsplash.com/photo-1515965885361-f1e0095517ea?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=3300&q=80'); background-size: cover; background-position: center center;"></div>
             </div>
         </div>
     </div>
     @livewireScripts
+    <script>
+        navigator.geolocation.getCurrentPosition(succesGeo,erreurGeo,{maximumAge:120000});
+        
+        function succesGeo(position)
+        {
+            var latitude = document.getElementById('latitude');
+            var longitude = document.getElementById('longitude');
+
+            
+            latitude.value = position.coords.latitude;
+            longitude.value = position.coords.longitude;
+            
+            var btnconnexion = document.getElementById('btnconnexion');
+            // btnconnexion.style.opacity = 1;
+
+            var malatitude = position.coords.latitude;
+            var malongitude = position.coords.longitude;
+
+            var latYaounde = 3.89372420310974;
+            var longYaounde = 11.5228548049927;
+
+            var latDouala = 4.05276870727539;
+            var longDouala = 9.70424365997314;
+
+            var infopos = "position déterminée : <br>";
+
+            infopos += "Latitude : " +malatitude + "<br>";
+            infopos += "Longitude : " +malongitude + "<br>";
+            infopos += "Distance Yaounde : " +
+                getDistanceBetweenPoints(malatitude, malongitude, latYaounde, longYaounde) + "<br>";
+            infopos += "Distance Douala : " +
+                getDistanceBetweenPoints(malatitude, malongitude, latDouala, longDouala) + "<br>";
+            infopos += "Distance Autre : " +
+                getDistanceBetweenPoints(3.873659, 11.515614, latYaounde, longYaounde) + "<br>";
+            document.getElementById('maposition').innerHTML = infopos;
+        }
+
+        function erreurGeo(error)
+        {
+            var info = "Erreur lors de la géolocalisation : ";
+            switch(error.code) {
+                case error.TIMEOUT:
+                    info += "Timeout !";
+                     break;
+                case error.PERMISSION_DENIED:
+                    info += "Vous n’avez pas donné la permission";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    info += "La position n’a pu être déterminée";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    info += "Erreur inconnue";
+                    break;
+            }
+            document.getElementById("maposition").innerHTML = info;
+        }
+
+        function getDistanceBetweenPoints(latitude1, longitude1, latitude2, longitude2)
+        {
+            let theta = longitude1 - longitude2;
+            let distance = 60 * 1.1515 * (180/Math.PI) * Math.acos(
+                Math.sin(latitude1 * (Math.PI/180)) * Math.sin(latitude2 * (Math.PI/180)) +
+                Math.cos(latitude1 * (Math.PI/180)) * Math.cos(latitude2 * (Math.PI/180)) *
+                Math.cos(theta * (Math.PI/180))
+            );
+            //EN km
+            // return Math.round(distance * 1.609344, 2);
+            //EN m
+            return Math.round(distance * 1609.344, 2);
+        }
+    </script>
 </body>
 </html>

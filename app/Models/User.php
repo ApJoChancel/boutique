@@ -28,4 +28,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Zone::class);
     }
+
+    public function logs()
+    {
+        return $this->hasMany(Log::class);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Client;
 use App\Models\Parametre;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -12,9 +13,9 @@ use Livewire\Attributes\Url;
 class LogAgent extends AppComponent
 {
     private static array $headers = [
-        'Login',
-        'Utilisateur',
         'Jour',
+        // 'Login',
+        'Utilisateur',
         'Heure',
     ];
 
@@ -63,6 +64,7 @@ class LogAgent extends AppComponent
         ->get();
 
         $parametre = Parametre::findOrFail(1);
+
         return view('livewire.log-agent', [
             'items' => $items,
             'parametre' => $parametre,

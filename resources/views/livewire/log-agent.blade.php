@@ -90,6 +90,56 @@
                             @endforeach
                         </x-table.table>
                     </div>
+
+                    {{-- <div class="overflow-x-auto">
+                        <x-table.table :headers="$headers">
+                            @foreach ($users as $user)
+                                @php
+                                    if($user_id != 0)
+                                        $lesUsers = [$user_id];
+                                    else
+                                        $lesUsers = $users->pluck('id')->toArray();
+                                    $rows = 0;
+                                    foreach ($user->logs as $log) {
+                                        if(
+                                            (in_array($user->id, $lesUsers)) &&
+                                            ($log->date >= $date_from && $log->date <= $date_to )
+                                        )
+                                            $rows += 1;
+                                    }
+                                    $i = 0;
+                                @endphp
+                                @foreach ($user->logs as $log)
+                                    @if (
+                                        (in_array($user->id, $lesUsers)) &&
+                                        ($log->date >= $date_from && $log->date <= $date_to )
+                                    )
+                                        @php
+                                            $i++;
+
+                                            $pointeuse = new DateTime($parametre->heure);
+                                            $delais = new DateTime($parametre->delais_retard);
+                                            $dateUser = new DateTime($log->date);
+                                            $aut = $dateUser->diff($delais);
+                                            $inter = new DateTime($aut->format('%h:%i'));
+                                            $retard = $pointeuse->format('H:i') < $inter->format('H:i');
+                                        @endphp
+                                        <tr class="border-2" @if ($retard) style="color: red;" @endif>
+                                            @if ($i === 1)
+                                                <x-table.td
+                                                    rowspan="{{ $rows }}"
+                                                >
+                                                    {{ formatDateLong($log->date) }}
+                                                </x-table.td>
+                                            @endif
+                                            <x-table.td>{{ "{$user->nom} {$user->prenom}" }}</x-table.td>
+                                            <x-table.td>{{ date('H:i:s', strtotime($log->date)) }}</x-table.td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        </x-table.table>
+                    </div> --}}
                 </div>
             </div>
         </section>
