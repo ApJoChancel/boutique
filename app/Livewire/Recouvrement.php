@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Client;
 use App\Models\Paiement;
 use App\Models\Vente;
 use Illuminate\Support\Facades\DB;
@@ -12,9 +13,9 @@ use Livewire\Attributes\Title;
 class Recouvrement extends AppComponent
 {
     private static array $headers = [
+        'Client',
         'Date de vente',
         'Boutique',
-        'Client',
         'Montant vente',
         'Réduction accordée',
         'Montant reçu',
@@ -22,8 +23,13 @@ class Recouvrement extends AppComponent
         'Téléphone',
     ];
 
+    public $clients = null;
+
     public $ventes = null;
     public $vente = null;
+
+    public $date_from = null;
+    public $date_to = null;
     
     #[Rule('required|integer')]
     public $montant = null;
@@ -36,6 +42,17 @@ class Recouvrement extends AppComponent
     {
         //Boutiques valides
         $this->boutiques_valides = $this->boutiqueValide();
+
+        $ventes = DB::table('ventes')
+        ->select(
+            DB::raw('MIN(ventes.date) AS date_from'),
+            DB::raw('MAX(ventes.date) AS date_to'),
+        )
+        ->whereIn('ventes.boutique_id', $this->boutiques_valides)
+        ->first();
+
+        $this->date_from = $ventes->date_from;
+        $this->date_to = $ventes->date_to;
     }
 
     public function infoItem(Vente $item)
@@ -113,6 +130,8 @@ class Recouvrement extends AppComponent
         ->having('reste', '>', 0)
         ->get();
         $total = $this->ventes->sum('reste');
+
+        $this->clients = Client::all();
         
         return view('livewire.recouvrement',[
             'vente' => $this->vente,

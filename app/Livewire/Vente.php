@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Client;
 use App\Models\Vente as ModelsVente;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
@@ -10,14 +11,16 @@ use Livewire\Attributes\Title;
 class Vente extends AppComponent
 {
     private static array $headers = [
+        'Client',
         'Date de vente',
         'Type',
-        'Client',
         'Montant vente',
         'Réduction accordée',
         'Montant reçu',
     ];
     
+    public $clients = null;
+
     public $ventes = null;
     public $vente = null;
     
@@ -85,6 +88,8 @@ class Vente extends AppComponent
         ->get();
         $total = $this->ventes->sum('montant_recu');
         $total += $this->ventes->sum('reduction');
+
+        $this->clients = Client::all();
         
         return view('livewire.vente',[
             'vente' => $this->vente,

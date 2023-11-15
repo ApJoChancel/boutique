@@ -19,6 +19,17 @@
                         </div>
                     @endif 
                 </div>
+
+                <div class="p-6 bg-white border-b border-gray-200">
+                    <div>
+                        <x-label for="date_from" :value="__('Du')" />
+                        <x-input wire:model.live="date_from" id="date_from" type="date" />
+                    </div>
+                    <div>
+                        <x-label for="date_to" :value="__('Au')" />
+                        <x-input wire:model.live="date_to" id="date_to" type="date" />
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -44,7 +55,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="overflow-x-auto">
+                    {{-- <div class="overflow-x-auto">
                         <x-table.table :headers="$headers">
                             @foreach ($ventes as $item)
                                 <tr class="border-2"
@@ -59,6 +70,63 @@
                                     <x-table.td>{{ formatNombre($item->reste) }}</x-table.td>
                                     <x-table.td>{{ $item->telephone }}</x-table.td>
                                 </tr>
+                            @endforeach
+                        </x-table.table>
+                    </div> --}}
+                    <div class="overflow-x-auto">
+                        <x-table.table :headers="$headers">
+                            @foreach ($clients as $client)
+                                @php
+                                    $rows = 0;
+                                    foreach ($client->ventes as $vente) {
+                                        $recu = $vente->paiements->sum('montant');
+                                        $reduction = $vente->paiements->sum('reduction');
+                                        $reste = $vente->montant - ($recu + $reduction);
+                                        if((
+                                            (in_array($vente->boutique_id, $boutiques_valides)) &&
+                                            ($vente->date >= $date_from && $vente->date <= $date_to ) &&
+                                            ($vente->montant > 0) &&
+                                            ($reste > 0)
+                                        ))
+                                            $rows += 1;
+                                    }
+                                    $i = 0;
+                                @endphp
+                                @foreach ($client->ventes as $vente)
+                                    @php
+                                        $recu = $vente->paiements->sum('montant');
+                                        $reduction = $vente->paiements->sum('reduction');
+                                        $reste = $vente->montant - ($recu + $reduction);
+                                    @endphp
+                                    @if (
+                                        (in_array($vente->boutique_id, $boutiques_valides)) &&
+                                        ($vente->date >= $date_from && $vente->date <= $date_to ) &&
+                                        ($vente->montant > 0) &&
+                                        ($reste > 0)
+                                    )
+                                        @php
+                                            $i++;
+                                        @endphp
+                                        <tr class="border-2"
+                                            wire:click='infoItem({{ $vente->id }})'
+                                        >
+                                            @if ($i === 1)
+                                                <x-table.td
+                                                    rowspan="{{ $rows }}"
+                                                >
+                                                    {{ "{$client->nom} {$client->prenom}" }}
+                                                </x-table.td>
+                                            @endif
+                                            <x-table.td>{{ formatDateLong($vente->date) }}</x-table.td>
+                                            <x-table.td>{{ $vente->type }}</x-table.td>
+                                            <x-table.td>{{ formatNombre($vente->montant) }}</x-table.td>
+                                            <x-table.td>{{ formatNombre($reduction) ?? 0 }}</x-table.td>
+                                            <x-table.td>{{ formatNombre($recu) }}</x-table.td>
+                                            <x-table.td>{{ formatNombre($reste) }}</x-table.td>
+                                            <x-table.td>{{ $client->telephone }}</x-table.td>
+                                        </tr>
+                                    @endif
+                                @endforeach
                             @endforeach
                         </x-table.table>
                     </div>

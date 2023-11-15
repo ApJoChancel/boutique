@@ -32,10 +32,11 @@
                 "nov",
                 "déc"
             ];
+            $sem = date('w', strtotime($date_str));
             $jour = date('j', strtotime($date_str));
+            $mo = date('n', strtotime($date_str));
             $an = date('Y', strtotime($date_str));
-            // return date('D j M Y', strtotime($date_str));
-            return "{$semaine[date('w')]} {$jour} {$mois[date('n')]} {$an}";
+            return "{$semaine[$sem]} {$jour} {$mois[$mo]} {$an}";
         }
     }
 
@@ -66,8 +67,8 @@
                 "déc"
             ];
             $jour = date('j', strtotime($date_str));
+            $mo = date('n', strtotime($date_str));
             $an = date('Y', strtotime($date_str));
-            // return date('D j M Y', strtotime($date_str));
-            return "{$jour} {$mois[date('n')]} {$an}";
+            return "{$jour} {$mois[$mo]} {$an}";
         }
     }
