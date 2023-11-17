@@ -33,6 +33,7 @@ class Auth extends AppComponent
         $item = User::where('login', $this->login)->first();
         if(password_verify($this->password, $item?->password)){
             //La géolocalisation
+            // dd($this);
             if(!$this->latitude || !$this->longitude){
                 $this->addError('login', 'Impossible de vous localiser');
                 return;
@@ -40,7 +41,7 @@ class Auth extends AppComponent
             if ((!empty($item->boutique)) && $item->type_id === 4) {
                 $distance = self::getDistanceBetweenPoints($this->latitude, $this->longitude,
                     $item->boutique->latitude, $item->boutique->longitude);
-                if($distance > 150){
+                if($distance > 100){
                     $this->addError('login', 'Vous êtes hors zone');
                     return;
                 }
@@ -61,7 +62,7 @@ class Auth extends AppComponent
 
         $this->addError('login', 'Informations incorrectes');
     }
-    public function getDistanceBetweenPoints($latitude1, $longitude1, $latitude2, $longitude2)
+    public function getDistanceBetweenPoints(float $latitude1, float $longitude1, float $latitude2, float $longitude2)
     {
         $theta = $longitude1 - $longitude2; 
         $distance = (sin(deg2rad($latitude1)) * sin(deg2rad($latitude2))) +
@@ -72,7 +73,7 @@ class Auth extends AppComponent
         $distance = $distance * 60 * 1.1515;
         //En mètres
         $distance = $distance * 1609.344;
-        return (round($distance,2)); 
+        return (round($distance,0));
     }
 
     public function resetValues()
