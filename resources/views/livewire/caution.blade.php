@@ -90,6 +90,7 @@
                                         @endphp
                                         <tr class="border-2"
                                             wire:click='infoItem({{ $vente->caution->id }})'
+                                            @if ($vente->caution->est_remboursee) style="color: green;" @endif
                                         >
                                             @if ($i === 1)
                                                 <x-table.td

@@ -65,11 +65,19 @@
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                     <div class="overflow-x-auto">
                         <h2>Toutes les boutiques</h2>
-                        <div style="width: 50%;margin: 20px">
+                        {{-- <div style="width: 50%;margin: 20px">
                             <div>
                                 <canvas id="cam"></canvas>
                                 <script>
                                     pieGraphique('cam', <?= json_encode($labels) ?>, <?= json_encode($totaux) ?>);
+                                </script>
+                            </div>
+                        </div> --}}
+                        <div style="width: 100%;margin: 20px">
+                            <div>
+                                <div id="autr" style="height: 500px"></div>
+                                <script>
+                                    pieChart('autr', <?= json_encode($labels) ?>, <?= json_encode($autres) ?>);
                                 </script>
                             </div>
                         </div>

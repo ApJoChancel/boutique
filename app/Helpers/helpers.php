@@ -43,15 +43,6 @@
     if(!function_exists('formatDateCourte')){
         function formatDateCourte(string $date_str): string
         {
-            $semaine = [
-                "Dim",
-                "Lun",
-                "Mar",
-                "Mer",
-                "Jeu", 
-                "ven",
-                "sam"
-            ];
             $mois = [
                 1 => "jan",
                 "fév",

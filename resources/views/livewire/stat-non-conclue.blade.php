@@ -20,16 +20,17 @@
                     <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                         <div class="overflow-x-auto">
                             <h2>{{ $data['titre'] }}</h2>
-                            <div style="width: 50%;margin: 20px">
+                            <div style="width: 100%;margin: 20px">
                                 <div>
-                                    <canvas id="{{ $key }}"></canvas>
-                                    @if (in_array($data['titre'], ["Profil du visiteur", "Lieu de résidence"]))
+                                    <div id="{{ $key }}" style="height: 500px"></div>
+
+                                    @if (in_array($data['titre'], ["Profil du visiteur", "Lieu de résidence", "Tranche d'âge"]))
                                         <script>
-                                            barGraphique('{{ $key }}', <?= json_encode($data['label']) ?>, <?= json_encode($data['totaux']) ?>);
+                                            barChart('{{ $key }}', <?= json_encode($data['label']) ?>, <?= json_encode($data['totaux']) ?>);
                                         </script>
                                     @else
                                         <script>
-                                            pieGraphique('{{ $key }}', <?= json_encode($data['label']) ?>, <?= json_encode($data['totaux']) ?>);
+                                            pieChart('{{ $key }}', <?= json_encode($data['label']) ?>, <?= json_encode($data['totaux']) ?>);
                                         </script>
                                     @endif
                                 </div>

@@ -76,7 +76,16 @@ class StatConclue extends AppComponent
         foreach($tab as $question => $reponses){
             $all[$i]['titre'] = $question;
             $all[$i]['label'] = array_keys($reponses);
-            $all[$i]['totaux'] = array_values($reponses);
+            if(in_array($question, ["Profil du visiteur", "Lieu de résidence", "Tranche d'âge"])){
+                $all[$i]['totaux'] = array_values($reponses);
+            } else{
+                foreach($reponses as $key => $value){
+                    $all[$i]['totaux'][] = [
+                        'value' => $value,
+                        'name' => $key
+                    ];
+                }
+            }
             $i++;
         }
         // dd($all);

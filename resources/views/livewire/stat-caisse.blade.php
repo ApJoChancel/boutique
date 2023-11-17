@@ -86,7 +86,7 @@
         <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
             <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
-                    <div class="overflow-x-auto">
+                    {{-- <div class="overflow-x-auto">
                         <h2>Toutes les boutiques</h2>
                         <div style="margin: 20px">
                             <div>
@@ -139,6 +139,23 @@
                                     });
                                 </script>
                             </div>
+                        </div>
+                    </div> --}}
+                    <div style="width: 100%;margin: 20px">
+                        <div>
+                            <div id="cai" style="height: 500px"></div>
+                            <script>
+                                lineChart(
+                                    'cai',
+                                    <?= json_encode($totaux) ?>
+                                    ,<?= json_encode($recus) ?>
+                                    ,<?= json_encode($reductions) ?>
+                                    ,<?= json_encode($restes) ?>
+                                    ,<?= json_encode($legend) ?>
+                                    ,<?= json_encode($axis) ?>
+                                    ,<?= json_encode($recus) ?>
+                                );
+                            </script>
                         </div>
                     </div>
                 </div>

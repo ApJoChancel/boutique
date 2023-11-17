@@ -35,7 +35,7 @@ class Auth extends AppComponent
             //La géolocalisation
             // dd($this);
             if(!$this->latitude || !$this->longitude){
-                $this->addError('login', 'Impossible de vous localiser');
+                $this->addError('login', 'Impossible de vous localiser. Rechargez la page.');
                 return;
             }
             if ((!empty($item->boutique)) && ($item->type_id === 4)) {

@@ -24,15 +24,16 @@ class StatCaisse extends AppComponent
     {
         $ventes = DB::table('ventes')
         ->select(
+            DB::raw('SUM(ventes.montant) AS montant'),
             DB::raw('MONTH(paiements.date) AS mois'),
             DB::raw('SUM(paiements.montant) AS montant_recu'),
             DB::raw('SUM(paiements.reduction) AS reduction'),
-            DB::raw('ventes.montant - SUM(paiements.montant + paiements.reduction) AS reste')
+            DB::raw('SUM(ventes.montant) - SUM(paiements.montant + paiements.reduction) AS reste')
         )
-        ->leftJoin('paiements', 'ventes.id', 'paiements.vente_id')
+        ->join('paiements', 'ventes.id', 'paiements.vente_id')
         ->whereYear('paiements.date', $this->year)
         ->whereIn('ventes.boutique_id', $this->boutiques_valides)
-        ->groupBy('mois', 'ventes.montant')
+        ->groupBy('mois')
         ->orderBy('mois')
         ->get();
 
@@ -63,8 +64,10 @@ class StatCaisse extends AppComponent
             $tab[$mois]['reste'] += $vente->reste;
             $tab[$mois]['total'] += $vente->montant_recu + $vente->reduction + $vente->reste;
         }
+        // dd($tab);
         $tab = array_values($tab);
 
+        
         // dd($tab);
 
         $labels = array_column($tab, 'mois');
@@ -73,12 +76,53 @@ class StatCaisse extends AppComponent
         $reste = array_column($tab, 'reste');
         $total = array_column($tab, 'total');
 
+        //Autres méthode
+        $recus = $restes = $reductions = $totaux = [];
+        for ($mois = 1; $mois <= 12; $mois++) {
+            $recus[$mois] = $restes[$mois] = $reductions[$mois] = $totaux[$mois] = 0;
+        }
+        foreach ($ventes as $vente) {
+            $recus[$vente->mois] += $vente->montant_recu;
+            $restes[$vente->mois] += $vente->reste;
+            $reductions[$vente->mois] += $vente->reduction;
+            $totaux[$vente->mois] += $vente->montant;
+        }
+        $legend = ['Totaux', 'Reçus', 'Restes', 'Réductions'];
+        $axis = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jui', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Dec'];
+        // dd($recus, $restes, $reductions, $totaux);
+
         return view('livewire.stat-caisse',[
             'labels' => $labels,
             'montantRecu' => $montantRecu,
             'reduction' => $reduction,
             'reste' => $reste,
             'total' => $total,
+            'recus' => [
+                'name' => 'Reçus',
+                'type' => 'line',
+                'stack' => 'Total',
+                'data' => array_values($recus),
+            ],
+            'restes' => [
+                'name' => 'Restes',
+                'type' => 'line',
+                'stack' => 'Total',
+                'data' => array_values($restes),
+            ],
+            'reductions' => [
+                'name' => 'Réductions',
+                'type' => 'line',
+                'stack' => 'Total',
+                'data' => array_values($reductions),
+            ],
+            'totaux' => [
+                'name' => 'Totaux',
+                'type' => 'line',
+                'stack' => 'Total',
+                'data' => array_values($totaux),
+            ],
+            'legend' => $legend,
+            'axis' => $axis,
         ]);
     }
 }

@@ -55,9 +55,9 @@ class StatCa extends AppComponent
 
         return view('livewire.stat-ca',[
             'labels' => [
-                "CA", 
-                'Réduction', 
-                'Reçu', 
+                "CA",
+                'Réduction',
+                'Reçu',
                 'Reste'
             ],
             'totaux' => [
@@ -65,6 +65,24 @@ class StatCa extends AppComponent
                 $totaux->reduction,
                 $totaux->montant_recu,
                 $totaux->reste
+            ],
+            'autres' => [
+                [
+                    'value' => $totaux->montant_total,
+                    'name' => 'CA'
+                ],
+                [
+                    'value' => $totaux->reduction,
+                    'name' => 'Réduction'
+                ],
+                [
+                    'value' => $totaux->montant_recu,
+                    'name' => 'Reçu'
+                ],
+                [
+                    'value' => $totaux->reste,
+                    'name' => 'Reste'
+                ]
             ],
         ]);
     }
