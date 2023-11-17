@@ -16,6 +16,8 @@ return new class extends Migration
             $table->id();
             $table->string('designation');
             $table->unsignedInteger('objectif');
+            $table->integer('latitude')->nullable();
+            $table->integer('longitude')->nullable();
             $table->foreignIdFor(Zone::class)->constrained();
             $table->timestamps();
         });

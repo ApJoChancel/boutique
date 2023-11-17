@@ -14,7 +14,7 @@ class LogAgent extends AppComponent
 {
     private static array $headers = [
         'Jour',
-        // 'Login',
+        'Login',
         'Utilisateur',
         'Heure',
     ];
@@ -69,6 +69,6 @@ class LogAgent extends AppComponent
             'items' => $items,
             'parametre' => $parametre,
             'headers' => self::$headers,
-        ]);
+        ]); 
     }
 }

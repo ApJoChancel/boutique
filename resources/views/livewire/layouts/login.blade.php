@@ -34,16 +34,8 @@
         {
             var latitude = document.getElementById('latitude');
             var longitude = document.getElementById('longitude');
-
-            
             latitude.value = position.coords.latitude;
             longitude.value = position.coords.longitude;
-            
-            var btnconnexion = document.getElementById('btnconnexion');
-            // btnconnexion.style.opacity = 1;
-
-            var malatitude = position.coords.latitude;
-            var malongitude = position.coords.longitude;
 
             var latYaounde = 3.89372420310974;
             var longYaounde = 11.5228548049927;
@@ -51,17 +43,17 @@
             var latDouala = 4.05276870727539;
             var longDouala = 9.70424365997314;
 
-            var infopos = "position déterminée : <br>";
+            // var infopos = "position déterminée : <br>"; 
 
-            infopos += "Latitude : " +malatitude + "<br>";
-            infopos += "Longitude : " +malongitude + "<br>";
-            infopos += "Distance Yaounde : " +
-                getDistanceBetweenPoints(malatitude, malongitude, latYaounde, longYaounde) + "<br>";
-            infopos += "Distance Douala : " +
-                getDistanceBetweenPoints(malatitude, malongitude, latDouala, longDouala) + "<br>";
-            infopos += "Distance Autre : " +
-                getDistanceBetweenPoints(3.873659, 11.515614, latYaounde, longYaounde) + "<br>";
-            document.getElementById('maposition').innerHTML = infopos;
+            // infopos += "Latitude : " +malatitude + "<br>";
+            // infopos += "Longitude : " +malongitude + "<br>";
+            // infopos += "Distance Yaounde : " +
+            //     getDistanceBetweenPoints(malatitude, malongitude, latYaounde, longYaounde) + "<br>";
+            // infopos += "Distance Douala : " +
+            //     getDistanceBetweenPoints(malatitude, malongitude, latDouala, longDouala) + "<br>";
+            // infopos += "Distance Autre : " +
+            //     getDistanceBetweenPoints(3.873659, 11.515614, latYaounde, longYaounde) + "<br>";
+            // document.getElementById('maposition').innerHTML = infopos;
         }
 
         function erreurGeo(error)

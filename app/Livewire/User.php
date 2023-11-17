@@ -78,7 +78,7 @@ class User extends AppComponent
             $this->voirRole =
             $this->voirBoutique = true;
         }
-    }
+    } 
 
     public function changeZone()
     {

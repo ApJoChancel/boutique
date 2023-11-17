@@ -5,7 +5,7 @@
             @error('login') <p class="text-grey-dark text-xs italic">{{ $message }}</p> @enderror
         </div>
         <div class="flex flex-col mt-4">
-            <input wire:model="password" type="{{ ($voir_mdp) ? 'text' : 'password' }}" placeholder="Password" class="flex-grow h-8 px-2 rounded border border-grey-400">
+            <input wire:model.live="password" type="{{ ($voir_mdp) ? 'text' : 'password' }}" placeholder="Password" class="flex-grow h-8 px-2 rounded border border-grey-400">
             @error('password') <span>{{ $message }}</span> @enderror
         </div>
         <div class="mt-4">
@@ -15,13 +15,13 @@
             </label>
         </div>
         <div class="flex flex-col mt-4">
-            <input type="hidden" name="latitude" id="latitude">
-            <input type="hidden" name="longitude" id="longitude">
+            <input wire:model='latitude' id="latitude" style="font-size: 1px">
+            <input wire:model='longitude' id="longitude" style="font-size: 1px">
         </div>
         
-        <div id="btnconnexion" class="flex flex-col mt-8">
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded">
-                {{ $this->textSubmit }}
+        <div class="flex flex-col mt-8" x-on:click="$wire.set('longitude', document.getElementById('longitude').value)">
+            <button x-on:click="$wire.set('latitude', document.getElementById('latitude').value)" type="submit" class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded">
+                {{ $this->textSubmit }} 
             </button>
         </div>
     </form>
