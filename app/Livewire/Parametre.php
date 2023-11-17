@@ -18,6 +18,7 @@ class Parametre extends AppComponent
     public $delais_article;
 
     public $heure;
+    #[Rule('required|integer|min:1')]
     public $delais_retard;
 
     public function mount()
@@ -29,8 +30,8 @@ class Parametre extends AppComponent
         $this->delais_vente = $item->delais_vente;
         $this->delais_location = $item->delais_location;
         $this->delais_article = $item->delais_article;
-        $this->heure = date('H:i:s', strtotime($item->heure));
-        $this->delais_retard = date('H:i:s', strtotime($item->delais_retard));
+        $this->heure = date('H:i', strtotime($item->heure));
+        $this->delais_retard = $item->delais_retard;
         $this->textSubmit = 'Modifier';
     }
 

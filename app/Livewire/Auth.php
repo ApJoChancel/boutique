@@ -38,7 +38,7 @@ class Auth extends AppComponent
                 $this->addError('login', 'Impossible de vous localiser');
                 return;
             }
-            if ((!empty($item->boutique)) && $item->type_id === 4) {
+            if ((!empty($item->boutique)) && ($item->type_id === 4)) {
                 $distance = self::getDistanceBetweenPoints($this->latitude, $this->longitude,
                     $item->boutique->latitude, $item->boutique->longitude);
                 if($distance > 100){

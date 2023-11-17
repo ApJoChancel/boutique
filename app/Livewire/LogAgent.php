@@ -2,9 +2,10 @@
 
 namespace App\Livewire;
 
-use App\Models\Client;
 use App\Models\Parametre;
 use App\Models\User;
+use DateInterval;
+use DateTime;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -63,10 +64,31 @@ class LogAgent extends AppComponent
         ->groupBy('day', 'login', 'users.nom', 'users.prenom')
         ->get();
 
+        $logs = [];
+        foreach($items as $item){
+            if(isset($logs[$item->day]['count'])){
+                $logs[$item->day]['count'] += 1;
+            } else{
+                $logs[$item->day]['count'] = 1;
+            }
+            //On reformate les heures de connexion
+            $dateTimeStringToTimeString = explode(' ', $item->connexion)[1];
+            $timeToStringToDateTimeString = "2024-01-01 {$dateTimeStringToTimeString}";
+            $dateTimeStringToDateTime = new DateTime($timeToStringToDateTimeString);
+            $dateTimeToTime = $dateTimeStringToDateTime->format('Y-m-d H:i');
+            $item->connexion = $dateTimeToTime;
+
+            $logs[$item->day]['logs'][] = $item;
+        }
+        //On reformate la date en paramètre en ajoutant le delais de retard
         $parametre = Parametre::findOrFail(1);
+        $parametre->heure = "2024-01-01 {$parametre->heure}";
+        $parametre->heure = new DateTime($parametre->heure);
+        $parametre->heure->add(new DateInterval("PT{$parametre->delais_retard}M"));
+        $parametre->heure = $parametre->heure->format('Y-m-d H:i');
 
         return view('livewire.log-agent', [
-            'items' => $items,
+            'items' => $logs,
             'parametre' => $parametre,
             'headers' => self::$headers,
         ]); 

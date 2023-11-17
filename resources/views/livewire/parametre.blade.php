@@ -25,17 +25,17 @@
                             <form wire:submit="save">
                                 <div>
                                     <x-label for="delais_vente" :value="__('Délais de recouvrement des ventes (en jours)')" />
-                                    <x-input wire:model="delais_vente" id="delais_vente" type="text" class="block mt-1 w-full" />
+                                    <x-input wire:model="delais_vente" id="delais_vente" type="number" class="block mt-1 w-full" />
                                     @error('delais_vente') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
                                     <x-label for="delais_location" :value="__('Délais de recouvrement des locations (en jours)')" />
-                                    <x-input wire:model="delais_location" id="delais_location" type="text" class="block mt-1 w-full" />
+                                    <x-input wire:model="delais_location" id="delais_location" type="number" class="block mt-1 w-full" />
                                     @error('delais_location') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
                                     <x-label for="delais_article" :value="__('Délais de retour d\'un article (en jours)')" />
-                                    <x-input wire:model="delais_article" id="delais_article" type="text" class="block mt-1 w-full" />
+                                    <x-input wire:model="delais_article" id="delais_article" type="number" class="block mt-1 w-full" />
                                     @error('delais_article') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
@@ -44,8 +44,8 @@
                                     @error('heure') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
-                                    <x-label for="retard" :value="__('Temps de retard autorisé')" />
-                                    <x-input wire:model="delais_retard" id="retard" type="time" class="block mt-1 w-full" />
+                                    <x-label for="retard" :value="__('Temps de retard autorisé (en minutes)')" />
+                                    <x-input wire:model="delais_retard" id="retard" type="number" class="block mt-1 w-full" />
                                     @error('retard') <p class="font-medium text-red-600">{{ $message }}</p> @enderror
                                 </div>
                     
